@@ -5,16 +5,11 @@ class App {
    * Constructs the app.
    */
   constructor() {
-    this.map = new Map();
-  }
-
-  /**
-   * Init main app
-   */
-  init() {
+    this.map = new Map('.map');
     this.map.init();
   }
 }
 
+/* eslint-disable no-unused-vars */
 let app = new App();
-app.init();
+/* eslint-enable no-unused-vars */
