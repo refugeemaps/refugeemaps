@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title Ubilabs Refugee Map
+    meta(charset='UTF-8')
+
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(content='', name='description')
+    meta(content='', name='author')
+    meta(content='3 days', name='revisit-after')
+
+    block stylesheets
+      link(href='styles/main.css', rel='stylesheet')
+
+  body
+    block content
+
+    block scripts
+      script(src='https://maps.googleapis.com/maps/api/js?v=3&libraries=visualization,geometry')
+      script(src='scripts/main.js')
