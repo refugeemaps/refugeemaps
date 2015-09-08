@@ -1,0 +1,55 @@
+{
+  "name": "ubilabs-refugee-map",
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ubilabs/ubilabs-refugee-map.git"
+  },
+  "precommit": {
+    "run": "test",
+    "template": ".gitcommit.template"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "scripts": {
+    "prepare": "npm run clean && npm run mkdirs",
+    "prepare:dev": "npm run prepare && npm run jade && npm run stylus && npm run js",
+    "clean": "rm -rf {build}/*",
+    "mkdirs": "mkdir -p build/{scripts,styles}",
+    "server": "npm run prepare:dev && light-server -s build -p 8000 -w 'app/scripts/**/*.js*  # npm run js' -w 'app/styles/**/*styl # npm run stylus # reloadcss' -w 'app/jade/**/*jade # npm run jade'",
+    "jade": "jade app/jade/*jade -H -P -o build",
+    "stylus": "stylus --inline --sourcemap-inline -u autoprefixer-stylus app/styles/main.styl -o build/styles",
+    "uglifyjs": "uglifyjs build/scripts/main.js -o build/scripts/main.js -c warnings=false,drop_console=true --mangle",
+    "js": "browserify app/scripts/main.js -t babelify > build/scripts/main.js",
+    "test": "eslint app/scripts && mocha --recursive --compilers js:babel-core/register",
+    "build": "npm run prepare && npm run jade && npm run stylus && npm run js && npm run uglifyjs",
+    "changelog": "conventional-changelog-generator && atom -w CHANGELOG.md",
+    "deploy": "gcloud-storage-upload -s 'ubilabs-refugee-map' -p build",
+    "release": "echo 'Usage: npm run release:patch|minor|major'",
+    "release:patch": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType patch && npm run changelog && npm run release:commit",
+    "release:minor": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType minor && npm run changelog && npm run release:commit",
+    "release:major": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType major && npm run changelog && npm run release:commit",
+    "release:commit": "bumpery --commitFiles 'CHANGELOG.md package.json' --commitMessage 'chore(release): version %VERSION%' --no-bumpVersion && sh ./tools/notify.sh release $npm_package_version"
+  },
+  "devDependencies": {
+    "autoprefixer-stylus": "^0.7.1",
+    "babel-core": "^5.8.23",
+    "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
+    "bumpery": "^1.1.1",
+    "conventional-changelog-generator": "0.0.3",
+    "eslint": "^1.3.1",
+    "gcloud-storage-upload": "^0.1.0",
+    "jade": "^1.11.0",
+    "light-server": "^1.0.6",
+    "mocha": "^2.3.2",
+    "pre-commit": "^1.1.1",
+    "stylus": "^0.52.4",
+    "uglifyjs": "^2.4.10"
+  },
+  "dependencies": {
+    "normalize-styl": "^3.0.3"
+  }
+}
