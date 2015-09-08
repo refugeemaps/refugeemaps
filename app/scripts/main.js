@@ -6,7 +6,6 @@ class App {
    */
   constructor() {
     this.map = new Map('.map');
-    this.map.init();
   }
 }
 

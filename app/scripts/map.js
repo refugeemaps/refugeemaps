@@ -14,12 +14,6 @@ export default class Map {
       },
       zoom: 14
     };
-  }
-
-  /**
-   * Init google map
-   */
-  init() {
     this.map = new google.maps.Map(this.$container, this.options);
   }
 }
