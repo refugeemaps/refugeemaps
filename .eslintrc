@@ -157,7 +157,7 @@
     "func-names": 0,
     "func-style": 0,
     "id-length": [2, {
-      "min": 3
+      "min": 2
     }],
     "key-spacing": [2, {
       "beforeColon": false,

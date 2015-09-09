@@ -46,6 +46,7 @@
     "light-server": "^1.0.6",
     "mocha": "^2.3.2",
     "pre-commit": "^1.1.1",
+    "reqwest": "^2.0.3",
     "stylus": "^0.52.4",
     "uglifyjs": "^2.4.10"
   },
