@@ -20,18 +20,73 @@ export default class Map {
   /**
    * Add a marker to the map
    * @param {Object} latLng The position of the marker
+   * @param {String} type The location type
    * @param {String} infoWindowContent The infowindow content (optional)
+   * @param {Booloean} showInfoWindow If the window should be open or not
    */
-  addMarker(latLng, infoWindowContent = false) {
+  addMarker(latLng, type, infoWindowContent = null, showInfoWindow = null) {
+    let icon = '';
+    switch (type) {
+    case 'supermarket':
+      icon = 'http://maps.google.com/mapfiles/kml/pal3/icon26.png';
+      break;
+    case 'culture':
+      icon = 'http://maps.google.com/mapfiles/kml/pal4/icon41.png';
+      break;
+    default:
+      icon = 'http://google.com/mapfiles/ms/micons/red-dot.png';
+    }
+
+    /* eslint-disable one-var */
     let marker = new google.maps.Marker({
-      position: latLng
+      position: latLng,
+      icon: icon
     });
+    /* eslint-disable one-var */
 
     marker.setMap(this.gMap);
 
     if (infoWindowContent) {
-      this.addInfoWindow(latLng, infoWindowContent, marker);
+      this.addInfoWindow(latLng, infoWindowContent, marker, showInfoWindow);
     }
+  }
+
+  /**
+   * Add a marker for every hotspot
+   * @param {Object} hotspotsData Array with the hotspots infos
+   */
+  addHotspots(hotspotsData) {
+    hotspotsData.forEach(hotspot => {
+      let position = {
+          lat: parseFloat(hotspot.lat),
+          lng: parseFloat(hotspot.lng)
+        },
+        infoWindowContent = '<div class="infowindow">';
+
+      if (hotspot.name) {
+        infoWindowContent += '<h4>' + hotspot.name + '</h4>';
+      }
+
+      if (hotspot.adress) {
+        infoWindowContent += '<div>' + hotspot.adress + '</div>';
+      }
+
+      if (hotspot.descriptionenglish) {
+        infoWindowContent += '<div>' + hotspot.descriptionenglish + '</div>';
+      }
+
+      if (hotspot.descriptionforeign) {
+        infoWindowContent += '<div>' + hotspot.descriptionenglish + '</div>';
+      }
+
+      if (hotspot.openinghours) {
+        infoWindowContent += '<div>' + hotspot.openinghours + '</div>';
+      }
+
+      infoWindowContent += '</div>';
+
+      this.addMarker(position, hotspot.type, infoWindowContent);
+    });
   }
 
   /**
@@ -39,13 +94,20 @@ export default class Map {
    * @param {Object} latLng The position of the marker
    * @param {String} infoWindowContent The infowindow content (optional)
    * @param {GoogleMarker} marker Optional marker this window is bound to
+   * @param {Boolean} showInfoWindow If the window should be open or not
    */
-  addInfoWindow(latLng, infoWindowContent, marker = false) {
+  addInfoWindow(latLng, infoWindowContent, marker = null,
+      showInfoWindow = null) {
     let infoWindow = new google.maps.InfoWindow({map: this.gMap});
     infoWindow.setContent(infoWindowContent);
 
     if (marker) {
-      infoWindow.open(this.gMap, marker);
+      if (showInfoWindow) {
+        infoWindow.open(this.gMap, marker);
+      } else {
+        infoWindow.close();
+      }
+
       marker.addListener('click', () => {
         infoWindow.open(this.gMap, marker);
       });

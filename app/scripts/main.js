@@ -1,4 +1,5 @@
 import Map from './map';
+import Data from './data';
 
 class App {
   /**
@@ -6,7 +7,21 @@ class App {
    */
   constructor() {
     this.map = new Map('.map');
+    this.data = new Data();
+    this.spreadsheetKey = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
+
+    this.data.get({
+      sourceId: this.spreadsheetKey,
+      sheet: 'od6'
+    }).then(() => this.init());
+  }
+
+  /**
+   * Kick off for adding the markers/locations to the map
+   */
+  init() {
     this.markUserLocation();
+    this.map.addHotspots(this.data.getHotspots());
   }
 
   /**
@@ -21,7 +36,7 @@ class App {
           },
           infoWindowContent = 'You are here';
 
-        this.map.addMarker(userPos, infoWindowContent);
+        this.map.addMarker(userPos, 'user', infoWindowContent, true);
         this.map.setCenter(userPos);
       }, () => {
         this.handleLocationError(true, this.map.getCenter());
