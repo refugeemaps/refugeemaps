@@ -1,7 +1,7 @@
 import Icons from './icons';
 import mapStyle from './map-style';
 
-/* global google */
+/* global google MarkerClusterer */
 
 export default class Map {
   /**
@@ -19,6 +19,7 @@ export default class Map {
       zoom: 15
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
+    this.markers = [];
     this.icons = new Icons();
   }
 
@@ -35,6 +36,8 @@ export default class Map {
         position: latLng,
         icon: icon
       });
+
+    this.markers.push(marker);
 
     marker.setMap(this.gMap);
 
@@ -88,6 +91,9 @@ export default class Map {
         infoWindowContent: infoWindowContent
       });
     });
+    /* eslint-disable no-new  */
+    new MarkerClusterer(this.gMap, this.markers);
+    /* eslint-enable no-new  */
   }
 
   /**
