@@ -1,4 +1,5 @@
 import Map from './map';
+import Data from './data';
 
 class App {
   /**
@@ -6,7 +7,25 @@ class App {
    */
   constructor() {
     this.map = new Map('.map');
+
     this.markUserLocation();
+
+    this.data = new Data();
+
+    this.spreadsheetKey = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
+
+    this.data.get({
+      sourceId: this.spreadsheetKey,
+      sheet: 'od6'
+    }).then(hotspotsData => this.onHotspotsLoaded(hotspotsData));
+  }
+
+  /**
+   * Kick off for adding the hotspots to the map
+   * @param {Object} hotspotsData hotspots data
+   */
+  onHotspotsLoaded(hotspotsData) {
+    this.map.addHotspots(hotspotsData);
   }
 
   /**
@@ -21,7 +40,12 @@ class App {
           },
           infoWindowContent = 'You are here';
 
-        this.map.addMarker(userPos, infoWindowContent);
+        this.map.addMarker({
+          latLng: userPos,
+          type: 'user',
+          infoWindowContent: infoWindowContent,
+          showInfoWindow: true
+        });
         this.map.setCenter(userPos);
       }, () => {
         this.handleLocationError(true, this.map.getCenter());
@@ -38,12 +62,15 @@ class App {
    */
   handleLocationError(browserHasGeolocation, pos) {
     if (browserHasGeolocation) {
-      this.map.addInfoWindow(pos, 'Error: The Geolocation service failed.');
+      this.map.addInfoWindow({
+        latLng: pos,
+        infoWindowContent: 'Error: The Geolocation service failed.'
+      });
     } else {
-      this.map.addInfoWindow(
-        pos,
-        'Error: Your browser doesn\'t support geolocation.'
-      );
+      this.map.addInfoWindow({
+        latLng: pos,
+        infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
+      });
     }
   }
 }
