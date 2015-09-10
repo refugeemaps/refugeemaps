@@ -1,3 +1,5 @@
+import Icons from './icons';
+
 /* global google */
 
 export default class Map {
@@ -15,6 +17,7 @@ export default class Map {
       zoom: 14
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
+    this.icons = new Icons();
   }
 
   /**
@@ -24,30 +27,22 @@ export default class Map {
    * @param {String} infoWindowContent The infowindow content (optional)
    * @param {Booloean} showInfoWindow If the window should be open or not
    */
-  addMarker(latLng, type, infoWindowContent = null, showInfoWindow = null) {
-    let icon = '';
-    switch (type) {
-    case 'supermarket':
-      icon = 'http://maps.google.com/mapfiles/kml/pal3/icon26.png';
-      break;
-    case 'culture':
-      icon = 'http://maps.google.com/mapfiles/kml/pal4/icon41.png';
-      break;
-    default:
-      icon = 'http://google.com/mapfiles/ms/micons/red-dot.png';
-    }
-
-    /* eslint-disable one-var */
-    let marker = new google.maps.Marker({
-      position: latLng,
-      icon: icon
-    });
-    /* eslint-disable one-var */
+  addMarker({latLng, type, infoWindowContent = null, showInfoWindow = null}) {
+    let icon = this.icons.getIconByType(type),
+      marker = new google.maps.Marker({
+        position: latLng,
+        icon: icon
+      });
 
     marker.setMap(this.gMap);
 
     if (infoWindowContent) {
-      this.addInfoWindow(latLng, infoWindowContent, marker, showInfoWindow);
+      this.addInfoWindow({
+        latLng: latLng,
+        infoWindowContent: infoWindowContent,
+        marker: marker,
+        showInfoWindow: showInfoWindow
+      });
     }
   }
 
@@ -85,7 +80,11 @@ export default class Map {
 
       infoWindowContent += '</div>';
 
-      this.addMarker(position, hotspot.type, infoWindowContent);
+      this.addMarker({
+        latLng: position,
+        type: hotspot.type,
+        infoWindowContent: infoWindowContent
+      });
     });
   }
 
@@ -96,8 +95,8 @@ export default class Map {
    * @param {GoogleMarker} marker Optional marker this window is bound to
    * @param {Boolean} showInfoWindow If the window should be open or not
    */
-  addInfoWindow(latLng, infoWindowContent, marker = null,
-      showInfoWindow = null) {
+  addInfoWindow({latLng, infoWindowContent, marker = null,
+      showInfoWindow = null}) {
     let infoWindow = new google.maps.InfoWindow({map: this.gMap});
     infoWindow.setContent(infoWindowContent);
 

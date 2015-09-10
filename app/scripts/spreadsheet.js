@@ -74,10 +74,10 @@ export default class Spreadsheet {
 
         sheetRequests.push(
           this.fetch(url)
-          .then(data => this.parse(data, id))
-          /* eslint-disable no-console */
-          .catch(err => console.log(err)));
-          /* eslint-enable no-console */
+            .then(data => this.parse(data, id))
+            /* eslint-disable no-console */
+            .catch(err => console.log(err)));
+            /* eslint-enable no-console */
       });
 
       Promise.all(sheetRequests)

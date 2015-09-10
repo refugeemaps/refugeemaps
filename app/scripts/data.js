@@ -15,16 +15,14 @@ export default class Data {
    * @param {object} options The source options
    * @return {Promise} The promise.
    */
-  get({
-    sheet, sourceId
-  }) {
+  get({sheet, sourceId}) {
     this.sheet = sheet;
 
     return new Promise((resolve, reject) => {
       this.source.get(sourceId)
         .then(data => {
           this.buildDataSet(data);
-          resolve();
+          resolve(this.data[this.sheet].data);
         })
         .catch(reject);
     });
@@ -86,13 +84,5 @@ export default class Data {
     }
 
     return item;
-  }
-
-  /**
-   * Returns all hotspots.
-   * @return {Array} The hotspot list.
-   */
-  getHotspots() {
-    return this.data[this.sheet].data;
   }
 }
