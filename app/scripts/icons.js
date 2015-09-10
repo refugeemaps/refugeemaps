@@ -229,7 +229,7 @@ export default class Icons {
   }
 
   /**
-   * Get the basketball icon
+   * Get the table-tennis icon
    * @return {GoogleIconObject} icon The marker icon
    */
   getTableTennisIcon() {
@@ -244,7 +244,7 @@ export default class Icons {
   }
 
   /**
-   * Get the basketball icon
+   * Get the skateboard icon
    * @return {GoogleIconObject} icon The marker icon
    */
   getSkateboardIcon() {
@@ -274,7 +274,7 @@ export default class Icons {
   }
 
   /**
-   * Get the library icon
+   * Get the restroom icon
    * @return {GoogleIconObject} icon The marker icon
    */
   getRestroomIcon() {
