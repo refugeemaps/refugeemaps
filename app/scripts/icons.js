@@ -7,18 +7,46 @@ export default class Icons {
    * @param {String} type The type of the location
    * @return {GoogleIconObject} icon The marker icon
    */
+  /* eslint-disable complexity */
   getIconByType(type) {
     switch (type) {
     case 'user':
       return this.getUserIcon();
+    case 'mosque':
+      return this.create({url: '../assets/religious-muslim-24@2x.png'});
+    case 'church':
+      return this.create({url: '../assets/religious-christian-24@2x.png'});
+    case 'bank':
+      return this.create({url: '../assets/bank-24@2x.png'});
+    case 'call-shop':
+      return this.create({url: '../assets/telephone-24@2x.png'});
     case 'supermarket':
-      return this.getSupermarketIcon();
+      return this.create({url: '../assets/grocery-24@2x.png'});
     case 'culture':
-      return this.getCultureIcon();
+      return this.create({url: '../assets/town-hall-24@2x.png'});
+    case 'pharmacy':
+      return this.create({url: '../assets/pharmacy-24@2x.png'});
+    case 'laundry':
+      return this.create({url: '../assets/laundry-24@2x.png'});
+    case 'playground':
+      return this.create({url: '../assets/playground-24@2x.png'});
+    case 'football':
+      return this.create({url: '../assets/soccer-24@2x.png'});
+    case 'basketball':
+      return this.create({url: '../assets/basketball-24@2x.png'});
+    case 'table-tennis':
+      return this.create({url: '../assets/tennis-24@2x.png'});
+    case 'skateboard':
+      return this.create({url: '../assets/skateboard.png'});
+    case 'library':
+      return this.create({url: '../assets/library-24@2x.png'});
+    case 'public-restroom':
+      return this.create({url: '../assets/toilets-24@2x.png'});
     default:
-      return this.getDefaultIcon();
+      return this.create({url: '../assets/marker-24@2x.png'});
     }
   }
+  /* eslint-enable complexity */
 
   /**
    * Get the user icon
@@ -36,51 +64,6 @@ export default class Icons {
   }
 
   /**
-   * Get the supermarket icon
-   * @return {GoogleIconObject} icon The marker icon
-   */
-  getSupermarketIcon() {
-    let icon = this.create({
-      url: '../assets/grocery-24@2x.png',
-      width: 30,
-      height: 30,
-      anchorX: 15,
-      anchorY: 15
-    });
-    return icon;
-  }
-
-  /**
-   * Get the culture icon
-   * @return {GoogleIconObject} icon The marker icon
-   */
-  getCultureIcon() {
-    let icon = this.create({
-      url: '../assets/town-hall-24@2x.png',
-      width: 30,
-      height: 30,
-      anchorX: 15,
-      anchorY: 15
-    });
-    return icon;
-  }
-
-  /**
-   * Get the default icon
-   * @return {GoogleIconObject} icon The marker icon
-   */
-  getDefaultIcon() {
-    let icon = this.create({
-      url: '../assets/marker-24@2x.png',
-      width: 30,
-      height: 30,
-      anchorX: 15,
-      anchorY: 15
-    });
-    return icon;
-  }
-
-  /**
    * Create the google icon object
    * @param {String} url The icon URL
    * @param {Integer} width The icon width
@@ -89,7 +72,7 @@ export default class Icons {
    * @param {Integer} anchorY The y anchor value
    * @return {GoogleIconObject} icon The marker icon
    */
-  create({url, width, height, anchorX, anchorY}) {
+  create({url, width = 30, height = 30, anchorX = 15, anchorY = 15}) {
     let image = {
       url: url,
       size: new google.maps.Size(width, height),
