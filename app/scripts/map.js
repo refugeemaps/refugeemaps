@@ -16,7 +16,7 @@ export default class Map {
         lng: 9.977840
       },
       styles: mapStyle,
-      zoom: 14
+      zoom: 15
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
     this.icons = new Icons();
