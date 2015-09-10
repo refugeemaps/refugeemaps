@@ -3,22 +3,16 @@
 export default class Icons {
 
   getIconByType(type) {
-    let icon = '';
     switch (type) {
     case 'user':
-      icon = this.getUserIcon();
-      break;
+      return this.getUserIcon();
     case 'supermarket':
-      icon = this.getSupermarketIcon();
-      break;
+      return this.getSupermarketIcon();
     case 'culture':
-      icon = this.getCultureIcon();
-      break;
+      return this.getCultureIcon();
     default:
-      icon = this.getDefaultIcon();
+      return this.getDefaultIcon();
     }
-
-    return icon;
   }
 
   getUserIcon() {
