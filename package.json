@@ -14,10 +14,10 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "prepare": "npm run clean && npm run mkdirs && cp app/assets/* build/assets/",
+    "prepare": "npm run clean && npm run mkdirs && cp app/assets/* build/assets/ && cp app/scripts/vendor/* build/scripts/vendor/",
     "prepare:dev": "npm run prepare && npm run jade && npm run stylus && npm run js",
     "clean": "rm -rf {build}/*",
-    "mkdirs": "mkdir -p build/{scripts,styles,assets}",
+    "mkdirs": "mkdir -p build/{scripts/vendor,styles,assets}",
     "server": "npm run prepare:dev && light-server -s build -p 8000 -w 'app/scripts/**/*.js*  # npm run js' -w 'app/styles/**/*styl # npm run stylus # reloadcss' -w 'app/jade/**/*jade # npm run jade'",
     "jade": "jade app/jade/*jade -H -P -o build",
     "stylus": "stylus --inline --sourcemap-inline -u autoprefixer-stylus app/styles/main.styl -o build/styles",
