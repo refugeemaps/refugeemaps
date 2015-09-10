@@ -1,4 +1,5 @@
 import Icons from './icons';
+import mapStyles from './map-styles';
 
 /* global google */
 
@@ -14,6 +15,7 @@ export default class Map {
         lat: 53.560022,
         lng: 9.977840
       },
+      styles: mapStyles,
       zoom: 14
     };
     this.gMap = new google.maps.Map(this.$container, this.options);

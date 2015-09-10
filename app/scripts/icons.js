@@ -26,10 +26,10 @@ export default class Icons {
    */
   getUserIcon() {
     let icon = this.create({
-      url: '../assets/marker-stroked-24@2x.png',
-      width: 40,
+      url: '../assets/red-marker.png',
+      width: 25,
       height: 40,
-      anchorX: 20,
+      anchorX: 12,
       anchorY: 40
     });
     return icon;
