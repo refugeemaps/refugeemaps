@@ -56,9 +56,11 @@ let mapStyles = [
     'stylers': [
       {
         'visibility': 'on'
-      }, {
+      },
+      {
         'hue': '#ffe800'
-      }, {
+      },
+      {
         'saturation': '-50'
       }
     ]
