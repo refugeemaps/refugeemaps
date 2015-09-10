@@ -115,7 +115,7 @@ const mapStyle = [
     'featureType': 'transit',
     'elementType': 'all',
     'stylers': [{
-      'visibility': 'off'
+      'visibility': 'on'
     }]
   },
   {
