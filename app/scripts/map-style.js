@@ -1,4 +1,4 @@
-let mapStyles = [
+const mapStyle = [
   {
     'featureType': 'administrative',
     'elementType': 'labels.text.fill',
@@ -132,4 +132,4 @@ let mapStyles = [
   }
 ];
 
-export default mapStyles;
+export default mapStyle;
