@@ -1,0 +1,25 @@
+- var sideBarItems = [];
+- sideBarItems.push({icon: 'assets/religious-muslim-24@2x.png', title: 'mosque'})
+- sideBarItems.push({icon: 'assets/religious-christian-24@2x.png', title: 'church'})
+- sideBarItems.push({icon: 'assets/bank-24@2x.png', title: 'bank'})
+- sideBarItems.push({icon: 'assets/telephone-24@2x.png', title: 'call-shop'})
+- sideBarItems.push({icon: 'assets/grocery-24@2x.png', title: 'supermarket'})
+- sideBarItems.push({icon: 'assets/town-hall-24@2x.png', title: 'culture'})
+- sideBarItems.push({icon: 'assets/pharmacy-24@2x.png', title: 'pharmacy'})
+- sideBarItems.push({icon: 'assets/laundry-24@2x.png', title: 'laundry'})
+- sideBarItems.push({icon: 'assets/playground-24@2x.png', title: 'playground'})
+- sideBarItems.push({icon: 'assets/soccer-24@2x.png', title: 'football'})
+- sideBarItems.push({icon: 'assets/basketball-24@2x.png', title: 'basketball'})
+- sideBarItems.push({icon: 'assets/tennis-24@2x.png', title: 'table-tennis'})
+- sideBarItems.push({icon: 'assets/skateboard.png', title: 'skateboard'})
+- sideBarItems.push({icon: 'assets/library-24@2x.png', title: 'library'})
+- sideBarItems.push({icon: 'assets/toilets-24@2x.png', title: 'public-restroom'})
+
+.sidebar
+  .sidebar__keys
+    .sidebar__keys__header(data-show="Show Filters", data-hide="Hide Filters") Hide Filters
+    .sidebar__keys__items
+      each item in sideBarItems
+        .sidebar__keys__items__item(data-filter!= item.title)
+          img.sidebar__keys__items__item__image(src!= item.icon)
+          span.sidebar__keys__items__item__text!= item.title

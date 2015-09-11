@@ -1,5 +1,6 @@
 import Map from './map';
 import Data from './data';
+import Sidebar from './sidebar';
 
 class App {
   /**
@@ -26,6 +27,9 @@ class App {
    */
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
+    /* eslint-disable no-new  */
+    new Sidebar(this.map, '.sidebar__keys__items__item', hotspotsData);
+    /* eslint-enable no-new  */
   }
 
   /**
