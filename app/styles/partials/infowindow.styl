@@ -1,26 +1,27 @@
 .infowindow
-  max-width: 200px
+  font-size: remCalc(14px)
+  max-width: emCalc(200px, 14)
   hr
     border: 0
     height: 1px
     background: #adadad;
     background-image: linear-gradient(to right, #fff, #adadad, #fff)
   &__title
-    margin-bottom: 5px
+    margin-bottom: emCalc(5px, 14)
   &__address
-    margin-bottom: 5px
+    margin-bottom: emCalc(5px, 13)
     &__image
-      width: 20px
+      width: emCalc(20px, 14)
       vertical-align: middle
-      margin-right: 3px
+      margin-right: emCalc(3px, 14)
     &__text
       vertical-align: middle
   &__description
-    margin-bottom: 5px
+    margin-bottom: emCalc(5px, 14)
   &__hours
     &__image
-      width: 20px
+      width: emCalc(20px, 14)
       vertical-align: middle
-      margin-right: 5px
+      margin-right: emCalc(5px, 14)
     &__text
       vertical-align: middle
