@@ -54,7 +54,7 @@ export default class Icons {
    */
   getUserIcon() {
     let icon = this.create({
-      url: '../assets/red-marker.png',
+      url: 'assets/red-marker.png',
       width: 25,
       height: 40,
       anchorX: 12,
