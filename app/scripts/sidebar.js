@@ -75,6 +75,9 @@ export default class Sidebar {
     }
   }
 
+  /**
+   * Toggle the sidebar visibility
+   */
   toggleSidebar() {
     this.$itemsContainer.classList.toggle('sidebar__keys__items--hidden');
 
