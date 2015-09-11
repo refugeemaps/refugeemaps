@@ -87,7 +87,7 @@ export default class Map {
 
       if (hotspot.descriptionforeign) {
         infoWindowContent += '<div class="infowindow__description">' +
-          hotspot.descriptionenglish +
+          hotspot.descriptionforeign +
         '</div><hr>';
       }
 
