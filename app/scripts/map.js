@@ -64,23 +64,40 @@ export default class Map {
         infoWindowContent = '<div class="infowindow">';
 
       if (hotspot.name) {
-        infoWindowContent += '<h4>' + hotspot.name + '</h4>';
+        infoWindowContent += '<h4 class="infowindow__title">' +
+          hotspot.name +
+        '</h4><hr>';
       }
 
-      if (hotspot.adress) {
-        infoWindowContent += '<div>' + hotspot.adress + '</div>';
+      if (hotspot.address) {
+        infoWindowContent += '<div class="infowindow__address">' +
+          '<img src="assets/marker-stroked-24@2x.png"' +
+            'class="infowindow__address__image">' +
+          '<span class="infowindow__address__text">' +
+            hotspot.address +
+          '</span>' +
+        '</div><hr>';
       }
 
       if (hotspot.descriptionenglish) {
-        infoWindowContent += '<div>' + hotspot.descriptionenglish + '</div>';
+        infoWindowContent += '<div class="infowindow__description">' +
+          hotspot.descriptionenglish +
+        '</div><hr>';
       }
 
       if (hotspot.descriptionforeign) {
-        infoWindowContent += '<div>' + hotspot.descriptionenglish + '</div>';
+        infoWindowContent += '<div class="infowindow__description">' +
+          hotspot.descriptionenglish +
+        '</div><hr>';
       }
 
       if (hotspot.openinghours) {
-        infoWindowContent += '<div>' + hotspot.openinghours + '</div>';
+        infoWindowContent += '<div class="infowindow__hours">' +
+          '<img src="assets/clock.png" class="infowindow__hours__image">' +
+          '<span class="infowindow__hours__text">' +
+            hotspot.openinghours +
+          '</span>' +
+        '</div>';
       }
 
       infoWindowContent += '</div>';
