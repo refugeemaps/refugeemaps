@@ -2,17 +2,15 @@
 
 ## Description
 
-Map that shows locations which are potentially useful and interesting for refugees such as public restrooms, supermarkets, churches, playgrounds or call shops. These are only examples.
+Map that shows locations which are potentially useful and interesting for refugees such as public restrooms, supermarkets, churches, playgrounds or call shops.
 
 ### Links
 
-* Staging: http://staging.domain.com/?debug=true
-* Live: http://domain.com/
+* Staging: http://storage.ubidev.net/ubilabs-refugee-map/89693431987396576/
 
 ### Team
 
-* PM Ubilabs: Name <name@ubilabs.net>
-* PM Client: Name <name@domain.com>
+* Dev Ubilabs: Malte Modrow <modrow@ubilabs.net>
 
 ## Development
 
@@ -25,7 +23,6 @@ Make sure you have the following tools installed:
 
 After cloning the repository, install all dependencies:
 
-For example:
 ```sh
 npm install # install new dependencies
 ```
@@ -34,7 +31,6 @@ npm install # install new dependencies
 
 Run the following command to start the server on localhost:
 
-For example:
 ```sh
 npm run server # start the server
 ```
@@ -43,7 +39,6 @@ npm run server # start the server
 
 To deploy the application, run the following commands:
 
-For example:
 ```sh
 npm run build
 npm run deploy
@@ -56,7 +51,3 @@ To make a release, run the following commands:
 ```sh
 npm run release:[patch|minor|major]
 ```
-
-## Hosting
-
-The project is hosted at [whereever.com](http://whereever.com)
