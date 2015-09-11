@@ -1,0 +1,10 @@
+{
+  "private_key_id": "d9cffecc72719bb0c67c6473a36712503fb3bad9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKglXOSuRj+FrFnM\ngavjfsY90OTwkMb9tPyy7LHcMDUQ8fE/w32i1zzzyp9l+Wtr4YXDPnWWdIeLlqIK\n1aUapN9CiGd0Ut/RQtq30iH0hDds7n77w7aGsIlSMf9LUHKU4KlJoy6KGXHkbimr\nTe6Ign9ui8bJvJNlA1eyDvROqdeTAgMBAAECgYEAltxu6/4wqO2WJTuHXGFQbS0p\nLz9npiIbMF6YXzvfRL1fVcSP8TkZRGa3dSxZDDhOr2TttTK4eqSTEfAGn4u4P+J+\nb245ftjrd4Cby1qvn1wF0ZhZi1IaedTG+8Uxstvuy0xcVycL7vlezOUHkGInlcV4\nlpCXwtHosg12Naah2YECQQDe9r85oL5cJ/hIBWD6fQ5428GAVcE+mzxUTy2psZ5t\nvk3HInh98YC3hZu5t5phKhW92nFh0pcqjG8A9PcFbWSPAkEAwQ9Qrm6A81p7bUcY\nF8tq8LT9BRk8WoSQtFJXiMNLoT2h9P2Gu9Mjy4ibBeiSziVjJ63MWFFGpxVwA5zM\nDODGvQJBAJR1LUx8yGNqRboGwtTmsd0tTcFa2CoMiPYGJnxoBPpDjVw7iokpZbBM\n6SyWoNdzgzh/m6Er7HVrPnofod7eQOcCQFdIEkTaJqhepuCPvL+9MnriiGWOtC+E\nMVukwnhNOtsJ3zfAivJNkahJ+TQhooVad8qPk4v2KsgNNBgeAk5sLM0CQEA2M+dJ\ntG2Tpa9SlGumN9nHnYxb2CERTq1KGYPpetGsPPkfr8Qn/Fv+B+WwPCxuCjaIc1a3\nlXtgYy0xA+3Eq0A\u003d\n-----END PRIVATE KEY-----\n",
+  "client_email": "729744127032-lnmrrjfi3r1elbjcirs19vatbjvnmi5o@developer.gserviceaccount.com",
+  "client_id": "729744127032-lnmrrjfi3r1elbjcirs19vatbjvnmi5o.apps.googleusercontent.com",
+  "type": "service_account",
+  "projectId": "ubilabs-dev",
+  "bucket": "storage.ubidev.net",
+  "remotePath": "ubilabs-refugee-map/89693431987396576/"
+}
