@@ -19,6 +19,7 @@ export default class Map {
       zoom: 15
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
+    this.markerClusterer = new MarkerClusterer(this.gMap);
     this.markers = [];
     this.icons = new Icons();
   }
@@ -37,7 +38,9 @@ export default class Map {
         icon: icon
       });
 
-    this.markers.push(marker);
+    if (type !== 'user') {
+      this.markers.push(marker);
+    }
 
     marker.setMap(this.gMap);
 
@@ -52,10 +55,26 @@ export default class Map {
   }
 
   /**
+   * Show or hide markers. Pass in 'null' to remove all markers
+   * @param {GoogleMap} map Map on which the markers should be set
+   */
+  setMarkers(map) {
+    /* eslint-disable id-length  */
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(map);
+    }
+    /* eslint-disable id-length  */
+  }
+
+  /**
    * Add a marker for every hotspot
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
+    this.markers = [];
+    this.setMarkers(null);
+    this.markerClusterer.clearMarkers();
+
     hotspotsData.forEach(hotspot => {
       let position = {
           lat: parseFloat(hotspot.lat),
@@ -108,9 +127,8 @@ export default class Map {
         infoWindowContent: infoWindowContent
       });
     });
-    /* eslint-disable no-new  */
-    new MarkerClusterer(this.gMap, this.markers);
-    /* eslint-enable no-new  */
+
+    this.markerClusterer = new MarkerClusterer(this.gMap, this.markers);
   }
 
   /**
