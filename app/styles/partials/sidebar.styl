@@ -1,0 +1,35 @@
+.sidebar
+  font-size: 1rem
+  position: absolute
+  top: 5%
+  right: emCalc(5px)
+  max-height: 90vh
+  z-index: 1
+  color: #444
+  border: 1px solid #D6D6D6
+  background: #fff
+  overflow: hidden
+  &__keys
+    &__header
+      cursor: pointer
+      padding: emCalc(10px)
+      background: #444
+      color: #fff
+    &__items
+      max-height: s('calc(%s - %s)', 90vh, $sidebar-header-height)
+      overflow-y: auto
+      &--hidden
+        display: none
+      &__item
+        padding: emCalc(10px)
+        cursor: pointer
+        &--active
+          background: #ff9500
+        &:hover
+          background: lighten(#ff9500, 20%)
+        &__image
+          vertical-align: middle
+          width: emCalc(30px)
+        &__text
+          margin-left: emCalc(10px)
+          vertical-align: middle
