@@ -156,9 +156,7 @@
     "eol-last": 1,
     "func-names": 0,
     "func-style": 0,
-    "id-length": [2, {
-      "min": 2
-    }],
+    "id-length": 0,
     "key-spacing": [2, {
       "beforeColon": false,
       "afterColon": true

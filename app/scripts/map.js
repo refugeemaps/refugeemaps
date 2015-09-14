@@ -59,11 +59,9 @@ export default class Map {
    * @param {GoogleMap} map Map on which the markers should be set
    */
   setMarkers(map) {
-    /* eslint-disable id-length  */
     for (var i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(map);
     }
-    /* eslint-disable id-length  */
   }
 
   /**

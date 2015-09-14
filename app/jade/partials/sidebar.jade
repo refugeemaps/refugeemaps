@@ -94,7 +94,9 @@
 
 .sidebar
   .sidebar__keys
-    .sidebar__keys__header(data-show="Show Filters", data-hide="Hide Filters") Hide Filters
+    .sidebar__keys__header
+      span.sidebar__keys__header__hide Hide Filters
+      span.sidebar__keys__header__show Show Filters
     .sidebar__keys__items
 
       each item in sideBarItems
