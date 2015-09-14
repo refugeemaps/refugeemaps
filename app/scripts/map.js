@@ -33,6 +33,7 @@ export default class Map {
    * Add a marker to the map
    * @param {Object} latLng The position of the marker
    * @param {String} type The location type
+   * @param {String} query The location query (name + adress)
    * @param {String} infoWindowContent The infowindow content (optional)
    * @param {Booloean} showInfoWindow If the window should be open or not
    */
