@@ -79,13 +79,6 @@ export default class Sidebar {
    */
   toggleSidebar() {
     this.$itemsWrapper.classList.toggle('sidebar__keys__items--hidden');
-
-    if (this.$itemsWrapper.classList.contains('sidebar__keys__items--hidden')) {
-      this.$headerShow.style.display = 'inline';
-      this.$headerHide.style.display = 'none';
-    } else {
-      this.$headerShow.style.display = 'none';
-      this.$headerHide.style.display = 'inline';
-    }
+    this.$header.classList.toggle('sidebar__keys__header--hide-filters');
   }
 }
