@@ -47,6 +47,7 @@ class App {
         this.map.addMarker({
           latLng: userPos,
           type: 'user',
+          query: `${userPos.lat.toString()}, ${userPos.lng.toString()}`,
           infoWindowContent: infoWindowContent,
           showInfoWindow: true
         });
