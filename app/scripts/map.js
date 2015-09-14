@@ -1,7 +1,7 @@
 import Icons from './icons';
 import mapStyle from './map-style';
 
-/* global google MarkerClusterer */
+/* global google */
 
 export default class Map {
   /**
@@ -19,7 +19,6 @@ export default class Map {
       zoom: 15
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
-    this.markerClusterer = new MarkerClusterer(this.gMap);
     this.markers = [];
     this.icons = new Icons();
   }
@@ -78,9 +77,8 @@ export default class Map {
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
-    this.markers = [];
     this.setMarkers(null);
-    this.markerClusterer.clearMarkers();
+    this.markers = [];
 
     hotspotsData.forEach(hotspot => {
       let position = {
@@ -135,8 +133,6 @@ export default class Map {
         infoWindowContent: infoWindowContent
       });
     });
-
-    this.markerClusterer = new MarkerClusterer(this.gMap, this.markers);
   }
 
   /**
