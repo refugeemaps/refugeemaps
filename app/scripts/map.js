@@ -1,7 +1,7 @@
 import Icons from './icons';
 import mapStyle from './map-style';
 
-/* global google MarkerClusterer */
+/* global google */
 
 export default class Map {
   /**
@@ -15,11 +15,16 @@ export default class Map {
         lat: 53.560022,
         lng: 9.977840
       },
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_BOTTOM
+      },
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.LEFT_BOTTOM
+      },
       styles: mapStyle,
       zoom: 15
     };
     this.gMap = new google.maps.Map(this.$container, this.options);
-    this.markerClusterer = new MarkerClusterer(this.gMap);
     this.markers = [];
     this.icons = new Icons();
   }
@@ -28,14 +33,24 @@ export default class Map {
    * Add a marker to the map
    * @param {Object} latLng The position of the marker
    * @param {String} type The location type
+   * @param {String} query The location query (name + adress)
    * @param {String} infoWindowContent The infowindow content (optional)
    * @param {Booloean} showInfoWindow If the window should be open or not
    */
-  addMarker({latLng, type, infoWindowContent = null, showInfoWindow = null}) {
+  addMarker({
+    latLng,
+    type,
+    query,
+    infoWindowContent = null,
+    showInfoWindow = null
+  }) {
     let icon = this.icons.getIconByType(type),
       marker = new google.maps.Marker({
-        position: latLng,
-        icon: icon
+        icon: icon,
+        place: {
+          location: latLng,
+          query: query
+        }
       });
 
     if (type !== 'user') {
@@ -69,9 +84,8 @@ export default class Map {
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
-    this.markers = [];
     this.setMarkers(null);
-    this.markerClusterer.clearMarkers();
+    this.markers = [];
 
     hotspotsData.forEach(hotspot => {
       let position = {
@@ -122,11 +136,10 @@ export default class Map {
       this.addMarker({
         latLng: position,
         type: hotspot.type,
+        query: hotspot.name + ', ' + hotspot.address,
         infoWindowContent: infoWindowContent
       });
     });
-
-    this.markerClusterer = new MarkerClusterer(this.gMap, this.markers);
   }
 
   /**

@@ -94,10 +94,10 @@
 
 .sidebar
   .sidebar__keys
-    .sidebar__keys__header
+    .sidebar__keys__header.sidebar__keys__header--hide-filters
       span.sidebar__keys__header__hide Hide Filters
       span.sidebar__keys__header__show Show Filters
-    .sidebar__keys__items
+    .sidebar__keys__items.sidebar__keys__items--hidden
 
       each item in sideBarItems
         .sidebar__keys__items__item(data-filter!= item.filter)
