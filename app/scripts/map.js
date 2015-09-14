@@ -31,11 +31,20 @@ export default class Map {
    * @param {String} infoWindowContent The infowindow content (optional)
    * @param {Booloean} showInfoWindow If the window should be open or not
    */
-  addMarker({latLng, type, infoWindowContent = null, showInfoWindow = null}) {
+  addMarker({
+    latLng,
+    type,
+    query,
+    infoWindowContent = null,
+    showInfoWindow = null
+  }) {
     let icon = this.icons.getIconByType(type),
       marker = new google.maps.Marker({
-        position: latLng,
-        icon: icon
+        icon: icon,
+        place: {
+          location: latLng,
+          query: query
+        }
       });
 
     if (type !== 'user') {
@@ -122,6 +131,7 @@ export default class Map {
       this.addMarker({
         latLng: position,
         type: hotspot.type,
+        query: hotspot.name + ', ' + hotspot.address,
         infoWindowContent: infoWindowContent
       });
     });
