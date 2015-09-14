@@ -15,6 +15,12 @@ export default class Map {
         lat: 53.560022,
         lng: 9.977840
       },
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_BOTTOM
+      },
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.LEFT_BOTTOM
+      },
       styles: mapStyle,
       zoom: 15
     };
