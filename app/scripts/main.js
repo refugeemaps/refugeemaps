@@ -7,18 +7,18 @@ class App {
    * Constructs the app.
    */
   constructor() {
+    const citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0',
+      hash = window.location.hash;
+
     this.map = new Map('.map');
 
     this.data = new Data();
-    this.citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0';
 
-    this.hash = window.location.hash;
-
-    this.fetchCities(this.citySpreadsheet)
-      .then(cities => this.chooseCity(cities, this.hash))
+    this.fetchCities(citySpreadsheet)
+      .then(cities => this.chooseCity(cities, hash))
       .then(city => this.getCityData(city)
       .then(hotspots => this.onHotspotsLoaded(hotspots))
-      .catch(error => console.log(error))); // eslint-disable-line
+      .catch(error => this.handlePromiseError(error)));
 
     window.onhashchange = function() {
       window.location.reload();
@@ -31,12 +31,10 @@ class App {
    * @return {Promise} Promise with the cities
    */
   fetchCities(spreadsheetId) {
-    return new Promise(resolve => {
-      let cityData = new Data();
-      cityData.get({
-        sourceId: spreadsheetId,
-        sheet: 'od6'
-      }).then(cities => resolve(cities));
+    let cityData = new Data();
+    return cityData.get({
+      sourceId: spreadsheetId,
+      sheet: 'od6'
     });
   }
 
@@ -68,8 +66,8 @@ class App {
       });
 
       if (!cityExists) {
-        resolve(cities[0]);
         this.markUserLocation();
+        resolve(cities[0]);
       }
     });
   }
@@ -80,9 +78,7 @@ class App {
    * @return {Promise} Promise with the city data
    */
   getCityData(city) {
-    return new Promise(resolve => {
-      resolve(this.getSpreadsheetData(city.spreadsheetid));
-    });
+    return this.getSpreadsheetData(city.spreadsheetid);
   }
 
   /**
@@ -91,11 +87,9 @@ class App {
    * @return {Promise} Promise with the hotspot data
    */
   getSpreadsheetData(spreadsheetId) {
-    return new Promise(resolve => {
-      this.data.get({
-        sourceId: spreadsheetId,
-        sheet: 'od6'
-      }).then(hotspotsData => resolve(hotspotsData));
+    return this.data.get({
+      sourceId: spreadsheetId,
+      sheet: 'od6'
     });
   }
 
@@ -155,6 +149,14 @@ class App {
         infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
       });
     }
+  }
+
+  /**
+   * Log the error the the console
+   * @param {Error} error The errow that was thrown
+   */
+  handlePromiseError(error) {
+    console.log('Something went wrong: ', error); // eslint-disable-line
   }
 }
 
