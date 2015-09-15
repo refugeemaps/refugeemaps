@@ -10,20 +10,15 @@ class App {
     this.map = new Map('.map');
 
     this.data = new Data();
-    this.defaultSpreadsheet = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
+    this.citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0';
 
     this.hash = window.location.hash;
 
-    if (this.hash) {
-      this.cityData = new Data();
-      this.citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0';
-      this.cityData.get({
-        sourceId: this.citySpreadsheet,
-        sheet: 'od6'
-      }).then(cityData => this.onCitiesLoaded(cityData, this.hash));
-    } else {
-      this.loadDefaultData();
-    }
+    this.fetchCities(this.citySpreadsheet)
+      .then(cities => this.chooseCity(cities, this.hash))
+      .then(city => this.getCityData(city)
+      .then(hotspots => this.onHotspotsLoaded(hotspots))
+      .catch(error => console.log(error))); // eslint-disable-line
 
     window.onhashchange = function() {
       window.location.reload();
@@ -31,51 +26,77 @@ class App {
   }
 
   /**
-   * Check if given city exists in spreadsheet. If yes, load the data.
-   * @param {Object} cityData Cities data
-   * @param {String} hash The URL hash
+   * Fetch the available cities from a spreadsheet
+   * @param {String} spreadsheetId The spreadsheet ID
+   * @return {Promise} Promise with the cities
    */
-  onCitiesLoaded(cityData, hash) {
-    let cityExists = false;
-    hash = hash.toLowerCase().substr(1);
-
-    cityData.forEach(item => {
-      let city = item.city.toLowerCase();
-
-      if (city === hash) {
-        this.getSpreadsheetData(item.spreadsheetid);
-
-        this.map.setCenter({
-          lat: parseFloat(item.lat),
-          lng: parseFloat(item.lng)
-        });
-
-        cityExists = true;
-      }
+  fetchCities(spreadsheetId) {
+    return new Promise(resolve => {
+      let cityData = new Data();
+      cityData.get({
+        sourceId: spreadsheetId,
+        sheet: 'od6'
+      }).then(cities => resolve(cities));
     });
-
-    if (!cityExists) {
-      this.loadDefaultData();
-    }
   }
 
   /**
-   * If no/wrong hash is set, load default data (hamburg) and mark user position
+   * Choose one city based on the url hash. If none or a wrong one
+   * is provided, use the first city
+   * @param {Object} cities The cities object
+   * @param {String} hash The url hash
+   * @return {Promise} Promise with the city
    */
-  loadDefaultData() {
-    this.markUserLocation();
-    this.getSpreadsheetData(this.defaultSpreadsheet);
+  chooseCity(cities, hash) {
+    let cityExists = false;
+    hash = hash.toLowerCase().substr(1);
+
+    return new Promise(resolve => {
+      cities.forEach(item => {
+        let city = item.city.toLowerCase();
+
+        if (city === hash) {
+          cityExists = true;
+
+          this.map.setCenter({
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lng)
+          });
+
+          resolve(item);
+        }
+      });
+
+      if (!cityExists) {
+        resolve(cities[0]);
+        this.markUserLocation();
+      }
+    });
+  }
+
+  /**
+   * Get the hotspot data from a single city
+   * @param {Object} city The city object
+   * @return {Promise} Promise with the city data
+   */
+  getCityData(city) {
+    return new Promise(resolve => {
+      resolve(this.getSpreadsheetData(city.spreadsheetid));
+    });
   }
 
   /**
    * Getting the data from the given spreadsheet
    * @param {String} spreadsheetId The spreadsheet ID
+   * @return {Promise} Promise with the hotspot data
    */
   getSpreadsheetData(spreadsheetId) {
-    this.data.get({
-      sourceId: spreadsheetId,
-      sheet: 'od6'
-    }).then(hotspotsData => this.onHotspotsLoaded(hotspotsData));
+    return new Promise(resolve => {
+      this.data.get({
+        sourceId: spreadsheetId,
+        sheet: 'od6'
+      }).then(hotspotsData => resolve(hotspotsData));
+    });
   }
 
   /**
