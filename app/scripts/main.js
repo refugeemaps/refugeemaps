@@ -9,14 +9,71 @@ class App {
   constructor() {
     this.map = new Map('.map');
 
-    this.markUserLocation();
-
     this.data = new Data();
+    this.defaultSpreadsheet = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
 
-    this.spreadsheetKey = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
+    this.hash = window.location.hash;
 
+    if (this.hash) {
+      this.cityData = new Data();
+      this.citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0';
+      this.cityData.get({
+        sourceId: this.citySpreadsheet,
+        sheet: 'od6'
+      }).then(cityData => this.onCitiesLoaded(cityData, this.hash));
+    } else {
+      this.loadDefaultData();
+    }
+
+    window.onhashchange = function() {
+      window.location.reload();
+    };
+  }
+
+  /**
+   * Check if given city exists in spreadsheet. If yes, load the data.
+   * @param {Object} cityData Cities data
+   * @param {String} hash The URL hash
+   */
+  onCitiesLoaded(cityData, hash) {
+    let cityExists = false;
+    hash = hash.toLowerCase().substr(1);
+
+    cityData.forEach(item => {
+      let city = item.city.toLowerCase();
+
+      if (city === hash) {
+        this.getSpreadsheetData(item.spreadsheetid);
+
+        this.map.setCenter({
+          lat: parseFloat(item.lat),
+          lng: parseFloat(item.lng)
+        });
+
+        cityExists = true;
+      }
+    });
+
+    if (!cityExists) {
+      this.loadDefaultData();
+    }
+  }
+
+  /**
+   * If no/wrong hash is set, load default data (hamburg) and mark user position
+   */
+  loadDefaultData() {
+    this.markUserLocation();
+    this.getSpreadsheetData(this.defaultSpreadsheet);
+  }
+
+  /**
+   * Getting the data from the given spreadsheet
+   * @param {String} spreadsheetId The spreadsheet ID
+   */
+  getSpreadsheetData(spreadsheetId) {
     this.data.get({
-      sourceId: this.spreadsheetKey,
+      sourceId: spreadsheetId,
       sheet: 'od6'
     }).then(hotspotsData => this.onHotspotsLoaded(hotspotsData));
   }
