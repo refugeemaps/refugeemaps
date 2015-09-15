@@ -7,18 +7,90 @@ class App {
    * Constructs the app.
    */
   constructor() {
-    this.map = new Map('.map');
+    const citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0',
+      hash = window.location.hash;
 
-    this.markUserLocation();
+    this.map = new Map('.map');
 
     this.data = new Data();
 
-    this.spreadsheetKey = '1M5INJw-LvHfRzl0VleYVKWdiGOS1LE1uF-4ePlCQeYQ';
+    this.fetchCities(citySpreadsheet)
+      .then(cities => this.chooseCity(cities, hash))
+      .then(city => this.getCityData(city)
+      .then(hotspots => this.onHotspotsLoaded(hotspots))
+      .catch(error => this.handlePromiseError(error)));
 
-    this.data.get({
-      sourceId: this.spreadsheetKey,
+    window.onhashchange = function() {
+      window.location.reload();
+    };
+  }
+
+  /**
+   * Fetch the available cities from a spreadsheet
+   * @param {String} spreadsheetId The spreadsheet ID
+   * @return {Promise} Promise with the cities
+   */
+  fetchCities(spreadsheetId) {
+    let cityData = new Data();
+    return cityData.get({
+      sourceId: spreadsheetId,
       sheet: 'od6'
-    }).then(hotspotsData => this.onHotspotsLoaded(hotspotsData));
+    });
+  }
+
+  /**
+   * Choose one city based on the url hash. If none or a wrong one
+   * is provided, use the first city
+   * @param {Object} cities The cities object
+   * @param {String} hash The url hash
+   * @return {Promise} Promise with the city
+   */
+  chooseCity(cities, hash) {
+    let cityExists = false;
+    hash = hash.toLowerCase().substr(1);
+
+    return new Promise(resolve => {
+      cities.forEach(item => {
+        let city = item.city.toLowerCase();
+
+        if (city === hash) {
+          cityExists = true;
+
+          this.map.setCenter({
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lng)
+          });
+
+          resolve(item);
+        }
+      });
+
+      if (!cityExists) {
+        this.markUserLocation();
+        resolve(cities[0]);
+      }
+    });
+  }
+
+  /**
+   * Get the hotspot data from a single city
+   * @param {Object} city The city object
+   * @return {Promise} Promise with the city data
+   */
+  getCityData(city) {
+    return this.getSpreadsheetData(city.spreadsheetid);
+  }
+
+  /**
+   * Getting the data from the given spreadsheet
+   * @param {String} spreadsheetId The spreadsheet ID
+   * @return {Promise} Promise with the hotspot data
+   */
+  getSpreadsheetData(spreadsheetId) {
+    return this.data.get({
+      sourceId: spreadsheetId,
+      sheet: 'od6'
+    });
   }
 
   /**
@@ -77,6 +149,14 @@ class App {
         infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
       });
     }
+  }
+
+  /**
+   * Log the error the the console
+   * @param {Error} error The errow that was thrown
+   */
+  handlePromiseError(error) {
+    console.log('Something went wrong: ', error); // eslint-disable-line
   }
 }
 
