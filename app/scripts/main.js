@@ -82,7 +82,6 @@ class App {
   /**
    * Find the closest city/spreadsheet to the user location.
    * Using the Haversine formula to calc distance between locations.
-   * is provided, use the first city
    * @param {Object} cities The cities object
    * @return {Promise} Promise with the closest city
    */
