@@ -196,7 +196,6 @@ class App {
    * @param {GoogleLatLng} position The user position
    */
   markUserLocation(position) {
-    console.log(position);
     const infoWindowContent = 'You are here';
 
     this.map.addMarker({
