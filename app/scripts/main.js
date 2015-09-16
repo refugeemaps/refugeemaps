@@ -14,11 +14,19 @@ class App {
 
     this.data = new Data();
 
-    this.fetchCities(citySpreadsheet)
-      .then(cities => this.chooseCity(cities, hash))
-      .then(city => this.getCityData(city)
-      .then(hotspots => this.onHotspotsLoaded(hotspots))
-      .catch(error => this.handlePromiseError(error)));
+    if (hash) {
+      this.fetchCities(citySpreadsheet)
+        .then(cities => this.selectCity(cities, hash))
+        .then(city => this.getCityData(city)
+        .then(hotspots => this.onHotspotsLoaded(hotspots))
+        .catch(error => this.handlePromiseError(error)));
+    } else {
+      Promise.all([this.fetchCities(citySpreadsheet), this.getUserLocation()])
+        .then(data => this.findClosestCity(data[0], data[1]))
+        .then(city => this.getCityData(city))
+        .then(hotspots => this.onHotspotsLoaded(hotspots))
+        .catch(error => this.handlePromiseError(error));
+    }
 
     window.onhashchange = function() {
       window.location.reload();
@@ -39,13 +47,13 @@ class App {
   }
 
   /**
-   * Choose one city based on the url hash. If none or a wrong one
-   * is provided, use the first city
+   * Select a city based on the url hash. If a wrong one
+   * is provided, use the first city in the document
    * @param {Object} cities The cities object
    * @param {String} hash The url hash
    * @return {Promise} Promise with the city
    */
-  chooseCity(cities, hash) {
+  selectCity(cities, hash) {
     let cityExists = false;
     hash = hash.toLowerCase().substr(1);
 
@@ -56,19 +64,72 @@ class App {
         if (city === hash) {
           cityExists = true;
 
-          this.map.setCenter({
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lng)
-          });
+          this.centerCity(item);
 
           resolve(item);
         }
       });
 
       if (!cityExists) {
-        this.markUserLocation();
+        this.centerCity(cities[0]);
         resolve(cities[0]);
       }
+    });
+  }
+
+  /**
+   * Find the closest city/spreadsheet to the user location.
+   * Using the Haversine formula to calc distance between locations.
+   * @param {Object} cities The cities object
+   * @param {Object} userPos The user position
+   * @return {Promise} Promise with the closest city
+   */
+  findClosestCity(cities, userPos) {
+    let userLat = userPos.lat,
+      userLng = userPos.lng,
+      r = 6371, // radius of earth in km
+      distances = [],
+      closestIndex = -1,
+      closestCity = '';
+
+    cities.forEach((city, index) => {
+      let cityLat = city.lat,
+        cityLng = city.lng,
+        dLat = this.rad(cityLat - userLat),
+        dLong = this.rad(cityLng - userLng),
+        a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(this.rad(userLat)) * Math.cos(this.rad(userLat))
+          * Math.sin(dLong / 2) * Math.sin(dLong / 2),
+        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+        d = r * c;
+
+      distances[index] = d;
+
+      if (closestIndex === -1 || d < distances[closestIndex]) {
+        closestIndex = index;
+        closestCity = city;
+      }
+    });
+    return closestCity;
+  }
+
+  /**
+   * Convert from degrees to radians
+   * @param {Float} x The degrees value
+   * @return {Float} The radian value
+   */
+  rad(x) {
+    return x * Math.PI / 180;
+  }
+
+  /**
+   * Center the given city on the map
+   * @param {Object} city The city
+   */
+  centerCity(city) {
+    this.map.setCenter({
+      lat: parseFloat(city.lat),
+      lng: parseFloat(city.lng)
     });
   }
 
@@ -105,31 +166,46 @@ class App {
   }
 
   /**
-   * Add a marker to the map at the current user position
+   * Get the user location
+   * @return {Promise} Promise with the user location
    */
-  markUserLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        let userPos = {
+  getUserLocation() {
+    return new Promise(resolve => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          let pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          },
-          infoWindowContent = 'You are here';
+          };
 
-        this.map.addMarker({
-          latLng: userPos,
-          type: 'user',
-          query: `${userPos.lat.toString()}, ${userPos.lng.toString()}`,
-          infoWindowContent: infoWindowContent,
-          showInfoWindow: true
+          this.markUserLocation(pos);
+          resolve(pos);
+        }, () => {
+          this.handleLocationError(true, this.map.getCenter());
+          resolve(this.map.getDefaultLocation());
         });
-        this.map.setCenter(userPos);
-      }, () => {
-        this.handleLocationError(true, this.map.getCenter());
-      });
-    } else {
-      this.handleLocationError(false, this.map.getCenter());
-    }
+      } else {
+        this.handleLocationError(false, this.map.getCenter());
+        resolve(this.map.getDefaultLocation());
+      }
+    });
+  }
+
+  /**
+   * Add a marker to the map at the current user position
+   * @param {GoogleLatLng} position The user position
+   */
+  markUserLocation(position) {
+    const infoWindowContent = 'You are here';
+
+    this.map.addMarker({
+      latLng: position,
+      type: 'user',
+      query: `${position.lat.toString()}, ${position.lng.toString()}`,
+      infoWindowContent: infoWindowContent,
+      showInfoWindow: true
+    });
+    this.map.setCenter(position);
   }
 
   /**
