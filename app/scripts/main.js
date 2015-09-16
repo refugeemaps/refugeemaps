@@ -50,26 +50,84 @@ class App {
     hash = hash.toLowerCase().substr(1);
 
     return new Promise(resolve => {
-      cities.forEach(item => {
-        let city = item.city.toLowerCase();
+      if (hash) {
+        cities.forEach(item => {
+          let city = item.city.toLowerCase();
 
-        if (city === hash) {
-          cityExists = true;
+          if (city === hash) {
+            cityExists = true;
 
-          this.map.setCenter({
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lng)
-          });
+            this.map.setCenter({
+              lat: parseFloat(item.lat),
+              lng: parseFloat(item.lng)
+            });
 
-          resolve(item);
-        }
-      });
+            resolve(item);
+          }
+        });
+      } else {
+        this.markUserLocation();
+        this.findClosestCity(cities)
+          .then(resolve)
+          .catch(error => this.handlePromiseError(error));
+      }
 
       if (!cityExists) {
         this.markUserLocation();
         resolve(cities[0]);
       }
     });
+  }
+
+  /**
+   * Find the closest city/spreadsheet to the user location.
+   * Using the Haversine formula to calc distance between locations.
+   * is provided, use the first city
+   * @param {Object} cities The cities object
+   * @return {Promise} Promise with the closest city
+   */
+  findClosestCity(cities) {
+    return new Promise((resolve, reject) => {
+      this.getUserLocation()
+        .then(userLocation => {
+          let userLat = userLocation.lat,
+            userLng = userLocation.lng,
+            r = 6371, // radius of earth in km
+            distances = [],
+            closestIndex = -1,
+            closestCity = '';
+
+          cities.forEach((city, index) => {
+            let cityLat = city.lat,
+              cityLng = city.lng,
+              dLat = this.rad(cityLat - userLat),
+              dLong = this.rad(cityLng - userLng),
+              a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(this.rad(userLat)) * Math.cos(this.rad(userLat))
+                * Math.sin(dLong / 2) * Math.sin(dLong / 2),
+              c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+              d = r * c;
+
+            distances[index] = d;
+
+            if (closestIndex === -1 || d < distances[closestIndex]) {
+              closestIndex = index;
+              closestCity = city;
+            }
+          });
+          resolve(closestCity);
+        })
+        .catch(reject);
+    });
+  }
+
+  /**
+   * Convert from degrees to radians
+   * @param {Float} x The degrees value
+   * @return {Float} The radian value
+   */
+  rad(x) {
+    return x * Math.PI / 180;
   }
 
   /**
@@ -105,28 +163,40 @@ class App {
   }
 
   /**
+   * Get the user location
+   * @return {Promise} Promise with the user location
+   */
+  getUserLocation() {
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(position => {
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude});
+      });
+    });
+  }
+
+  /**
    * Add a marker to the map at the current user position
    */
   markUserLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        let userPos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          },
-          infoWindowContent = 'You are here';
+      this.getUserLocation()
+        .then(userPos => {
+          const infoWindowContent = 'You are here';
 
-        this.map.addMarker({
-          latLng: userPos,
-          type: 'user',
-          query: `${userPos.lat.toString()}, ${userPos.lng.toString()}`,
-          infoWindowContent: infoWindowContent,
-          showInfoWindow: true
-        });
-        this.map.setCenter(userPos);
-      }, () => {
-        this.handleLocationError(true, this.map.getCenter());
-      });
+          this.map.addMarker({
+            latLng: userPos,
+            type: 'user',
+            query: `${userPos.lat.toString()}, ${userPos.lng.toString()}`,
+            infoWindowContent: infoWindowContent,
+            showInfoWindow: true
+          });
+          this.map.setCenter(userPos);
+        }, () => {
+          this.handleLocationError(true, this.map.getCenter());
+        })
+        .catch(error => this.handlePromiseError(error));
     } else {
       this.handleLocationError(false, this.map.getCenter());
     }
