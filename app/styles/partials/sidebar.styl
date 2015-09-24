@@ -10,6 +10,18 @@
   background: #fff
   overflow: hidden
   &__keys
+    &__language-filter
+      display: flex
+      align-items: center
+      justify-content: space-between
+      padding: emCalc(10px)
+      &__item
+        margin-right: emCalc(10px)
+        img
+          width: emCalc(20px)
+          vertical-align: middle
+        &:last-child
+          margin: 0
     &__header
       cursor: pointer
       padding: emCalc(10px)

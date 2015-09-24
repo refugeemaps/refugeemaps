@@ -1,3 +1,5 @@
+import Data from './data';
+
 export default class Sidebar {
   /**
    * Constructs the Sidebar
@@ -11,18 +13,27 @@ export default class Sidebar {
     this.currentFilter = [];
     this.selector = selector;
     this.$container = document.querySelector(selector);
+    this.$languageSwitcher =
+      document.querySelector(`${selector}__language-filter`);
     this.$itemsWrapper = document.querySelector(`${selector}__items`);
     this.$items = document.querySelectorAll(`${selector}__items__item`);
     this.$header = document.querySelector(`${selector}__header`);
     this.$headerShow = document.querySelector(`${selector}__header__show`);
     this.$headerHide = document.querySelector(`${selector}__header__hide`);
-    this.initEvents();
+
+    this.getItems('1TSg1Nd9j-zqNw-HaxAR__jyOU3GLtI_eW3oEddvEu-Y')
+      .then(items => {
+        this.filterItemsData = items;
+        this.addToSidebar(items);
+      });
   }
 
   /**
    * Add click listener to sidebar items
+   * @param {String} selector The container selector
    */
-  initEvents() {
+  initEvents(selector) {
+    this.$items = document.querySelectorAll(`${selector}__items__item`);
     for (let i = 0; i < this.$items.length; i++) {
       let type = this.$items[i].dataset.filter;
       this.$items[i].addEventListener('click',
@@ -30,6 +41,62 @@ export default class Sidebar {
     }
 
     this.$header.addEventListener('click', () => this.toggleSidebar());
+    this.$languageSwitcher.addEventListener('change', event =>
+      this.switchLanguage(event, this.$items));
+  }
+
+  /**
+   * Add filter items to sidebar
+   * @param {Object} items The items data object
+   */
+  addToSidebar(items) {
+    items.forEach(item => {
+      let filterItem = document.createElement('div'),
+        filterItemIcon = document.createElement('img'),
+        filterItemText = document.createElement('span');
+
+      filterItem.className = 'sidebar__keys__items__item';
+      filterItem.dataset.filter = item.key;
+
+      filterItemIcon.src = `../assets/${item.key}.png`;
+      filterItemIcon.className = 'sidebar__keys__items__item__image';
+
+      filterItemText.textContent = item.english;
+      filterItemText.className = 'sidebar__keys__items__item__text';
+
+      filterItem.appendChild(filterItemIcon);
+      filterItem.appendChild(filterItemText);
+      this.$itemsWrapper.appendChild(filterItem);
+    });
+
+    this.initEvents(this.selector);
+  }
+
+  /**
+   * Add filter items to sidebar
+   * @param {ChangeEvent} event The change event of the radio buttons
+   * @param {DOMNodes} items The filter items
+   */
+  switchLanguage(event, items) {
+    let language = event.target.value;
+
+    for (let i = 0; i < this.$items.length; i++) {
+      items[i].lastChild.textContent = this.filterItemsData[i][language];
+    }
+  }
+
+  /**
+   * Get the sidebar filter items
+   * @param {String} spreadsheetId The spreadsheet id
+   * @return {Promise} The promise with the filter items object
+   */
+  getItems(spreadsheetId) {
+    this.filterItems = new Data();
+
+    return this.filterItems.get({
+      sourceId: spreadsheetId,
+      sheet: 'od6'
+    });
   }
 
   /**
