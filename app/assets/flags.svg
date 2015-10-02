@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+
+  <symbol id="germany" height="15" width="20" viewBox="0 0 640 480" version="1.0" y="0" x="0">
+    <g id="flag" fill-rule="evenodd" stroke-width="1pt" transform="matrix(.60207 0 0 .75259 0 -.000028157)">
+      <rect id="rect171" height="212.6" width="1063" y="425.2" x="0" fill="#ffe600"/>
+      <rect id="rect256" height="212.6" width="1063" y="0.000038" x="0"/>
+      <rect id="rect255" height="212.6" width="1063" y="212.6" x="0" fill="#f00"/>
+    </g>
+  </symbol>
+
+  <symbol id="great-britain" height="15" width="20" viewBox="0 0 640 480" version="1.1">
+    <defs id="defs3">
+      <clipPath id="clipPath8673" clipPathUnits="userSpaceOnUse">
+        <rect id="rect8675" fill-opacity="0.67" height="512" width="682.67" y="-.0000028613" x="-85.333"/>
+      </clipPath>
+    </defs>
+    <g id="flag" clip-path="url(#clipPath8673)" transform="matrix(.93750 0 0 .93750 80 .0000026825)">
+      <g id="g578" stroke-width="1pt" transform="matrix(17.067 0 0 17.067 -256 -0.0000024)">
+        <rect id="rect124" height="30" width="60" y="0" x="0" fill="#006"/>
+        <g id="g584">
+          <path id="path146" d="m0 0v3.3541l53.292 26.646h6.708v-3.354l-53.292-26.646h-6.708zm60 0v3.354l-53.292 26.646h-6.708v-3.354l53.292-26.646h6.708z" fill="#fff"/>
+          <path id="path136" d="m25 0v30h10v-30h-10zm-25 10v10h60v-10h-60z" fill="#fff"/>
+          <path id="path141" d="m0 12v6h60v-6h-60zm27-12v30h6v-30h-6z" fill="#c00"/>
+          <path id="path150" d="m0 30 20-10h4.472l-20 10h-4.472zm0-30 20 10h-4.472l-15.528-7.7639v-2.2361zm35.528 10 20-10h4.472l-20 10h-4.472zm24.472 20-20-10h4.472l15.528 7.764v2.236z" fill="#c00"/>
+        </g>
+      </g>
+    </g>
+  </symbol>
+
+  <symbol id="syria" height="15" width="20" viewBox="0 0 640 480" version="1" y="0" x="0">
+    <g id="flag" fill-rule="evenodd">
+      <rect id="rect171" rx="0" ry="0" height="480" width="640" y=".0000010549" x="-2.1606e-8" fill="#fff"/>
+      <rect id="rect256" rx="0" ry="0" height="159.3" width="480" y="320.7" x="-3.457e-7" fill="#fff"/>
+      <rect id="rect255" height="159.3" width="480" y=".000033733" x="-3.457e-7" fill="#fff"/>
+      <path id="path205" d="m201.9 281-28.822-20.867-28.68 21.072 10.667-34.242-28.628-21.145 35.418-0.2948 10.985-34.138 11.221 34.06 35.418 0.0449-28.481 21.344 10.902 34.166z" fill="#fff"/>
+      <path id="path583" d="m509.54 281-28.822-20.867-28.68 21.072 10.667-34.242-28.628-21.145 35.418-0.2948 10.985-34.138 11.221 34.06 35.418 0.0449-28.481 21.344 10.902 34.166z" fill="#fff"/>
+      <rect id="rect7524" rx="0" ry="0" height="159.3" width="640" y="320.7" x="-3.457e-7" stroke-width="1pt"/>
+      <rect id="rect7526" height="159.3" width="640" y=".000033733" x="-3.457e-7" stroke-width="1pt" fill="#f00"/>
+      <path id="path7528" d="m201.9 281-28.822-20.867-28.68 21.072 10.667-34.242-28.628-21.145 35.418-0.2948 10.985-34.138 11.221 34.06 35.418 0.0449-28.481 21.344 10.902 34.166z" stroke-width=".11287" fill="#090"/>
+      <path id="path7530" d="m509.54 281-28.822-20.867-28.68 21.072 10.667-34.242-28.628-21.145 35.418-0.2948 10.985-34.138 11.221 34.06 35.418 0.0449-28.481 21.344 10.902 34.166z" stroke-width=".11287" fill="#090"/>
+    </g>
+  </symbol>
+
+</svg>

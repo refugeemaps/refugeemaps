@@ -1,107 +1,22 @@
--
-  var sideBarItems = [
-    {
-      icon: 'assets/religious-muslim-24@2x.png',
-      filter: 'mosque',
-      nameEnglish: 'Mosque',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/religious-christian-24@2x.png',
-      filter: 'church',
-      nameEnglish: 'Church',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/bank-24@2x.png',
-      filter: 'bank',
-      nameEnglish: 'Bank',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/telephone-24@2x.png',
-      filter: 'call-shop',
-      nameEnglish: 'Call Shop',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/grocery-24@2x.png',
-      filter: 'supermarket',
-      nameEnglish: 'Supermarket',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/town-hall-24@2x.png',
-      filter: 'culture',
-      nameEnglish: 'Culture',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/pharmacy-24@2x.png',
-      filter: 'pharmacy',
-      nameEnglish: 'Pharmacy',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/laundry-24@2x.png',
-      filter: 'laundry',
-      nameEnglish: 'Laundry',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/playground-24@2x.png',
-      filter: 'playground',
-      nameEnglish: 'Playground',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/soccer-24@2x.png',
-      filter: 'football',
-      nameEnglish: 'Football',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/basketball-24@2x.png',
-      filter: 'basketball',
-      nameEnglish: 'Basketball',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/tennis-24@2x.png',
-      filter: 'table-tennis',
-      nameEnglish: 'Table Tennis',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/skateboard.png',
-      filter: 'skateboard',
-      nameEnglish: 'Skatepark',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/library-24@2x.png',
-      filter: 'library',
-      nameEnglish: 'Library',
-      nameForeign: ''
-    },
-    {
-      icon: 'assets/toilets-24@2x.png',
-      filter: 'public-restroom',
-      nameEnglish: 'Public Restroom',
-      nameForeign: ''
-    }
-  ];
-
 .sidebar
-  .sidebar__keys
-    .sidebar__keys__header.sidebar__keys__header--hide-filters
-      span.sidebar__keys__header__hide Hide Filters
-      span.sidebar__keys__header__show Show Filters
-    .sidebar__keys__items.sidebar__keys__items--hidden
-
-      each item in sideBarItems
-        .sidebar__keys__items__item(data-filter!= item.filter)
-          img.sidebar__keys__items__item__image(src!= item.icon)
-          span.sidebar__keys__items__item__text!= item.nameEnglish
-          if (item.nameForeign)
-            span.sidebar__keys__items__item__text / !{item.nameForeign}
+  form.language-filter
+    div.language-filter__flag
+      label(for='english')
+        svg
+          use(xlink:href='assets/flags.svg#great-britain')
+      input(type='radio', name='lang' value='english' id='english' checked)
+    div.language-filter__flag
+      label(for='german')
+        svg
+          use(xlink:href='assets/flags.svg#germany')
+      input(type='radio', name='lang' value='german' id='german')
+    .language-filter__flag
+      label(for='arabic')
+        svg
+          use(xlink:href='assets/flags.svg#syria')
+      input(type='radio', name='lang' value='arabic' id='arabic')
+  .sidebar__filters
+    .sidebar__filters__header.sidebar__filters__header--hide-filters
+      span.sidebar__filters__header__hide Hide Filters
+      span.sidebar__filters__header__show Show Filters
+    .sidebar__filters__body.sidebar__filters__body--hidden
