@@ -46,7 +46,6 @@ export default class Data {
     this.data[this.sheet].data = this.data[this.sheet].data
       .filter(item => item.visible === 'y' && this.hasMandatories(item))
       .map(item => {
-        item.id = item.place + item.lat + item.lng;
         return this.sanitize(item);
       });
   }
