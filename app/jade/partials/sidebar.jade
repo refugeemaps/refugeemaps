@@ -1,20 +1,22 @@
 .sidebar
-  .sidebar__keys
-    form.sidebar__keys__language-filter
-      div.sidebar__keys__language-filter__item
-        label(for='english')
-          img(src='assets/GB.svg')
-        input(type='radio', name='lang' value='english' id='english' checked)
-      div.sidebar__keys__language-filter__item
-        label(for='german')
-          img(src='assets/DE.svg')
-        input(type='radio', name='lang' value='german' id='german')
-      div.sidebar__keys__language-filter__item
-        label(for='arabic')
-          img(src='assets/SY.svg')
-        input(type='radio', name='lang' value='arabic' id='arabic')
-
-    .sidebar__keys__header.sidebar__keys__header--hide-filters
-      span.sidebar__keys__header__hide Hide Filters
-      span.sidebar__keys__header__show Show Filters
-    .sidebar__keys__items.sidebar__keys__items--hidden
+  form.language-filter
+    div.language-filter__flag
+      label(for='english')
+        svg
+          use(xlink:href='assets/flags.svg#great-britain')
+      input(type='radio', name='lang' value='english' id='english' checked)
+    div.language-filter__flag
+      label(for='german')
+        svg
+          use(xlink:href='assets/flags.svg#germany')
+      input(type='radio', name='lang' value='german' id='german')
+    .language-filter__flag
+      label(for='arabic')
+        svg
+          use(xlink:href='assets/flags.svg#syria')
+      input(type='radio', name='lang' value='arabic' id='arabic')
+  .sidebar__filters
+    .sidebar__filters__header.sidebar__filters__header--hide-filters
+      span.sidebar__filters__header__hide Hide Filters
+      span.sidebar__filters__header__show Show Filters
+    .sidebar__filters__body.sidebar__filters__body--hidden
