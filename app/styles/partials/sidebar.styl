@@ -9,37 +9,25 @@
   border: 1px solid #D6D6D6
   background: #fff
   overflow: hidden
-  &__keys
-    &__language-filter
-      display: flex
-      align-items: center
-      justify-content: space-between
-      padding: emCalc(10px)
-      &__item
-        margin-right: emCalc(10px)
-        img
-          width: emCalc(20px)
-          vertical-align: middle
-        &:last-child
-          margin: 0
+  &__filters
     &__header
       cursor: pointer
       padding: emCalc(10px)
       background: #444
       color: #fff
       &--hide-filters
-        .sidebar__keys__header__show
+        .sidebar__filters__header__show
           display: inline
-        .sidebar__keys__header__hide
+        .sidebar__filters__header__hide
           display: none
       &__show
         display: none
-    &__items
+    &__body
       max-height: s('calc(%s - %s)', 90vh, $sidebar-header-height)
       overflow-y: auto
       &--hidden
         display: none
-      &__item
+      &__filter
         padding: emCalc(10px)
         cursor: pointer
         &--active

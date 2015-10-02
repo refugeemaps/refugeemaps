@@ -14,9 +14,9 @@ export default class Sidebar {
     this.selector = selector;
     this.$container = document.querySelector(selector);
     this.$languageSwitcher =
-      document.querySelector(`${selector}__language-filter`);
-    this.$itemsWrapper = document.querySelector(`${selector}__items`);
-    this.$items = document.querySelectorAll(`${selector}__items__item`);
+      document.querySelector('.language-filter');
+    this.$itemsWrapper = document.querySelector(`${selector}__body`);
+    this.$items = document.querySelectorAll(`${selector}__body__filter`);
     this.$header = document.querySelector(`${selector}__header`);
     this.$headerShow = document.querySelector(`${selector}__header__show`);
     this.$headerHide = document.querySelector(`${selector}__header__hide`);
@@ -33,7 +33,7 @@ export default class Sidebar {
    * @param {String} selector The container selector
    */
   initEvents(selector) {
-    this.$items = document.querySelectorAll(`${selector}__items__item`);
+    this.$items = document.querySelectorAll(`${selector}__body__filter`);
     for (let i = 0; i < this.$items.length; i++) {
       let type = this.$items[i].dataset.filter;
       this.$items[i].addEventListener('click',
@@ -55,14 +55,14 @@ export default class Sidebar {
         filterItemIcon = document.createElement('img'),
         filterItemText = document.createElement('span');
 
-      filterItem.className = 'sidebar__keys__items__item';
+      filterItem.className = 'sidebar__filters__body__filter';
       filterItem.dataset.filter = item.key;
 
       filterItemIcon.src = `../assets/${item.key}.png`;
-      filterItemIcon.className = 'sidebar__keys__items__item__image';
+      filterItemIcon.className = 'sidebar__filters__body__filter__image';
 
       filterItemText.textContent = item.english;
-      filterItemText.className = 'sidebar__keys__items__item__text';
+      filterItemText.className = 'sidebar__filters__body__filter__text';
 
       filterItem.appendChild(filterItemIcon);
       filterItem.appendChild(filterItemText);
@@ -108,7 +108,7 @@ export default class Sidebar {
   filterMarker(hotspotsData, item, type) {
     let filteredData = [];
 
-    item.classList.toggle('sidebar__keys__items__item--active');
+    item.classList.toggle('sidebar__filters__body__filter--active');
 
     this.updateCurrentFilter(type);
 
@@ -145,7 +145,8 @@ export default class Sidebar {
    * Toggle the sidebar visibility
    */
   toggleSidebar() {
-    this.$itemsWrapper.classList.toggle('sidebar__keys__items--hidden');
-    this.$header.classList.toggle('sidebar__keys__header--hide-filters');
+    console.log('test');
+    this.$itemsWrapper.classList.toggle('sidebar__filters__body--hidden');
+    this.$header.classList.toggle('sidebar__filters__header--hide-filters');
   }
 }
