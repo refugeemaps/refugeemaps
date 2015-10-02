@@ -58,7 +58,7 @@ export default class Sidebar {
       filterItem.className = 'sidebar__filters__body__filter';
       filterItem.dataset.filter = item.key;
 
-      filterItemIcon.src = `../assets/${item.key}.png`;
+      filterItemIcon.src = `assets/${item.key}.png`;
       filterItemIcon.className = 'sidebar__filters__body__filter__image';
 
       filterItemText.textContent = item.english;
@@ -145,7 +145,6 @@ export default class Sidebar {
    * Toggle the sidebar visibility
    */
   toggleSidebar() {
-    console.log('test');
     this.$itemsWrapper.classList.toggle('sidebar__filters__body--hidden');
     this.$header.classList.toggle('sidebar__filters__header--hide-filters');
   }
