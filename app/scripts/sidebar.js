@@ -80,8 +80,28 @@ export default class Sidebar {
   switchLanguage(event, items) {
     let language = event.target.value;
 
+    if (this.isRightToLeft(language)) {
+      this.$container.classList.add('sidebar__filters--rtl');
+    } else {
+      this.$container.classList.remove('sidebar__filters--rtl');
+    }
+
     for (let i = 0; i < this.$items.length; i++) {
       items[i].lastChild.textContent = this.filterItemsData[i][language];
+    }
+  }
+
+  /**
+   * Check if language is right to left
+   * @param {string} language The language
+   * @return {Boolean}
+   */
+  isRightToLeft(language) {
+    switch (language) {
+      case 'arabic':
+        return true;
+      default:
+        return false;
     }
   }
 
