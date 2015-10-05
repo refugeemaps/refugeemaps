@@ -80,6 +80,12 @@ export default class Sidebar {
   switchLanguage(event, items) {
     let language = event.target.value;
 
+    if (language === 'arabic') {
+      this.$container.classList.add('sidebar__filters--rtl');
+    } else {
+      this.$container.classList.remove('sidebar__filters--rtl');
+    }
+
     for (let i = 0; i < this.$items.length; i++) {
       items[i].lastChild.textContent = this.filterItemsData[i][language];
     }
