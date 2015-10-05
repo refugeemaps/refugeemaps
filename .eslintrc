@@ -142,7 +142,7 @@
     "no-restricted-modules": 0,
     "no-sync": 0,
 
-    "indent": [2, 2],
+    "indent": [2, 2, {"SwitchCase": 1}],
     "brace-style": [2, "1tbs", {
       "allowSingleLine": false
     }],
