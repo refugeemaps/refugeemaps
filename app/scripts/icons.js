@@ -10,40 +10,40 @@ export default class Icons {
   /* eslint-disable complexity */
   getIconByType(type) {
     switch (type) {
-    case 'user':
-      return this.getUserIcon();
-    case 'mosque':
-      return this.create({url: 'assets/religious-muslim-24@2x.png'});
-    case 'church':
-      return this.create({url: 'assets/religious-christian-24@2x.png'});
-    case 'bank':
-      return this.create({url: 'assets/bank-24@2x.png'});
-    case 'call-shop':
-      return this.create({url: 'assets/telephone-24@2x.png'});
-    case 'supermarket':
-      return this.create({url: 'assets/grocery-24@2x.png'});
-    case 'culture':
-      return this.create({url: 'assets/town-hall-24@2x.png'});
-    case 'pharmacy':
-      return this.create({url: 'assets/pharmacy-24@2x.png'});
-    case 'laundry':
-      return this.create({url: 'assets/laundry-24@2x.png'});
-    case 'playground':
-      return this.create({url: 'assets/playground-24@2x.png'});
-    case 'football':
-      return this.create({url: 'assets/soccer-24@2x.png'});
-    case 'basketball':
-      return this.create({url: 'assets/basketball-24@2x.png'});
-    case 'table-tennis':
-      return this.create({url: 'assets/tennis-24@2x.png'});
-    case 'skateboard':
-      return this.create({url: 'assets/skateboard.png'});
-    case 'library':
-      return this.create({url: 'assets/library-24@2x.png'});
-    case 'public-restroom':
-      return this.create({url: 'assets/toilets-24@2x.png'});
-    default:
-      return this.create({url: 'assets/marker-24@2x.png'});
+      case 'user':
+        return this.getUserIcon();
+      case 'mosque':
+        return this.create({url: 'assets/religious-muslim-24@2x.png'});
+      case 'church':
+        return this.create({url: 'assets/religious-christian-24@2x.png'});
+      case 'bank':
+        return this.create({url: 'assets/bank-24@2x.png'});
+      case 'call-shop':
+        return this.create({url: 'assets/telephone-24@2x.png'});
+      case 'supermarket':
+        return this.create({url: 'assets/grocery-24@2x.png'});
+      case 'culture':
+        return this.create({url: 'assets/town-hall-24@2x.png'});
+      case 'pharmacy':
+        return this.create({url: 'assets/pharmacy-24@2x.png'});
+      case 'laundry':
+        return this.create({url: 'assets/laundry-24@2x.png'});
+      case 'playground':
+        return this.create({url: 'assets/playground-24@2x.png'});
+      case 'football':
+        return this.create({url: 'assets/soccer-24@2x.png'});
+      case 'basketball':
+        return this.create({url: 'assets/basketball-24@2x.png'});
+      case 'table-tennis':
+        return this.create({url: 'assets/tennis-24@2x.png'});
+      case 'skateboard':
+        return this.create({url: 'assets/skateboard.png'});
+      case 'library':
+        return this.create({url: 'assets/library-24@2x.png'});
+      case 'public-restroom':
+        return this.create({url: 'assets/toilets-24@2x.png'});
+      default:
+        return this.create({url: 'assets/marker-24@2x.png'});
     }
   }
   /* eslint-enable complexity */
