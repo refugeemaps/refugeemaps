@@ -47,8 +47,13 @@ var MAP_DIMENSIONS = {
   height: 100
 };
 
-function bootstrap() {
+function bootstrapSpreadsheet() {
   resetSheet();
+  readAdminSheet();
+  freezeAndProtectSheets();
+}
+
+function updateSpreadsheet() {
   readAdminSheet();
   freezeAndProtectSheets();
 }
@@ -104,7 +109,7 @@ function onEdit(e) {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
   if (sheet.getName() === ADMIN_SHEET_NAME) {
-    return readAdminSheet();
+    return updateSpreadsheet();
   }
   var temp = PropertiesService.getDocumentProperties();
   var properties = {};
