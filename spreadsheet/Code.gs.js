@@ -11,6 +11,9 @@
 // The name of the hidden admin sheet
 var ADMIN_SHEET_NAME = '🔒Admin';
 
+// The name of the hidden data sheet
+var DATA_SHEET_NAME = '💩Data';
+
 // The to-be-expected admin column headers
 var ADMIN_COLUMN_HEADERS = {
   sheets: 'sheets',
@@ -111,6 +114,9 @@ function onEdit(e) {
   if (sheet.getName() === ADMIN_SHEET_NAME) {
     return updateSpreadsheet();
   }
+  if (sheet.getName() === DATA_SHEET_NAME) {
+    return;
+  }
   var temp = PropertiesService.getDocumentProperties();
   var properties = {};
   var keys = temp.getKeys();
@@ -129,6 +135,23 @@ function onEdit(e) {
         properties.mapPreview.columnIndex,
         row,
         numRows);
+  }
+}
+
+function onOpen() {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
+  var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
+  var sheets = activeSpreadsheet.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    var sheet = sheets[i];
+    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
+        (sheet.getName() === DATA_SHEET_NAME)) {
+      continue;
+    }
+    var data = sheet.getDataRange();
+    dataSheet.clear();
+    sheet.appendRow(data.getValues());
   }
 }
 
@@ -203,6 +226,7 @@ function resetSheet() {
       activeSpreadsheet.deleteSheet(sheet);
     }
   }
+  var dataSheet = activeSpreadsheet.insertSheet(DATA_SHEET_NAME, 1);
 }
 
 function freezeAndProtectSheets() {
@@ -214,12 +238,14 @@ function freezeAndProtectSheets() {
   });
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
+  var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
     var maxRows = sheet.getMaxRows();
     var maxCols = sheet.getMaxColumns();
-    if (sheet.getName() === ADMIN_SHEET_NAME) {
+    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
+        (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
     // Vertical alignment and wrapping in all cells
@@ -238,7 +264,8 @@ function freezeAndProtectSheets() {
     sheet.getRange(1, properties.longitude.columnIndex, maxRows).protect();
     sheet.getRange(1, properties.mapPreview.columnIndex, maxRows).protect();
   }
-  adminSheet.hideSheet();
+  adminSheet.hideSheet().protect();
+  dataSheet.hideSheet().protect();
 }
 
 function createSheetIfNotExists(sheetName, index) {
@@ -255,7 +282,8 @@ function createColumnIfNotExists(columnName, index) {
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if (sheet.getName() === ADMIN_SHEET_NAME) {
+    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
+        (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
     var columnHeaders = sheet.getLastColumn() ?
@@ -275,7 +303,8 @@ function createEnums(values, index) {
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if (sheet.getName() === ADMIN_SHEET_NAME) {
+    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
+        (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
     var emoji = sheet.getName().replace(/\w/g, '');
@@ -297,7 +326,8 @@ function createTranslations(language, index, descriptionIndex) {
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if (sheet.getName() === ADMIN_SHEET_NAME) {
+    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
+        (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
     var range = sheet.getRange(2, index + 1, sheet.getMaxRows(), 1);
