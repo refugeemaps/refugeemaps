@@ -12,7 +12,7 @@
 var ADMIN_SHEET_NAME = '🔒Admin';
 
 // The name of the hidden data sheet
-var DATA_SHEET_NAME = '💩Data';
+var DATA_SHEET_NAME = '🗂Data';
 
 // The to-be-expected admin column headers
 var ADMIN_COLUMN_HEADERS = {
@@ -52,8 +52,7 @@ var MAP_DIMENSIONS = {
 
 function bootstrapSpreadsheet() {
   resetSheet();
-  readAdminSheet();
-  freezeAndProtectSheets();
+  updateSpreadsheet();
 }
 
 function updateSpreadsheet() {
@@ -139,6 +138,10 @@ function onEdit(e) {
   updateDataSheet();
 }
 
+function onOpen() {
+  updateDataSheet();
+}
+
 function updateDataSheet() {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
@@ -152,10 +155,10 @@ function updateDataSheet() {
         (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
-    Logger.log('Sheet ' + sheet.getName());
     var data;
     if (headersWritten) {
-      data = sheet.getRange(2, 1, sheet.getMaxRows(), sheet.getMaxColumns());
+      data = sheet.getRange(2, 1, sheet.getMaxRows() - 1,
+          sheet.getMaxColumns());
     } else {
       data = sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns());
     }
@@ -185,9 +188,9 @@ function updateLatLongColumn(addressIndex, latitudeIndex, longitudeIndex,
     mapIndex, row, numRows) {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
-  var addressRange = sheet.getRange(2, addressIndex, sheet.getMaxRows(), 1)
+  var addressRange = sheet.getRange(2, addressIndex, sheet.getMaxRows() - 1, 1)
       .getValues();
-  var latLongRange = sheet.getRange(2, latitudeIndex, sheet.getMaxRows(), 2)
+  var latLongRange = sheet.getRange(2, latitudeIndex, sheet.getMaxRows() - 1, 2)
       .getValues();
   for (var i = 0; i < latLongRange.length; i++) {
     if (!(i + 1 <= row && i + 1 <= row + numRows)) {
@@ -220,9 +223,10 @@ function updateLatLongColumn(addressIndex, latitudeIndex, longitudeIndex,
 function updateMapColumn(latitudeIndex, longitudeIndex, mapIndex) {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
-  var latLongRange = sheet.getRange(2, latitudeIndex, sheet.getMaxRows(), 2)
+  var latLongRange = sheet.getRange(2, latitudeIndex, sheet.getMaxRows() - 1, 2)
       .getValues();
-  var mapRange = sheet.getRange(2, mapIndex, sheet.getMaxRows(), 1).getValues();
+  var mapRange = sheet.getRange(2, mapIndex, sheet.getMaxRows() - 1, 1)
+      .getValues();
   for (var i = 0; i < mapRange.length; i++) {
     var map = mapRange[i][0];
     var latitude = latLongRange[i][0];
@@ -284,14 +288,18 @@ function freezeAndProtectSheets() {
     // Hide "latitude" and "longitude" columns
     sheet.hideColumns(properties.latitude.columnIndex);
     sheet.hideColumns(properties.longitude.columnIndex);
-    // Protect "visible", "latitude", "longitude", "map preview" columns
-    sheet.getRange(1, properties.visible.columnIndex, maxRows).protect();
-    sheet.getRange(1, properties.latitude.columnIndex, maxRows).protect();
-    sheet.getRange(1, properties.longitude.columnIndex, maxRows).protect();
-    sheet.getRange(1, properties.mapPreview.columnIndex, maxRows).protect();
+    // Read-only "visible", "latitude", "longitude", "map preview" columns
+    sheet.getRange(1, properties.visible.columnIndex, maxRows).protect()
+        .setDescription('Read-only');
+    sheet.getRange(1, properties.latitude.columnIndex, maxRows).protect()
+        .setDescription('Read-only');
+    sheet.getRange(1, properties.longitude.columnIndex, maxRows).protect()
+        .setDescription('Read-only');
+    sheet.getRange(1, properties.mapPreview.columnIndex, maxRows).protect()
+        .setDescription('Read-only');
   }
-  adminSheet.hideSheet().protect();
-  dataSheet.hideSheet().protect();
+  adminSheet.hideSheet().protect().setDescription('Read-only');
+  dataSheet.hideSheet().protect().setDescription('Read-only');
 }
 
 function createSheetIfNotExists(sheetName, index) {
@@ -334,7 +342,7 @@ function createEnums(values, index) {
       continue;
     }
     var emoji = sheet.getName().replace(/\w/g, '');
-    var range = sheet.getRange(2, index + 1, sheet.getMaxRows(), 1);
+    var range = sheet.getRange(2, index + 1, sheet.getMaxRows() - 1, 1);
     var localValues = [
       emoji + values[0],
       values[1]
@@ -356,7 +364,7 @@ function createTranslations(language, index, descriptionIndex) {
         (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
-    var range = sheet.getRange(2, index + 1, sheet.getMaxRows(), 1);
+    var range = sheet.getRange(2, index + 1, sheet.getMaxRows() - 1, 1);
     var a1Notation = String.fromCharCode(descriptionIndex + 96) + ':' +
         String.fromCharCode(descriptionIndex + 96);
     range.setValue('=IF(LEN(' + a1Notation + '), GOOGLETRANSLATE(' +
