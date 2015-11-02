@@ -136,22 +136,48 @@ function onEdit(e) {
         row,
         numRows);
   }
+  updateDataSheet();
 }
 
-function onOpen() {
+function updateDataSheet() {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
+  dataSheet.clear();
   var sheets = activeSpreadsheet.getSheets();
+  var headersWritten = false;
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
     if ((sheet.getName() === ADMIN_SHEET_NAME) ||
         (sheet.getName() === DATA_SHEET_NAME)) {
       continue;
     }
-    var data = sheet.getDataRange();
-    dataSheet.clear();
-    sheet.appendRow(data.getValues());
+    Logger.log('Sheet ' + sheet.getName());
+    var data;
+    if (headersWritten) {
+      data = sheet.getRange(2, 1, sheet.getMaxRows(), sheet.getMaxColumns());
+    } else {
+      data = sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns());
+    }
+    var row = data.getRow();
+    var column = data.getColumn();
+    var numColumns = data.getNumColumns();
+    var offset = dataSheet.getDataRange().getLastRow() - 1;
+    var filteredData = [];
+    var values = data.getValues();
+    for (var j = 0; j < values.length; j++) {
+      var line = values[j];
+      if (line.slice(1).join('').length > 0) {
+        filteredData.push(line);
+      }
+    }
+    if (!filteredData.length) {
+      continue;
+    }
+    var numRows = filteredData.length;
+    dataSheet.getRange(row + offset, column, numRows, numColumns)
+        .setValues(filteredData);
+    headersWritten = true;
   }
 }
 
