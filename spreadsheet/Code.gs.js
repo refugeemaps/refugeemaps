@@ -4,7 +4,12 @@
  */
 
 /* jshint shadow:true, loopfunc:true, -W034, -W097 */
-/* global SpreadsheetApp, Logger, PropertiesService, Maps */
+/* global SpreadsheetApp, Logger, BetterLog, PropertiesService, Maps */
+
+/**
+ * Uses BetterLog from https://github.com/peterherrmann/BetterLog
+ * Resources > Libraries > Search for "MYB7yzedMbnJaMKECt6Sm7FLDhaBgl_dE"
+ */
 
 'use strict';
 
@@ -13,6 +18,9 @@ var ADMIN_SHEET_NAME = '🔒Admin';
 
 // The name of the hidden data sheet
 var DATA_SHEET_NAME = '🗂Data';
+
+// The name of the log spreadsheet
+var LOG_SHEET_NAME = '📓Logs';
 
 // The to-be-expected admin column headers
 var ADMIN_COLUMN_HEADERS = {
@@ -52,15 +60,23 @@ var MAP_DIMENSIONS = {
 
 function bootstrapSpreadsheet() {
   resetSheet();
+  /* jshint ignore:start */
+  Logger = BetterLog.useSpreadsheet(false, LOG_SHEET_NAME);
+  /* jshint ignore:end */
+  Logger.log('Boostrapping spreadsheet');
+  Logger.log('Resetting spreadsheet');
   updateSpreadsheet();
+  Logger.log('Finished bootstrapping');
 }
 
 function updateSpreadsheet() {
+  Logger.log('Updating spreadsheet');
   readAdminSheet();
   freezeAndProtectSheets();
 }
 
 function readAdminSheet() {
+  Logger.log('Reading admin sheet');
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var columnHeaders = adminSheet.getRange(1, 1, 1,
@@ -108,12 +124,15 @@ function readAdminSheet() {
 }
 
 function onEdit(e) {
+  Logger.log('Edit event in ' + e.range.getA1Notation());
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
-  if (sheet.getName() === ADMIN_SHEET_NAME) {
+  var name = sheet.getName();
+  if (name === ADMIN_SHEET_NAME) {
     return updateSpreadsheet();
   }
-  if (sheet.getName() === DATA_SHEET_NAME) {
+  if ((name === DATA_SHEET_NAME) ||
+      (name === LOG_SHEET_NAME)) {
     return;
   }
   var temp = PropertiesService.getDocumentProperties();
@@ -138,11 +157,13 @@ function onEdit(e) {
   updateDataSheet();
 }
 
-function onOpen() {
+function onOpen(e) {
+  Logger.log('Open event in ' + e.source.getName());
   updateDataSheet();
 }
 
 function updateDataSheet() {
+  Logger.log('Updating data sheet');
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
@@ -151,8 +172,10 @@ function updateDataSheet() {
   var headersWritten = false;
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
-        (sheet.getName() === DATA_SHEET_NAME)) {
+    var name = sheet.getName();
+    if ((name === ADMIN_SHEET_NAME) ||
+        (name === DATA_SHEET_NAME) ||
+        (name === LOG_SHEET_NAME)) {
       continue;
     }
     var data;
@@ -164,14 +187,23 @@ function updateDataSheet() {
     }
     var row = data.getRow();
     var column = data.getColumn();
-    var numColumns = data.getNumColumns();
+    var numColumns = data.getNumColumns() + 1;
     var offset = dataSheet.getDataRange().getLastRow() - 1;
     var filteredData = [];
     var values = data.getValues();
     for (var j = 0; j < values.length; j++) {
       var line = values[j];
-      if (line.slice(1).join('').length > 0) {
-        filteredData.push(line);
+      var payload = line.slice(1);
+      if (payload.join('').length > 0) {
+        if (headersWritten) {
+          // The category is an emoji
+          var category = line[0].replace(/\w/g, '');
+          var isVisible = line[0].replace(/^.*?(\w+)$/g, '$1')[0];
+          filteredData.push([category, isVisible].concat(payload));
+         } else {
+           filteredData.push(['Category'].concat(line));
+           headersWritten = true;
+         } 
       }
     }
     if (!filteredData.length) {
@@ -180,12 +212,12 @@ function updateDataSheet() {
     var numRows = filteredData.length;
     dataSheet.getRange(row + offset, column, numRows, numColumns)
         .setValues(filteredData);
-    headersWritten = true;
   }
 }
 
 function updateLatLongColumn(addressIndex, latitudeIndex, longitudeIndex,
     mapIndex, row, numRows) {
+  Logger.log('Updating latitude/longitude columns');
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
   var addressRange = sheet.getRange(2, addressIndex, sheet.getMaxRows() - 1, 1)
@@ -221,6 +253,7 @@ function updateLatLongColumn(addressIndex, latitudeIndex, longitudeIndex,
 }
 
 function updateMapColumn(latitudeIndex, longitudeIndex, mapIndex) {
+  Logger.log('Updating map column');
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getActiveSheet();
   var latLongRange = sheet.getRange(2, latitudeIndex, sheet.getMaxRows() - 1, 2)
@@ -242,6 +275,7 @@ function updateMapColumn(latitudeIndex, longitudeIndex, mapIndex) {
 }
 
 function geocode(address) {
+  Logger.log('Geocoding ' + address);
   return Maps.newGeocoder().geocode(address);
 }
 
@@ -260,6 +294,7 @@ function resetSheet() {
 }
 
 function freezeAndProtectSheets() {
+  Logger.log('Freezing and protecting sheets');
   var temp = PropertiesService.getDocumentProperties();
   var properties = {};
   var keys = temp.getKeys();
@@ -269,13 +304,16 @@ function freezeAndProtectSheets() {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
+  var logSheet = activeSpreadsheet.getSheetByName(LOG_SHEET_NAME);
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
+    var name = sheet.getName();
     var maxRows = sheet.getMaxRows();
     var maxCols = sheet.getMaxColumns();
-    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
-        (sheet.getName() === DATA_SHEET_NAME)) {
+    if ((name === ADMIN_SHEET_NAME) ||
+        (name === DATA_SHEET_NAME) ||
+        (name === LOG_SHEET_NAME)) {
       continue;
     }
     // Vertical alignment and wrapping in all cells
@@ -300,9 +338,11 @@ function freezeAndProtectSheets() {
   }
   adminSheet.hideSheet().protect().setDescription('Read-only');
   dataSheet.hideSheet().protect().setDescription('Read-only');
+  logSheet.hideSheet().protect().setDescription('Read-only');
 }
 
 function createSheetIfNotExists(sheetName, index) {
+  Logger.log('Creating sheet ' + sheetName);
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = activeSpreadsheet.getSheetByName(sheetName);
   if (sheet) {
@@ -312,12 +352,15 @@ function createSheetIfNotExists(sheetName, index) {
 }
 
 function createColumnIfNotExists(columnName, index) {
+  Logger.log('Creating column ' + columnName);
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
-        (sheet.getName() === DATA_SHEET_NAME)) {
+    var name = sheet.getName();
+    if ((name === ADMIN_SHEET_NAME) ||
+        (name === DATA_SHEET_NAME) ||
+        (name === LOG_SHEET_NAME)) {
       continue;
     }
     var columnHeaders = sheet.getLastColumn() ?
@@ -332,16 +375,19 @@ function createColumnIfNotExists(columnName, index) {
 }
 
 function createEnums(values, index) {
+  Logger.log('Creating enum values ' + values.join(', '));
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
-        (sheet.getName() === DATA_SHEET_NAME)) {
+    var name = sheet.getName();
+    if ((name === ADMIN_SHEET_NAME) ||
+        (name === DATA_SHEET_NAME) ||
+        (name === LOG_SHEET_NAME)) {
       continue;
     }
-    var emoji = sheet.getName().replace(/\w/g, '');
+    var emoji = name.replace(/\w/g, '');
     var range = sheet.getRange(2, index + 1, sheet.getMaxRows() - 1, 1);
     var localValues = [
       emoji + values[0],
@@ -355,13 +401,16 @@ function createEnums(values, index) {
 }
 
 function createTranslations(language, index, descriptionIndex) {
+  Logger.log('Creating translation values ' + language);
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var sheets = activeSpreadsheet.getSheets();
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
-    if ((sheet.getName() === ADMIN_SHEET_NAME) ||
-        (sheet.getName() === DATA_SHEET_NAME)) {
+    var name = sheet.getName();
+    if ((name === ADMIN_SHEET_NAME) ||
+        (name === DATA_SHEET_NAME) ||
+        (name === LOG_SHEET_NAME)) {
       continue;
     }
     var range = sheet.getRange(2, index + 1, sheet.getMaxRows() - 1, 1);
@@ -373,6 +422,7 @@ function createTranslations(language, index, descriptionIndex) {
 }
 
 function createStaticMap(latitude, longitude) {
+  Logger.log('Creating static map for ' + latitude + ', ' + longitude);
   var map = Maps.newStaticMap()
       .setMapType(Maps.StaticMap.Type.TERRAIN)
       .setCenter(latitude, longitude)
