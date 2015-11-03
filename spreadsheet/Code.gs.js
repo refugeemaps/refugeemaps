@@ -389,10 +389,7 @@ function createEnums(values, index) {
     }
     var emoji = name.replace(/\w/g, '');
     var range = sheet.getRange(2, index + 1, sheet.getMaxRows() - 1, 1);
-    var localValues = [
-      emoji + values[0],
-      values[1]
-    ];
+    var localValues = values.map(function(value) { return emoji + value; });
     var rule = SpreadsheetApp.newDataValidation().requireValueInList(
         localValues, true);
     range.setDataValidation(rule);
