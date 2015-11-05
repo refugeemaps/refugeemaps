@@ -49,6 +49,9 @@ var USER_COLUMNS = {
   },
   description: {
     name: 'description'
+  },
+  category: {
+    name: 'category'
   }
 };
 
@@ -162,14 +165,29 @@ function onOpen(e) {
   updateDataSheet();
 }
 
+function transpose(a) {
+  return a[0].map(function(_, c) {
+    return a.map(function(r) {
+      return r[c];
+    });
+  });
+}
+
 function updateDataSheet() {
   Logger.log('Updating data sheet');
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var adminSheet = activeSpreadsheet.getSheetByName(ADMIN_SHEET_NAME);
   var dataSheet = activeSpreadsheet.getSheetByName(DATA_SHEET_NAME);
   dataSheet.clear();
+  var categories = transpose(adminSheet.getRange(2, 1, adminSheet.getRange(
+      2, 1, adminSheet.getLastRow()).getValues().filter(String).length, 1)
+    .getValues());
+  dataSheet.getRange(1, 1, 1, categories[0].length).setValues(categories);
   var sheets = activeSpreadsheet.getSheets();
   var headersWritten = false;
+  var category = USER_COLUMNS.category.name.substr(0, 1).toUpperCase() +
+      USER_COLUMNS.category.name.substr(1);
+  var mapPreview = -1;
   for (var i = 0; i < sheets.length; i++) {
     var sheet = sheets[i];
     var name = sheet.getName();
@@ -187,12 +205,19 @@ function updateDataSheet() {
     }
     var row = data.getRow();
     var column = data.getColumn();
-    var numColumns = data.getNumColumns() + 1;
-    var offset = dataSheet.getDataRange().getLastRow() - 1;
+    var numColumns = data.getNumColumns();
+    var offset = dataSheet.getDataRange().getLastRow();
     var filteredData = [];
     var values = data.getValues();
     for (var j = 0; j < values.length; j++) {
       var line = values[j];
+      // Remove the map preview column, not needed for data
+      if (!headersWritten) {
+        mapPreview = line.map(function(cell) {
+          return cell.toLowerCase();
+        }).indexOf(USER_COLUMNS.mapPreview.name);
+      }
+      line.splice(mapPreview, 1);
       var payload = line.slice(1);
       if (payload.join('').length > 0) {
         if (headersWritten) {
@@ -201,17 +226,17 @@ function updateDataSheet() {
           var isVisible = line[0].replace(/^.*?(\w+)$/g, '$1')[0];
           filteredData.push([category, isVisible].concat(payload));
          } else {
-           filteredData.push(['Category'].concat(line));
+           filteredData.push([category].concat(line));
            headersWritten = true;
-         } 
+         }
       }
     }
     if (!filteredData.length) {
       continue;
     }
     var numRows = filteredData.length;
-    dataSheet.getRange(row + offset, column, numRows, numColumns)
-        .setValues(filteredData);
+    dataSheet.getRange(row + offset - (row > 1 ? 1 : 0), column, numRows,
+        numColumns).setValues(filteredData);
   }
 }
 
@@ -430,7 +455,7 @@ function createStaticMap(latitude, longitude) {
 }
 
 function getLanguageName(code) {
-  var iso639_1 = {
+  var iso6391 = {
     ab: 'Abkhazian',
     aa: 'Afar',
     af: 'Afrikaans',
@@ -615,5 +640,5 @@ function getLanguageName(code) {
     za: 'Zhuang',
     zu: 'Zulu'
   };
-  return iso639_1[code];
+  return iso6391[code];
 }
