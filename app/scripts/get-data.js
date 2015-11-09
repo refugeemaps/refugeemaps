@@ -7,9 +7,9 @@ import getSpreadsheet from './get-spreadsheet.js';
  * @param {Object} options The source options
  * @return {Promise} The promise.
  */
-export default function({sheet, sourceId}) {
+export default function({spreadsheetId, sheet = 'od6'}) {
   return new Promise((resolve, reject) => {
-    getSpreadsheet(sourceId)
+    getSpreadsheet(spreadsheetId)
       .then(data => getSpreadsheetData(data, sheet))
       .then(spreadsheetData => buildDataSet(spreadsheetData))
       .then(spreadsheetData => resolve(spreadsheetData))

@@ -3,7 +3,7 @@ import getData from './get-data';
 export default class Sidebar {
   /**
    * Constructs the Sidebar
-   * @param {GoogleMap} map The map
+   * @param {google.maps.Map} map The map
    * @param {String} selector The sidebar container selector
    * @param {Object} hotspotsData The hotspot data
    */
@@ -112,7 +112,7 @@ export default class Sidebar {
    */
   getItems(spreadsheetId) {
     return getData({
-      sourceId: spreadsheetId,
+      spreadsheetId: spreadsheetId,
       sheet: 'od6'
     });
   }

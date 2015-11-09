@@ -1,6 +1,8 @@
 import Promise from 'lie';
 import Map from './map';
+import config from './config';
 import getData from './get-data';
+import findClosestCity from './find-closest-city';
 import Sidebar from './sidebar';
 
 class App {
@@ -8,21 +10,23 @@ class App {
    * Constructs the app.
    */
   constructor() {
-    const citySpreadsheet = '1pg-73mda1ZBtGZAFdkt2gh6XXCHxPuYnaWhNQbrcDx0',
-      hash = window.location.hash;
+    const hash = window.location.hash.toLowerCase().substr(1);
 
     this.map = new Map('.map');
 
     if (hash) {
-      this.fetchCities(citySpreadsheet)
+      getData({spreadsheetId: config.citySpreadsheetId})
         .then(cities => this.selectCity(cities, hash))
-        .then(city => this.getCityData(city)
+        .then(city => getData({spreadsheetId: city.spreadsheetId}))
         .then(hotspots => this.onHotspotsLoaded(hotspots))
-        .catch(error => this.handlePromiseError(error)));
+        .catch(error => this.handlePromiseError(error));
     } else {
-      Promise.all([this.fetchCities(citySpreadsheet), this.getUserLocation()])
-        .then(data => this.findClosestCity(data[0], data[1]))
-        .then(city => this.getCityData(city))
+      Promise.all([
+        getData({spreadsheetId: config.citySpreadsheetId}),
+        this.getUserLocation()
+      ])
+        .then(([cities, position]) => findClosestCity(cities, position))
+        .then(city => getData({spreadsheetId: city.spreadsheetid}))
         .then(hotspots => this.onHotspotsLoaded(hotspots))
         .catch(error => this.handlePromiseError(error));
     }
@@ -30,18 +34,6 @@ class App {
     window.onhashchange = function() {
       window.location.reload();
     };
-  }
-
-  /**
-   * Fetch the available cities from a spreadsheet
-   * @param {String} spreadsheetId The spreadsheet ID
-   * @return {Promise} Promise with the cities
-   */
-  fetchCities(spreadsheetId) {
-    return getData({
-      sourceId: spreadsheetId,
-      sheet: 'od6'
-    });
   }
 
   /**
@@ -53,7 +45,6 @@ class App {
    */
   selectCity(cities, hash) {
     let cityExists = false;
-    hash = hash.toLowerCase().substr(1);
 
     return new Promise(resolve => {
       cities.forEach(item => {
@@ -63,7 +54,6 @@ class App {
           cityExists = true;
 
           this.centerCity(item);
-
           resolve(item);
         }
       });
@@ -76,51 +66,6 @@ class App {
   }
 
   /**
-   * Find the closest city/spreadsheet to the user location.
-   * Using the Haversine formula to calc distance between locations.
-   * @param {Object} cities The cities object
-   * @param {Object} userPos The user position
-   * @return {Promise} Promise with the closest city
-   */
-  findClosestCity(cities, userPos) {
-    let userLat = userPos.lat,
-      userLng = userPos.lng,
-      r = 6371, // radius of earth in km
-      distances = [],
-      closestIndex = -1,
-      closestCity = '';
-
-    cities.forEach((city, index) => {
-      let cityLat = city.lat,
-        cityLng = city.lng,
-        dLat = this.rad(cityLat - userLat),
-        dLong = this.rad(cityLng - userLng),
-        a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(this.rad(userLat)) * Math.cos(this.rad(userLat))
-          * Math.sin(dLong / 2) * Math.sin(dLong / 2),
-        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
-        d = r * c;
-
-      distances[index] = d;
-
-      if (closestIndex === -1 || d < distances[closestIndex]) {
-        closestIndex = index;
-        closestCity = city;
-      }
-    });
-    return closestCity;
-  }
-
-  /**
-   * Convert from degrees to radians
-   * @param {Float} x The degrees value
-   * @return {Float} The radian value
-   */
-  rad(x) {
-    return x * Math.PI / 180;
-  }
-
-  /**
    * Center the given city on the map
    * @param {Object} city The city
    */
@@ -128,27 +73,6 @@ class App {
     this.map.setCenter({
       lat: parseFloat(city.lat),
       lng: parseFloat(city.lng)
-    });
-  }
-
-  /**
-   * Get the hotspot data from a single city
-   * @param {Object} city The city object
-   * @return {Promise} Promise with the city data
-   */
-  getCityData(city) {
-    return this.getSpreadsheetData(city.spreadsheetid);
-  }
-
-  /**
-   * Getting the data from the given spreadsheet
-   * @param {String} spreadsheetId The spreadsheet ID
-   * @return {Promise} Promise with the hotspot data
-   */
-  getSpreadsheetData(spreadsheetId) {
-    return getData({
-      sourceId: spreadsheetId,
-      sheet: 'od6'
     });
   }
 
@@ -230,10 +154,8 @@ class App {
    * @param {Error} error The errow that was thrown
    */
   handlePromiseError(error) {
-    console.log('Something went wrong: ', error); // eslint-disable-line
+    console.error('Something went wrong: ', error); // eslint-disable-line
   }
 }
 
-/* eslint-disable no-unused-vars */
-let app = new App();
-/* eslint-enable no-unused-vars */
+window.app = new App();
