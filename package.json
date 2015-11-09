@@ -26,7 +26,7 @@
     "test": "eslint app/scripts && mocha --recursive --compilers js:babel-core/register",
     "build": "npm run prepare && npm run jade && npm run stylus && npm run js && npm run uglifyjs",
     "changelog": "conventional-changelog-generator && atom -w CHANGELOG.md",
-    "deploy": "gcloud-storage-upload -s 'ubilabs-refugee-map' -p build",
+    "deploy": "npm run build && gcloud-storage-upload -s 'ubilabs-refugee-map' -p build",
     "release": "echo 'Usage: npm run release:patch|minor|major'",
     "release:patch": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType patch && npm run changelog && npm run release:commit",
     "release:minor": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType minor && npm run changelog && npm run release:commit",
