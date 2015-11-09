@@ -1,3 +1,4 @@
+import Promise from 'lie';
 import Map from './map';
 import getData from './get-data';
 import Sidebar from './sidebar';

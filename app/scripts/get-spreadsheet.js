@@ -1,3 +1,4 @@
+import Promise from 'lie';
 import reqwest from 'reqwest';
 import config from './config';
 

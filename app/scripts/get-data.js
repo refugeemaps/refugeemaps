@@ -1,3 +1,4 @@
+import Promise from 'lie';
 import find from 'array-find';
 import getSpreadsheet from './get-spreadsheet.js';
 
