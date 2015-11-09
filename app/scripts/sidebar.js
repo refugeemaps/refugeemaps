@@ -1,4 +1,6 @@
+import config from './config';
 import getData from './get-data';
+import isRightToLeft from './is-right-to-left';
 
 export default class Sidebar {
   /**
@@ -13,19 +15,47 @@ export default class Sidebar {
     this.currentFilter = [];
     this.selector = selector;
     this.$container = document.querySelector(selector);
-    this.$languageSwitcher =
-      document.querySelector('.language-filter');
-    this.$itemsWrapper = document.querySelector(`${selector}__body`);
-    this.$items = document.querySelectorAll(`${selector}__body__filter`);
-    this.$header = document.querySelector(`${selector}__header`);
-    this.$headerShow = document.querySelector(`${selector}__header__show`);
-    this.$headerHide = document.querySelector(`${selector}__header__hide`);
+    this.$languageSwitcher = document.querySelector('.language-filter');
+    this.$itemsWrapper = this.$container.querySelector(`${selector}__body`);
+    this.$items = this.$container.querySelectorAll(`${selector}__body__filter`);
+    this.$header = this.$container.querySelector(`${selector}__header`);
+    this.$headerShow = this.$container
+      .querySelector(`${selector}__header__show`);
+    this.$headerHide = this.$container
+      .querySelector(`${selector}__header__hide`);
 
-    this.getItems('1TSg1Nd9j-zqNw-HaxAR__jyOU3GLtI_eW3oEddvEu-Y')
-      .then(items => {
-        this.filterItemsData = items;
-        this.addToSidebar(items);
+    getData({spreadsheetId: config.categoriesSpreadsheetId})
+      .then(categories => {
+        this.categoriesFilterData = categories;
+        this.renderCategories(categories);
       });
+  }
+
+  /**
+   * Add filter items for each category to sidebar
+   * @param {Object} categories The items data object
+   */
+  renderCategories(categories) {
+    categories.forEach(category => {
+      let categorieFilter = document.createElement('div'),
+        categorieFilterIcon = document.createElement('img'),
+        categorieFilterText = document.createElement('span');
+
+      categorieFilter.className = 'sidebar__filters__body__filter';
+      categorieFilter.setAttribute('data-filter', category.key);
+
+      categorieFilterIcon.src = `assets/${category.key}.png`;
+      categorieFilterIcon.className = 'sidebar__filters__body__filter__image';
+
+      categorieFilterText.textContent = category.english;
+      categorieFilterText.className = 'sidebar__filters__body__filter__text';
+
+      categorieFilter.appendChild(categorieFilterIcon);
+      categorieFilter.appendChild(categorieFilterText);
+      this.$itemsWrapper.appendChild(categorieFilter);
+    });
+
+    this.initEvents(this.selector);
   }
 
   /**
@@ -33,88 +63,36 @@ export default class Sidebar {
    * @param {String} selector The container selector
    */
   initEvents(selector) {
-    this.$items = document.querySelectorAll(`${selector}__body__filter`);
+    this.$items = this.$container.querySelectorAll(`${selector}__body__filter`);
     for (let i = 0; i < this.$items.length; i++) {
-      let type = this.$items[i].dataset.filter;
+      let type = this.$items[i].getAttribute('data-filter');
       this.$items[i].addEventListener('click',
         () => this.filterMarker(this.hotspotsData, this.$items[i], type));
     }
 
     this.$header.addEventListener('click', () => this.toggleSidebar());
+
     this.$languageSwitcher.addEventListener('change', event =>
       this.switchLanguage(event, this.$items));
   }
 
   /**
    * Add filter items to sidebar
-   * @param {Object} items The items data object
-   */
-  addToSidebar(items) {
-    items.forEach(item => {
-      let filterItem = document.createElement('div'),
-        filterItemIcon = document.createElement('img'),
-        filterItemText = document.createElement('span');
-
-      filterItem.className = 'sidebar__filters__body__filter';
-      filterItem.dataset.filter = item.key;
-
-      filterItemIcon.src = `assets/${item.key}.png`;
-      filterItemIcon.className = 'sidebar__filters__body__filter__image';
-
-      filterItemText.textContent = item.english;
-      filterItemText.className = 'sidebar__filters__body__filter__text';
-
-      filterItem.appendChild(filterItemIcon);
-      filterItem.appendChild(filterItemText);
-      this.$itemsWrapper.appendChild(filterItem);
-    });
-
-    this.initEvents(this.selector);
-  }
-
-  /**
-   * Add filter items to sidebar
    * @param {ChangeEvent} event The change event of the radio buttons
-   * @param {DOMNodes} items The filter items
+   * @param {DOMNodes} $items The filter items
    */
-  switchLanguage(event, items) {
+  switchLanguage(event, $items) {
     let language = event.target.value;
 
-    if (this.isRightToLeft(language)) {
+    if (isRightToLeft(language)) {
       this.$container.classList.add('sidebar__filters--rtl');
     } else {
       this.$container.classList.remove('sidebar__filters--rtl');
     }
 
-    for (let i = 0; i < this.$items.length; i++) {
-      items[i].lastChild.textContent = this.filterItemsData[i][language];
+    for (let i = 0; i < $items.length; i++) {
+      $items[i].lastChild.textContent = this.categoriesFilterData[i][language];
     }
-  }
-
-  /**
-   * Check if language is right to left
-   * @param {string} language The language
-   * @return {Boolean}
-   */
-  isRightToLeft(language) {
-    switch (language) {
-      case 'arabic':
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  /**
-   * Get the sidebar filter items
-   * @param {String} spreadsheetId The spreadsheet id
-   * @return {Promise} The promise with the filter items object
-   */
-  getItems(spreadsheetId) {
-    return getData({
-      spreadsheetId: spreadsheetId,
-      sheet: 'od6'
-    });
   }
 
   /**

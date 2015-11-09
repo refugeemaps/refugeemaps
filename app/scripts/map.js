@@ -10,19 +10,20 @@ export default class Map {
    * @param {String} selector The selector for the map
    */
   constructor(selector) {
-    this.$container = document.querySelector(selector);
-    this.options = {
-      center: config.defaultLocation,
-      zoomControlOptions: {
-        position: google.maps.ControlPosition.LEFT_BOTTOM
-      },
-      streetViewControlOptions: {
-        position: google.maps.ControlPosition.LEFT_BOTTOM
-      },
-      styles: mapStyle,
-      zoom: 15
-    };
-    this.mapCanvas = new google.maps.Map(this.$container, this.options);
+    const $container = document.querySelector(selector),
+      options = {
+        center: config.defaultLocation,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM
+        },
+        streetViewControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM
+        },
+        styles: mapStyle,
+        zoom: 15
+      };
+
+    this.mapCanvas = new google.maps.Map($container, options);
     this.markers = [];
   }
 
@@ -68,12 +69,12 @@ export default class Map {
 
   /**
    * Show or hide markers. Pass in 'null' to remove all markers
-   * @param {GoogleMap} map Map on which the markers should be set
    */
-  setMarkers(map) {
+  resetMarkers() {
     for (var i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(map);
+      this.markers[i].setMap(null);
     }
+    this.markers = [];
   }
 
   /**
@@ -81,60 +82,51 @@ export default class Map {
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
-    this.setMarkers(null);
-    this.markers = [];
+    this.resetMarkers();
 
     hotspotsData.forEach(hotspot => {
-      let position = {
-          lat: parseFloat(hotspot.lat),
-          lng: parseFloat(hotspot.lng)
-        },
-        infoWindowContent = '<div class="infowindow">';
+      const position = {
+        lat: parseFloat(hotspot.lat),
+        lng: parseFloat(hotspot.lng)
+      };
+      let content = '<div class="infowindow">';
 
       if (hotspot.name) {
-        infoWindowContent += '<h4 class="infowindow__title">' +
-          hotspot.name +
-        '</h4><hr>';
+        content += `<h4 class="infowindow__title">${hotspot.name}</h4><hr>`;
       }
 
       if (hotspot.address) {
-        infoWindowContent += '<div class="infowindow__address">' +
-          '<img src="assets/marker-stroked-24@2x.png"' +
-            'class="infowindow__address__image">' +
-          '<span class="infowindow__address__text">' +
-            hotspot.address +
-          '</span>' +
-        '</div><hr>';
+        content += `<div class="infowindow__address">
+          <img src="assets/marker-stroked-24@2x.png"
+            class="infowindow__address__image">
+          <span class="infowindow__address__text">${hotspot.address}</span>
+        </div><hr>`;
       }
 
       if (hotspot.descriptionenglish) {
-        infoWindowContent += '<div class="infowindow__description">' +
-          hotspot.descriptionenglish +
-        '</div><hr>';
+        content += `<div class="infowindow__description">
+          ${hotspot.descriptionenglish}</div><hr>`;
       }
 
       if (hotspot.descriptionforeign) {
-        infoWindowContent += '<div class="infowindow__description">' +
-          hotspot.descriptionforeign +
-        '</div><hr>';
+        content += `<div class="infowindow__description">
+          ${hotspot.descriptionforeign}</div><hr>`;
       }
 
       if (hotspot.openinghours) {
-        infoWindowContent += '<div class="infowindow__hours">' +
-          '<img src="assets/clock.png" class="infowindow__hours__image">' +
-          '<span class="infowindow__hours__text">' +
-            hotspot.openinghours +
-          '</span>' +
-        '</div>';
+        content += `<div class="infowindow__hours">
+          <img src="assets/clock.png" class="infowindow__hours__image">
+          <span class="infowindow__hours__text">${hotspot.openinghours}</span>
+        </div>`;
       }
 
-      infoWindowContent += '</div>';
+      content += '</div>';
 
       this.addMarker({
         latLng: position,
         type: hotspot.type,
         query: hotspot.name + ', ' + hotspot.address,
-        infoWindowContent: infoWindowContent
+        infoWindowContent: content
       });
     });
   }
