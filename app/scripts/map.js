@@ -1,3 +1,4 @@
+import config from './config';
 import getIcon from './get-icon';
 import mapStyle from './map-style';
 
@@ -10,9 +11,8 @@ export default class Map {
    */
   constructor(selector) {
     this.$container = document.querySelector(selector);
-    this.defaultLocation = {lat: 53.560022, lng: 9.977840};
     this.options = {
-      center: this.defaultLocation,
+      center: config.defaultLocation,
       zoomControlOptions: {
         position: google.maps.ControlPosition.LEFT_BOTTOM
       },
@@ -172,14 +172,6 @@ export default class Map {
    */
   getCenter() {
     return this.mapCanvas.getCenter();
-  }
-
-  /**
-   * Get the default location of the map
-   * @returns {GoogleLatLng}
-   */
-  getDefaultLocation() {
-    return this.defaultLocation;
   }
 
   /**

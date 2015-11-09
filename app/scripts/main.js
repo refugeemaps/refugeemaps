@@ -1,4 +1,5 @@
 import Promise from 'lie';
+import find from 'array-find';
 import Map from './map';
 import config from './config';
 import getData from './get-data';
@@ -17,7 +18,8 @@ class App {
     if (hash) {
       getData({spreadsheetId: config.citySpreadsheetId})
         .then(cities => this.selectCity(cities, hash))
-        .then(city => getData({spreadsheetId: city.spreadsheetId}))
+        .then(city => this.centerOnCity(city))
+        .then(city => getData({spreadsheetId: city.spreadsheetid}))
         .then(hotspots => this.onHotspotsLoaded(hotspots))
         .catch(error => this.handlePromiseError(error));
     } else {
@@ -44,22 +46,14 @@ class App {
    * @return {Promise} Promise with the city
    */
   selectCity(cities, hash) {
-    let cityExists = false;
-
     return new Promise(resolve => {
-      cities.forEach(item => {
-        let city = item.city.toLowerCase();
-
-        if (city === hash) {
-          cityExists = true;
-
-          this.centerCity(item);
-          resolve(item);
-        }
+      const foundCity = find(cities, city => {
+        return city.city.toLowerCase() === hash;
       });
 
-      if (!cityExists) {
-        this.centerCity(cities[0]);
+      if (foundCity) {
+        resolve(foundCity);
+      } else {
         resolve(cities[0]);
       }
     });
@@ -68,12 +62,14 @@ class App {
   /**
    * Center the given city on the map
    * @param {Object} city The city
+   * @return {Object} The city
    */
-  centerCity(city) {
+  centerOnCity(city) {
     this.map.setCenter({
       lat: parseFloat(city.lat),
       lng: parseFloat(city.lng)
     });
+    return city;
   }
 
   /**
@@ -104,11 +100,11 @@ class App {
           resolve(pos);
         }, () => {
           this.handleLocationError(true, this.map.getCenter());
-          resolve(this.map.getDefaultLocation());
+          resolve(config.defaultLocation);
         });
       } else {
         this.handleLocationError(false, this.map.getCenter());
-        resolve(this.map.getDefaultLocation());
+        resolve(config.defaultLocation);
       }
     });
   }
