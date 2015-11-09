@@ -1,4 +1,4 @@
-import Icons from './icons';
+import getIcon from './get-icon';
 import mapStyle from './map-style';
 
 /* global google */
@@ -24,7 +24,6 @@ export default class Map {
     };
     this.mapCanvas = new google.maps.Map(this.$container, this.options);
     this.markers = [];
-    this.icons = new Icons();
   }
 
   /**
@@ -42,7 +41,7 @@ export default class Map {
     infoWindowContent = null,
     showInfoWindow = null
   }) {
-    let icon = this.icons.getIconByType(type),
+    let icon = getIcon(type),
       marker = new google.maps.Marker({
         icon: icon,
         place: {
