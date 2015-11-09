@@ -22,7 +22,7 @@ export default class Map {
       styles: mapStyle,
       zoom: 15
     };
-    this.gMap = new google.maps.Map(this.$container, this.options);
+    this.mapCanvas = new google.maps.Map(this.$container, this.options);
     this.markers = [];
     this.icons = new Icons();
   }
@@ -55,7 +55,7 @@ export default class Map {
       this.markers.push(marker);
     }
 
-    marker.setMap(this.gMap);
+    marker.setMap(this.mapCanvas);
 
     if (infoWindowContent) {
       this.addInfoWindow({
@@ -149,18 +149,18 @@ export default class Map {
    */
   addInfoWindow({latLng, infoWindowContent, marker = null,
       showInfoWindow = null}) {
-    let infoWindow = new google.maps.InfoWindow({map: this.gMap});
+    let infoWindow = new google.maps.InfoWindow({map: this.mapCanvas});
     infoWindow.setContent(infoWindowContent);
 
     if (marker) {
       if (showInfoWindow) {
-        infoWindow.open(this.gMap, marker);
+        infoWindow.open(this.mapCanvas, marker);
       } else {
         infoWindow.close();
       }
 
       marker.addListener('click', () => {
-        infoWindow.open(this.gMap, marker);
+        infoWindow.open(this.mapCanvas, marker);
       });
     } else {
       infoWindow.setPosition(latLng);
@@ -172,7 +172,7 @@ export default class Map {
    * @returns {GoogleLatLng}
    */
   getCenter() {
-    return this.gMap.getCenter();
+    return this.mapCanvas.getCenter();
   }
 
   /**
@@ -188,6 +188,6 @@ export default class Map {
    * @param {Object} position The position which should be centered
    */
   setCenter(position) {
-    this.gMap.setCenter(position);
+    this.mapCanvas.setCenter(position);
   }
 }
