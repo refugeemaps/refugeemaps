@@ -34,6 +34,7 @@
     "release:commit": "bumpery --commitFiles 'CHANGELOG.md package.json' --commitMessage 'chore(release): version %VERSION%' --no-bumpVersion && sh ./tools/notify.sh release $npm_package_version"
   },
   "devDependencies": {
+    "array-find": "^1.0.0",
     "autoprefixer-stylus": "^0.7.1",
     "babel-core": "^5.8.23",
     "babelify": "^6.3.0",

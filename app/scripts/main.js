@@ -1,5 +1,5 @@
 import Map from './map';
-import Data from './data';
+import getData from './get-data';
 import Sidebar from './sidebar';
 
 class App {
@@ -11,8 +11,6 @@ class App {
       hash = window.location.hash;
 
     this.map = new Map('.map');
-
-    this.data = new Data();
 
     if (hash) {
       this.fetchCities(citySpreadsheet)
@@ -39,8 +37,7 @@ class App {
    * @return {Promise} Promise with the cities
    */
   fetchCities(spreadsheetId) {
-    let cityData = new Data();
-    return cityData.get({
+    return getData({
       sourceId: spreadsheetId,
       sheet: 'od6'
     });
@@ -148,7 +145,7 @@ class App {
    * @return {Promise} Promise with the hotspot data
    */
   getSpreadsheetData(spreadsheetId) {
-    return this.data.get({
+    return getData({
       sourceId: spreadsheetId,
       sheet: 'od6'
     });

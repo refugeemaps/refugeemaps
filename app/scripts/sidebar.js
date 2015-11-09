@@ -1,4 +1,4 @@
-import Data from './data';
+import getData from './get-data';
 
 export default class Sidebar {
   /**
@@ -111,9 +111,7 @@ export default class Sidebar {
    * @return {Promise} The promise with the filter items object
    */
   getItems(spreadsheetId) {
-    this.filterItems = new Data();
-
-    return this.filterItems.get({
+    return getData({
       sourceId: spreadsheetId,
       sheet: 'od6'
     });
