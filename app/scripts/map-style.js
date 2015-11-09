@@ -1,4 +1,7 @@
-const mapStyle = [
+/**
+ * The map style
+ */
+export default [
   {
     'featureType': 'administrative',
     'elementType': 'labels.text.fill',
@@ -131,5 +134,3 @@ const mapStyle = [
     ]
   }
 ];
-
-export default mapStyle;
