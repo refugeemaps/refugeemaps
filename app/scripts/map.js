@@ -77,10 +77,33 @@ export default class Map {
   }
 
   /**
+   * Update the hotspots
+   * @param  {Array} currentFilters The current selected filters
+   */
+  updateHotspots(currentFilters) {
+    let filteredData = [];
+
+    currentFilters.forEach(filter => {
+      this.hotspotsData.forEach(hotspot => {
+        if (hotspot.type === filter) {
+          filteredData.push(hotspot);
+        }
+      });
+    });
+
+    if (filteredData.length > 0) {
+      this.addHotspots(filteredData);
+    } else {
+      this.addHotspots(this.hotspotsData);
+    }
+  }
+
+  /**
    * Add a marker for every hotspot
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
+    this.hotspotsData = hotspotsData;
     this.resetMarkers();
 
     hotspotsData.forEach(hotspot => {

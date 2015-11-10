@@ -1,10 +1,13 @@
 import Promise from 'lie';
 import find from 'array-find';
-import Map from './map';
 import config from './config';
 import getData from './get-data';
 import findClosestCity from './find-closest-city';
+
+import Map from './map';
 import Sidebar from './sidebar';
+import Filters from './filters';
+import LanguageSwitch from './language-switch';
 
 class App {
   /**
@@ -14,6 +17,17 @@ class App {
     const hash = window.location.hash.toLowerCase().substr(1);
 
     this.map = new Map();
+    this.sidebar = new Sidebar();
+    this.filters = new Filters({
+      onFilterChange: currentFilters => {
+        this.map.updateHotspots(currentFilters);
+      }
+    });
+    this.languageSwitch = new LanguageSwitch({
+      onLanguageChange: language => {
+        this.filters.changeLanguage(language);
+      }
+    });
 
     if (hash) {
       getData({spreadsheetId: config.citySpreadsheetId})
@@ -32,6 +46,10 @@ class App {
         .then(hotspots => this.onHotspotsLoaded(hotspots))
         .catch(error => this.handlePromiseError(error));
     }
+
+    getData({spreadsheetId: config.categoriesSpreadsheetId})
+      .then(categories => this.filters.renderCategories(categories))
+      .catch(error => this.handlePromiseError(error));
 
     window.onhashchange = function() {
       window.location.reload();
@@ -78,7 +96,6 @@ class App {
    */
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
-    this.sidebar = new Sidebar(this.map, hotspotsData);
     this.sidebar.show();
   }
 

@@ -1,22 +1,24 @@
 .sidebar.sidebar--hidden
-  form.language-filter
-    div.language-filter__flag
+
+  form.language-switch
+    div.language-switch__flag
       label(for='english')
         svg
           use(xlink:href='assets/flags.svg#great-britain')
       input(type='radio', name='lang' value='english' id='english' checked)
-    div.language-filter__flag
+    div.language-switch__flag
       label(for='german')
         svg
           use(xlink:href='assets/flags.svg#germany')
       input(type='radio', name='lang' value='german' id='german')
-    .language-filter__flag
+    .language-switch__flag
       label(for='arabic')
         svg
           use(xlink:href='assets/flags.svg#syria')
       input(type='radio', name='lang' value='arabic' id='arabic')
-  .sidebar__filters
-    .sidebar__filters__header.sidebar__filters__header--hide-filters
-      span.sidebar__filters__header__hide Hide Filters
-      span.sidebar__filters__header__show Show Filters
-    .sidebar__filters__body.sidebar__filters__body--hidden
+
+  .filters.filters--hidden
+    .filters__header.filters__header--hide-filters
+      span.filters__header__hide Hide Filters
+      span.filters__header__show Show Filters
+    .filters__body.filters__body--hidden
