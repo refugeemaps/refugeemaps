@@ -70,10 +70,10 @@ export default class {
 
   /**
    * Add a marker for every hotspot
-   * @param {Object} hotspotsData Array with the hotspots infos
+   * @param {Object} hotspots Array with the hotspots infos
    */
-  addHotspots(hotspotsData) {
-    hotspotsData.forEach(hotspot => {
+  addHotspots(hotspots) {
+    hotspots.forEach(hotspot => {
       const position = {
           lat: parseFloat(hotspot.lat),
           lng: parseFloat(hotspot.lng)
@@ -81,7 +81,7 @@ export default class {
         icon = getIcon(hotspot.type),
         marker = new google.maps.Marker({
           map: this.mapCanvas,
-          icon: icon,
+          icon,
           position
         });
 
