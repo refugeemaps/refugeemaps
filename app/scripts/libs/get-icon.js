@@ -1,48 +1,41 @@
 /* global google */
 
+const icons = {
+  user: 'mosque',
+  church: 'curch',
+  bank: 'bank',
+  'call-shop': 'call-shop',
+  supermarket: 'supermarket',
+  culture: 'culture',
+  pharmacy: 'pharmacy',
+  laundry: 'laundry',
+  playground: 'playground',
+  football: 'football',
+  basketball: 'basketball',
+  'table-tennis': 'table-tennis',
+  skateboard: 'skateboard',
+  library: 'library',
+  'public-restroom': 'public-restroom'
+};
+
 /**
  * Get the marker icon
- * @param {String} type The type of the location
+ * @param {String} category The category of the location
  * @return {GoogleIconObject} icon The marker icon
  */
 /* eslint-disable complexity */
-export default function(type) {
-  switch (type) {
-    case 'user':
-      return getUserIcon();
-    case 'mosque':
-      return create({url: 'assets/religious-muslim-24@2x.png'});
-    case 'church':
-      return create({url: 'assets/religious-christian-24@2x.png'});
-    case 'bank':
-      return create({url: 'assets/bank-24@2x.png'});
-    case 'call-shop':
-      return create({url: 'assets/telephone-24@2x.png'});
-    case 'supermarket':
-      return create({url: 'assets/grocery-24@2x.png'});
-    case 'culture':
-      return create({url: 'assets/town-hall-24@2x.png'});
-    case 'pharmacy':
-      return create({url: 'assets/pharmacy-24@2x.png'});
-    case 'laundry':
-      return create({url: 'assets/laundry-24@2x.png'});
-    case 'playground':
-      return create({url: 'assets/playground-24@2x.png'});
-    case 'football':
-      return create({url: 'assets/soccer-24@2x.png'});
-    case 'basketball':
-      return create({url: 'assets/basketball-24@2x.png'});
-    case 'table-tennis':
-      return create({url: 'assets/tennis-24@2x.png'});
-    case 'skateboard':
-      return create({url: 'assets/skateboard.png'});
-    case 'library':
-      return create({url: 'assets/library-24@2x.png'});
-    case 'public-restroom':
-      return create({url: 'assets/toilets-24@2x.png'});
-    default:
-      return create({url: 'assets/marker-24@2x.png'});
+export default function(category) {
+  const iconName = icons[category];
+
+  if (iconName) {
+    return create({url: `assets/${iconName}.png`});
   }
+
+  if (category === 'user') {
+    return getUserIcon();
+  }
+
+  return create({url: 'assets/marker-24@2x.png'});
 }
 /* eslint-enable complexity */
 
