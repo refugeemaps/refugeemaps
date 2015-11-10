@@ -4,7 +4,7 @@ import getIcon from '../libs/get-icon';
 
 /* global google */
 
-export default class Map {
+export default class {
   /**
    * Constructs the map
    */
