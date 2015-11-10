@@ -13,7 +13,7 @@ class App {
   constructor() {
     const hash = window.location.hash.toLowerCase().substr(1);
 
-    this.map = new Map('.map');
+    this.map = new Map();
 
     if (hash) {
       getData({spreadsheetId: config.citySpreadsheetId})

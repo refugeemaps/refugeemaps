@@ -7,10 +7,9 @@ import mapStyle from './map-style';
 export default class Map {
   /**
    * Constructs the map
-   * @param {String} selector The selector for the map
    */
-  constructor(selector) {
-    const $container = document.querySelector(selector),
+  constructor() {
+    const $container = document.querySelector('.map'),
       options = {
         center: config.defaultLocation,
         zoomControlOptions: {
