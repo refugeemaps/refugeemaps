@@ -1,6 +1,18 @@
 .infowindow
   font-size: remCalc(14px)
-  max-width: emCalc(200px, 14)
+  background: #fff
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  max-height: 25vh
+  padding: 1em 2em
+  &--hidden
+    display: none
+  &__close
+    position: absolute
+    top: .5em
+    right: .5em
   hr
     border: 0
     height: 1px

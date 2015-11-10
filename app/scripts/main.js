@@ -7,6 +7,7 @@ import findClosestCity from './libs/find-closest-city';
 import Map from './views/map';
 import Sidebar from './views/sidebar';
 import Filters from './views/filters';
+import Infowindow from './views/infowindow';
 import LanguageSwitch from './views/language-switch';
 
 class App {
@@ -16,7 +17,12 @@ class App {
   constructor() {
     const hash = window.location.hash.toLowerCase().substr(1);
 
-    this.map = new Map();
+    this.infowindow = new Infowindow();
+    this.map = new Map({
+      onHotspotClick: hotspot => {
+        this.infowindow.show(hotspot);
+      }
+    });
     this.sidebar = new Sidebar();
     this.filters = new Filters({
       onFilterChange: currentFilters => {
@@ -112,34 +118,17 @@ class App {
             lng: position.coords.longitude
           };
 
-          this.markUserLocation(pos);
+          this.map.showUserPosition(pos);
           resolve(pos);
         }, () => {
-          this.handleLocationError(true, this.map.getCenter());
+          this.handleLocationError(true);
           resolve(config.defaultLocation);
         });
       } else {
-        this.handleLocationError(false, this.map.getCenter());
+        this.handleLocationError(false);
         resolve(config.defaultLocation);
       }
     });
-  }
-
-  /**
-   * Add a marker to the map at the current user position
-   * @param {GoogleLatLng} position The user position
-   */
-  markUserLocation(position) {
-    const infoWindowContent = 'You are here';
-
-    this.map.addMarker({
-      latLng: position,
-      type: 'user',
-      query: `${position.lat.toString()}, ${position.lng.toString()}`,
-      infoWindowContent: infoWindowContent,
-      showInfoWindow: true
-    });
-    this.map.setCenter(position);
   }
 
   /**
@@ -147,18 +136,18 @@ class App {
    * @param {Boolean} browserHasGeolocation If the browser supports geolocation
    * @param {Object} pos Position where the error infowindow will be placed
    */
-  handleLocationError(browserHasGeolocation, pos) {
-    if (browserHasGeolocation) {
-      this.map.addInfoWindow({
-        latLng: pos,
-        infoWindowContent: 'Error: The Geolocation service failed.'
-      });
-    } else {
-      this.map.addInfoWindow({
-        latLng: pos,
-        infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
-      });
-    }
+  handleLocationError(browserHasGeolocation) {
+    // if (browserHasGeolocation) {
+    //   this.map.addInfoWindow({
+    //     latLng: pos,
+    //     infoWindowContent: 'Error: The Geolocation service failed.'
+    //   });
+    // } else {
+    //   this.map.addInfoWindow({
+    //     latLng: pos,
+    //     infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
+    //   });
+    // }
   }
 
   /**

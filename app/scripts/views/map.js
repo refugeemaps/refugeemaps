@@ -8,7 +8,9 @@ export default class {
   /**
    * Constructs the map
    */
-  constructor() {
+  constructor({
+    onHotspotClick = () => {}
+  }) {
     const $container = document.querySelector('.map'),
       options = {
         center: config.defaultLocation,
@@ -24,56 +26,29 @@ export default class {
 
     this.mapCanvas = new google.maps.Map($container, options);
     this.markers = [];
+    this.onHotspotClick = onHotspotClick;
   }
 
   /**
-   * Add a marker to the map
-   * @param {Object} latLng The position of the marker
-   * @param {String} type The location type
-   * @param {String} query The location query (name + adress)
-   * @param {String} infoWindowContent The infowindow content (optional)
-   * @param {Booloean} showInfoWindow If the window should be open or not
+   * Show the users position
+   * @param {Object} position The position of the user
    */
-  addMarker({
-    latLng,
-    type,
-    query,
-    infoWindowContent = null,
-    showInfoWindow = null
-  }) {
-    let icon = getIcon(type),
-      marker = new google.maps.Marker({
-        icon: icon,
-        place: {
-          location: latLng,
-          query: query
-        }
-      });
+  showUserPosition(position) {
+    this.mapCanvas.setCenter(position);
 
-    if (type !== 'user') {
-      this.markers.push(marker);
+    if (this.userMarker) {
+      this.userMarker.setPosition(position);
+      this.userMarker.setMap(this.mapCanvas);
+      return;
     }
 
-    marker.setMap(this.mapCanvas);
-
-    if (infoWindowContent) {
-      this.addInfoWindow({
-        latLng: latLng,
-        infoWindowContent: infoWindowContent,
-        marker: marker,
-        showInfoWindow: showInfoWindow
-      });
-    }
-  }
-
-  /**
-   * Show or hide markers. Pass in 'null' to remove all markers
-   */
-  resetMarkers() {
-    for (var i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
-    }
-    this.markers = [];
+    this.userMarker = new google.maps.Marker({
+      map: this.mapCanvas,
+      clickable: false,
+      label: 'You are here',
+      icon: getIcon('user'),
+      position
+    });
   }
 
   /**
@@ -81,21 +56,16 @@ export default class {
    * @param  {Array} currentFilters The current selected filters
    */
   updateHotspots(currentFilters) {
-    let filteredData = [];
-
-    currentFilters.forEach(filter => {
-      this.hotspotsData.forEach(hotspot => {
-        if (hotspot.type === filter) {
-          filteredData.push(hotspot);
-        }
-      });
-    });
-
-    if (filteredData.length > 0) {
-      this.addHotspots(filteredData);
-    } else {
-      this.addHotspots(this.hotspotsData);
+    if (currentFilters.length === 0) {
+      this.markers.forEach(marker => marker.setVisible(true));
+      return;
     }
+
+    this.markers.forEach(marker => {
+      const isInFilters = currentFilters.indexOf(marker.hotspot.type) >= 0;
+
+      marker.setVisible(isInFilters);
+    });
   }
 
   /**
@@ -103,89 +73,26 @@ export default class {
    * @param {Object} hotspotsData Array with the hotspots infos
    */
   addHotspots(hotspotsData) {
-    this.hotspotsData = hotspotsData;
-    this.resetMarkers();
-
     hotspotsData.forEach(hotspot => {
       const position = {
-        lat: parseFloat(hotspot.lat),
-        lng: parseFloat(hotspot.lng)
-      };
-      let content = '<div class="infowindow">';
+          lat: parseFloat(hotspot.lat),
+          lng: parseFloat(hotspot.lng)
+        },
+        icon = getIcon(hotspot.type),
+        marker = new google.maps.Marker({
+          map: this.mapCanvas,
+          icon: icon,
+          position
+        });
 
-      if (hotspot.name) {
-        content += `<h4 class="infowindow__title">${hotspot.name}</h4><hr>`;
-      }
-
-      if (hotspot.address) {
-        content += `<div class="infowindow__address">
-          <img src="assets/marker-stroked-24@2x.png"
-            class="infowindow__address__image">
-          <span class="infowindow__address__text">${hotspot.address}</span>
-        </div><hr>`;
-      }
-
-      if (hotspot.descriptionenglish) {
-        content += `<div class="infowindow__description">
-          ${hotspot.descriptionenglish}</div><hr>`;
-      }
-
-      if (hotspot.descriptionforeign) {
-        content += `<div class="infowindow__description">
-          ${hotspot.descriptionforeign}</div><hr>`;
-      }
-
-      if (hotspot.openinghours) {
-        content += `<div class="infowindow__hours">
-          <img src="assets/clock.png" class="infowindow__hours__image">
-          <span class="infowindow__hours__text">${hotspot.openinghours}</span>
-        </div>`;
-      }
-
-      content += '</div>';
-
-      this.addMarker({
-        latLng: position,
-        type: hotspot.type,
-        query: hotspot.name + ', ' + hotspot.address,
-        infoWindowContent: content
-      });
-    });
-  }
-
-  /**
-   * Add an infowindow to the map
-   * @param {Object} latLng The position of the marker
-   * @param {String} infoWindowContent The infowindow content (optional)
-   * @param {GoogleMarker} marker Optional marker this window is bound to
-   * @param {Boolean} showInfoWindow If the window should be open or not
-   */
-  addInfoWindow({latLng, infoWindowContent, marker = null,
-      showInfoWindow = null}) {
-    let infoWindow = new google.maps.InfoWindow({map: this.mapCanvas});
-    infoWindow.setContent(infoWindowContent);
-
-    if (marker) {
-      if (showInfoWindow) {
-        infoWindow.open(this.mapCanvas, marker);
-      } else {
-        infoWindow.close();
-      }
+      marker.hotspot = hotspot;
 
       marker.addListener('click', () => {
-        infoWindow.open(this.mapCanvas, marker);
+        this.onHotspotClick(hotspot);
       });
-    } else {
-      infoWindow.setPosition(latLng);
-    }
-  }
 
-  /**
-   * Get the center of the map
-   * @returns {GoogleLatLng}
-   */
-  getCenter() {
-    return this.mapCanvas.getCenter();
+      this.markers.push(marker);
+    });
   }
 
   /**
