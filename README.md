@@ -17,14 +17,14 @@ Map that shows locations which are potentially useful and interesting for refuge
 ### Prerequisites
 Make sure you have the following tools installed:
 
-* npm
+* [Node.js](https://nodejs.org/)
 
 ### Installation
 
 After cloning the repository, install all dependencies:
 
 ```sh
-npm install # install new dependencies
+npm install
 ```
 
 ### Develop
@@ -32,7 +32,7 @@ npm install # install new dependencies
 Run the following command to start the server on localhost:
 
 ```sh
-npm run server # start the server
+npm run server
 ```
 
 ### Deploy
@@ -40,7 +40,6 @@ npm run server # start the server
 To deploy the application, run the following commands:
 
 ```sh
-npm run build
 npm run deploy
 ```
 
