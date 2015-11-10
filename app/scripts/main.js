@@ -78,9 +78,8 @@ class App {
    */
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
-    /* eslint-disable no-new  */
-    new Sidebar(this.map, '.sidebar__filters', hotspotsData);
-    /* eslint-enable no-new  */
+    this.sidebar = new Sidebar(this.map, hotspotsData);
+    this.sidebar.show();
   }
 
   /**

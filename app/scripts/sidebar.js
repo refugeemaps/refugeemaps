@@ -6,27 +6,30 @@ export default class Sidebar {
   /**
    * Constructs the Sidebar
    * @param {google.maps.Map} map The map
-   * @param {String} selector The sidebar container selector
    * @param {Object} hotspotsData The hotspot data
    */
-  constructor(map, selector, hotspotsData) {
+  constructor(map, hotspotsData) {
+    const container = '.sidebar',
+      filters = `${container}__filters`,
+      filtersHeader = `${filters}__header`;
+
+    this.$container = document.querySelector(container);
+    this.$filters = this.$container.querySelector(`${filters}`);
+    this.$languageSwitcher = this.$container.querySelector('.language-filter');
+    this.$itemsWrapper = this.$container.querySelector(`${filters}__body`);
+    this.$items = this.$container.querySelectorAll(`${filters}__body__filter`);
+    this.$header = this.$container.querySelector(`${filtersHeader}`);
+    this.$headerShow = this.$container.querySelector(`${filtersHeader}__show`);
+    this.$headerHide = this.$container.querySelector(`${filtersHeader}__hide`);
+
     this.map = map;
     this.hotspotsData = hotspotsData;
+
     this.currentFilter = [];
-    this.selector = selector;
-    this.$container = document.querySelector(selector);
-    this.$languageSwitcher = document.querySelector('.language-filter');
-    this.$itemsWrapper = this.$container.querySelector(`${selector}__body`);
-    this.$items = this.$container.querySelectorAll(`${selector}__body__filter`);
-    this.$header = this.$container.querySelector(`${selector}__header`);
-    this.$headerShow = this.$container
-      .querySelector(`${selector}__header__show`);
-    this.$headerHide = this.$container
-      .querySelector(`${selector}__header__hide`);
 
     getData({spreadsheetId: config.categoriesSpreadsheetId})
       .then(categories => {
-        this.categoriesFilterData = categories;
+        this.categories = categories;
         this.renderCategories(categories);
       });
   }
@@ -60,10 +63,11 @@ export default class Sidebar {
 
   /**
    * Add click listener to sidebar items
-   * @param {String} selector The container selector
    */
-  initEvents(selector) {
-    this.$items = this.$container.querySelectorAll(`${selector}__body__filter`);
+  initEvents() {
+    this.$items = this.$filters
+      .querySelectorAll('.sidebar__filters__body__filter');
+
     for (let i = 0; i < this.$items.length; i++) {
       let type = this.$items[i].getAttribute('data-filter');
       this.$items[i].addEventListener('click',
@@ -85,13 +89,13 @@ export default class Sidebar {
     let language = event.target.value;
 
     if (isRightToLeft(language)) {
-      this.$container.classList.add('sidebar__filters--rtl');
+      this.$filters.classList.add('sidebar__filters--rtl');
     } else {
-      this.$container.classList.remove('sidebar__filters--rtl');
+      this.$filters.classList.remove('sidebar__filters--rtl');
     }
 
     for (let i = 0; i < $items.length; i++) {
-      $items[i].lastChild.textContent = this.categoriesFilterData[i][language];
+      $items[i].lastChild.textContent = this.categories[i][language];
     }
   }
 
@@ -143,5 +147,12 @@ export default class Sidebar {
   toggleSidebar() {
     this.$itemsWrapper.classList.toggle('sidebar__filters__body--hidden');
     this.$header.classList.toggle('sidebar__filters__header--hide-filters');
+  }
+
+  /**
+   * Show the sidebar
+   */
+  show() {
+    this.$container.classList.remove('sidebar--hidden');
   }
 }
