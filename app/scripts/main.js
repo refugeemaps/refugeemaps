@@ -1,13 +1,13 @@
 import Promise from 'lie';
 import find from 'array-find';
-import config from './config';
-import getData from './get-data';
-import findClosestCity from './find-closest-city';
+import config from './config/config';
+import getData from './libs/get-data';
+import findClosestCity from './libs/find-closest-city';
 
-import Map from './map';
-import Sidebar from './sidebar';
-import Filters from './filters';
-import LanguageSwitch from './language-switch';
+import Map from './views/map';
+import Sidebar from './views/sidebar';
+import Filters from './views/filters';
+import LanguageSwitch from './views/language-switch';
 
 class App {
   /**

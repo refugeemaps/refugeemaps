@@ -1,6 +1,6 @@
-import config from './config';
-import getIcon from './get-icon';
-import mapStyle from './map-style';
+import config from '../config/config';
+import mapStyle from '../config/map-style';
+import getIcon from '../libs/get-icon';
 
 /* global google */
 

@@ -1,4 +1,4 @@
-import isRightToLeft from './is-right-to-left';
+import isRightToLeft from '../libs/is-right-to-left';
 
 /**
  * The category filters

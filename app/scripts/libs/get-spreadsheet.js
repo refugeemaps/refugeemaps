@@ -1,6 +1,6 @@
 import Promise from 'lie';
 import reqwest from 'reqwest';
-import config from './config';
+import config from '../config/config';
 
 /**
  * Trigger method to get the spreadsheet data.
