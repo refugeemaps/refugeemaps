@@ -28,7 +28,7 @@ export default class {
 
     if (hotspot.address) {
       content += `<div class="infowindow__address">
-        <img src="assets/marker-stroked-24@2x.png"
+        <img src="static/images/marker-stroked-24@2x.png"
           class="infowindow__address__image">
         <span class="infowindow__address__text">${hotspot.address}</span>
       </div><hr>`;
@@ -46,7 +46,7 @@ export default class {
 
     if (hotspot.openinghours) {
       content += `<div class="infowindow__hours">
-        <img src="assets/clock.png" class="infowindow__hours__image">
+        <img src="static/images/clock.png" class="infowindow__hours__image">
         <span class="infowindow__hours__text">${hotspot.openinghours}</span>
       </div>`;
     }

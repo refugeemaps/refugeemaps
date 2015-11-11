@@ -28,14 +28,14 @@ export default function(category) {
   const iconName = icons[category];
 
   if (iconName) {
-    return create({url: `assets/${iconName}.png`});
+    return create({url: `static/images/${iconName}.png`});
   }
 
   if (category === 'user') {
     return getUserIcon();
   }
 
-  return create({url: 'assets/marker-24@2x.png'});
+  return create({url: 'static/images/marker-24@2x.png'});
 }
 /* eslint-enable complexity */
 
@@ -45,7 +45,7 @@ export default function(category) {
  */
 function getUserIcon() {
   return create({
-    url: 'assets/red-marker.png',
+    url: 'static/images/red-marker.png',
     width: 25,
     height: 40,
     anchorX: 12,

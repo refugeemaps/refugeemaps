@@ -1,0 +1,28 @@
+{{define "languageSwitch"}}
+  <form class="language-switch">
+    <div class="language-switch__flag">
+      <label for="english">
+        <svg>
+          <use xlink:href="static/images/flags.svg#great-britain"></use>
+        </svg>
+      </label>
+      <input type="radio" name="lang" value="english" id="english" checked="checked"/>
+    </div>
+    <div class="language-switch__flag">
+      <label for="german">
+        <svg>
+          <use xlink:href="static/images/flags.svg#germany"></use>
+        </svg>
+      </label>
+      <input type="radio" name="lang" value="german" id="german"/>
+    </div>
+    <div class="language-switch__flag">
+      <label for="arabic">
+        <svg>
+          <use xlink:href="static/images/flags.svg#syria"></use>
+        </svg>
+      </label>
+      <input type="radio" name="lang" value="arabic" id="arabic"/>
+    </div>
+  </form>
+{{end}}

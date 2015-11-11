@@ -34,7 +34,7 @@ export default class {
       $categoryFilter.addEventListener('click',
         () => this.toggleCategoryFilter($categoryFilter, category.key));
 
-      $categoryFilterIcon.src = `assets/${category.key}.png`;
+      $categoryFilterIcon.src = `static/images/${category.key}.png`;
       $categoryFilterIcon.className = 'filters__body__filter__image';
 
       $categoryFilterText.textContent = category.english;

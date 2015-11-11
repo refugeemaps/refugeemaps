@@ -1,0 +1,21 @@
+application: refugeemaps
+version: 1-0
+runtime: go
+api_version: go1
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: _go_app
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^(.*/)?.*/assets/.*$
+- ^(.*/)?.*/node_modules/.*$
+- ^(.*/)?.*/tools/.*$

@@ -1,0 +1,22 @@
+{{define "404Page"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {{template "head" .}}
+</head>
+
+<body>
+  <section class="error">
+    <div class="error__content">
+      <header>
+        <p class="error__content__info">OOPS!</p>
+        <h1 class="error__content__title">404</h1>
+      </header>
+      <a class="error__content__button" href="/" title="Take me away">Take me away</a>
+    </div>
+  </section>
+</body>
+
+</html>
+{{end}}

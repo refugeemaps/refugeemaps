@@ -1,0 +1,26 @@
+{{define "indexPage"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {{template "head" .}}
+</head>
+
+<body>
+
+  <div class="map"></div>
+
+  <div class="sidebar sidebar--hidden">
+    {{template "languageSwitch" .}}
+    {{template "filters" .}}
+  </div>
+
+  {{template "infowindow" .}}
+
+  <script src="https://maps.googleapis.com/maps/api/js?signed_in=true"></script>
+  <script src="/static/main.js"></script>
+
+</body>
+
+</html>
+{{end}}
