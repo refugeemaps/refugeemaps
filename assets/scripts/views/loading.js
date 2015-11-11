@@ -13,6 +13,6 @@ export default class {
    * Hide the loading indicator
    */
   hide() {
-    this.$container.classList.add('loading--hidden');
+    this.$container.classList.add('overlay--hidden');
   }
 }

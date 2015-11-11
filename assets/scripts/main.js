@@ -6,6 +6,7 @@ import findClosestCity from './libs/find-closest-city';
 
 import Map from './views/map';
 import Loading from './views/loading';
+import Error from './views/error';
 import Sidebar from './views/sidebar';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
@@ -20,6 +21,7 @@ class App {
 
     this.infowindow = new Infowindow();
     this.loading = new Loading();
+    this.error = new Error();
     this.map = new Map({
       onHotspotClick: hotspot => {
         this.infowindow.show(hotspot);
@@ -43,7 +45,7 @@ class App {
         .then(city => this.centerOnCity(city))
         .then(city => getData({spreadsheetId: city.spreadsheetid}))
         .then(hotspots => this.onHotspotsLoaded(hotspots))
-        .catch(error => this.handlePromiseError(error));
+        .catch(error => this.handleError(error));
     } else {
       Promise.all([
         getData({spreadsheetId: config.citySpreadsheetId}),
@@ -52,12 +54,12 @@ class App {
         .then(([cities, position]) => findClosestCity(cities, position))
         .then(city => getData({spreadsheetId: city.spreadsheetid}))
         .then(hotspots => this.onHotspotsLoaded(hotspots))
-        .catch(error => this.handlePromiseError(error));
+        .catch(error => this.handleError(error));
     }
 
     getData({spreadsheetId: config.categoriesSpreadsheetId})
       .then(categories => this.filters.renderCategories(categories))
-      .catch(error => this.handlePromiseError(error));
+      .catch(error => this.handleError(error));
 
     window.onhashchange = function() {
       window.location.reload();
@@ -124,11 +126,11 @@ class App {
           this.map.showUserPosition(pos);
           resolve(pos);
         }, () => {
-          this.handleLocationError(true);
+          this.handleError();
           resolve(config.defaultLocation);
         });
       } else {
-        this.handleLocationError(false);
+        this.handleError();
         resolve(config.defaultLocation);
       }
     });
@@ -136,29 +138,9 @@ class App {
 
   /**
    * Handle errors when geolocation fails
-   * @param {Boolean} browserHasGeolocation If the browser supports geolocation
-   * @param {Object} pos Position where the error infowindow will be placed
    */
-  handleLocationError(browserHasGeolocation) {
-    // if (browserHasGeolocation) {
-    //   this.map.addInfoWindow({
-    //     latLng: pos,
-    //     infoWindowContent: 'Error: The Geolocation service failed.'
-    //   });
-    // } else {
-    //   this.map.addInfoWindow({
-    //     latLng: pos,
-    //     infoWindowContent: 'Error: Your browser doesn\'t support geolocation.'
-    //   });
-    // }
-  }
-
-  /**
-   * Log the error the the console
-   * @param {Error} error The errow that was thrown
-   */
-  handlePromiseError(error) {
-    console.error('Something went wrong: ', error); // eslint-disable-line
+  handleError() {
+    this.error.show();
   }
 }
 

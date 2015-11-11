@@ -1,22 +1,7 @@
 .loading
-  font-size: 1rem
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  background: rgba(0, 0, 0, .33)
-  z-index: 2
-  &--hidden
-    display: none
-  &__spinner
-    position: absolute
-    top: 50%
-    left: 50%
-    transform: translate(-50%, -50%)
-    .mdl-spinner
-      &:not(.is-upgraded).is-active:after
-        color: #fff
-      &--single-color
-        .mdl-spinner__layer-1, .mdl-spinner__layer-2, .mdl-spinner__layer-3, .mdl-spinner__layer-4
-          border-color: #fff
+  .mdl-spinner
+    &:not(.is-upgraded).is-active:after
+      color: $color-white
+    &--single-color
+      .mdl-spinner__layer-1, .mdl-spinner__layer-2, .mdl-spinner__layer-3, .mdl-spinner__layer-4
+        border-color: $color-white
