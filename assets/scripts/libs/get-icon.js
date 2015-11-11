@@ -2,7 +2,7 @@
 
 const icons = {
   mosque: 'mosque',
-  church: 'curch',
+  church: 'church',
   bank: 'bank',
   'call-shop': 'call-shop',
   supermarket: 'supermarket',

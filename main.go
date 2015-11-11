@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 
 	"lib/constants"
+	"lib/position"
+	"lib/subdomain"
 )
 
 var (
@@ -17,7 +19,7 @@ var (
 
 // Initialize
 func init() {
-	router.HandleFunc("/", RootHandler).Name("index")
+	router.HandleFunc("/", RootHandler)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 
 	http.Handle("/", router)
@@ -26,6 +28,9 @@ func init() {
 // RootHandler handles the main call.
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+
+	c.Infof("This city: %v", subdomain.Get(r))
+	c.Infof("The position: %v", position.Get(r))
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":    constants.SiteName,

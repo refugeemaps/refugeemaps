@@ -1,4 +1,4 @@
-application: refugeemaps
+application: refugee-maps-test
 version: 1-0
 runtime: go
 api_version: go1
@@ -16,6 +16,6 @@ skip_files:
 - ^(.*/)?.*\.py[co]$
 - ^(.*/)?.*/RCS/.*$
 - ^(.*/)?\..*$
-- ^(.*/)?.*/assets/.*$
-- ^(.*/)?.*/node_modules/.*$
-- ^(.*/)?.*/tools/.*$
+- ^(.*/)?assets/.*$
+- ^(.*/)?node_modules/.*$
+- ^(.*/)?tools/.*$
