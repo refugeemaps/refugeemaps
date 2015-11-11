@@ -17,7 +17,18 @@
 
   {{template "infowindow" .}}
 
+  <div class="loading">
+    <div class="loading__spinner">
+      <span class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></span>
+    </div>
+  </div>
+
+  <div class="error">
+
+  </div>
+
   <script src="https://maps.googleapis.com/maps/api/js?signed_in=true"></script>
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
   <script src="/static/main.js"></script>
 
 </body>
