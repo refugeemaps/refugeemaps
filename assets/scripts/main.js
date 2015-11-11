@@ -5,6 +5,7 @@ import getData from './libs/get-data';
 import findClosestCity from './libs/find-closest-city';
 
 import Map from './views/map';
+import Loading from './views/loading';
 import Sidebar from './views/sidebar';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
@@ -18,6 +19,7 @@ class App {
     const hash = window.location.hash.toLowerCase().substr(1);
 
     this.infowindow = new Infowindow();
+    this.loading = new Loading();
     this.map = new Map({
       onHotspotClick: hotspot => {
         this.infowindow.show(hotspot);
@@ -102,6 +104,7 @@ class App {
    */
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
+    this.loading.hide();
     this.sidebar.show();
   }
 
