@@ -1,5 +1,4 @@
 import config from '../config/config';
-import mapStyle from '../config/map-style';
 import getIcon from '../libs/get-icon';
 
 /* global google */
@@ -20,7 +19,6 @@ export default class {
         streetViewControlOptions: {
           position: google.maps.ControlPosition.LEFT_BOTTOM
         },
-        styles: mapStyle,
         zoom: 15
       };
 
