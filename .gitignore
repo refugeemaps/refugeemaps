@@ -1,3 +1,9 @@
-node_modules
-build
+/static
+/node_modules
+/.tmp
+.DS_Store
+/src/github.com
+/src/golang.org
+/pkg
+/bin
 npm-debug.log

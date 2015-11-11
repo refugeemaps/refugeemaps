@@ -14,24 +14,34 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "prepare": "npm run clean && npm run mkdirs && cp app/assets/* build/assets/ && cp app/scripts/vendor/* build/scripts/vendor/",
-    "prepare:dev": "npm run prepare && npm run jade && npm run stylus && npm run js",
-    "clean": "rm -rf {build}/*",
-    "mkdirs": "mkdir -p build/{scripts/vendor,styles,assets}",
-    "server": "npm run prepare:dev && light-server -s build -p 8000 -w 'app/scripts/**/*.js*  # npm run js' -w 'app/styles/**/*styl # npm run stylus # reloadcss' -w 'app/jade/**/*jade # npm run jade'",
-    "jade": "jade app/jade/*jade -H -P -o build",
-    "stylus": "stylus --inline --sourcemap-inline -u autoprefixer-stylus app/styles/main.styl -o build/styles",
-    "uglifyjs": "uglifyjs build/scripts/main.js -o build/scripts/main.js -c warnings=false,drop_console=true --mangle",
-    "js": "browserify app/scripts/main.js -t babelify > build/scripts/main.js",
-    "test": "eslint app/scripts && mocha --recursive --compilers js:babel-core/register",
-    "build": "npm run prepare && npm run jade && npm run stylus && npm run js && npm run uglifyjs",
-    "changelog": "conventional-changelog-generator && atom -w CHANGELOG.md",
-    "deploy": "npm run build && gcloud-storage-upload -s 'ubilabs-refugee-map' -p build",
+    "server": "parallelshell 'goapp serve' 'npm run watch'",
+
+    "clean": "rm -rf static && mkdir static",
+    "clean:images": "rm -rf static/images && mkdir static/images",
+
+    "watch": "npm run clean && parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run watch:images'",
+    "watch:js": "watchify --debug -v -t babelify assets/scripts/main.js -o static/main.js",
+    "watch:css": "stylus --inline --watch --sourcemap-inline -u autoprefixer-stylus assets/styles/main.styl -o static",
+    "watch:images": "npm run build:images && watch-run -p 'assets/images/*' npm run build:images",
+
+    "test": "npm run lint && npm run build",
+    "lint": "eslint ./assets/scripts",
+
+    "build": "npm run clean && npm run build:css && npm run build:js && npm run build:images",
+    "build:js": "browserify assets/scripts/main.js -t babelify | uglifyjs > static/main.js",
+    "build:css": "stylus --inline --compress -u autoprefixer-stylus assets/styles/main.styl -o static",
+    "build:images": "npm run clean:images && cp -r assets/images/* static/images/",
+
+    "changelog": "conventional-changelog-generator && vim -w CHANGELOG.md",
+    "cachebuster": "node tools/cachebuster.js",
+
     "release": "echo 'Usage: npm run release:patch|minor|major'",
     "release:patch": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType patch && npm run changelog && npm run release:commit",
     "release:minor": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType minor && npm run changelog && npm run release:commit",
     "release:major": "bumpery --verify='npm test' --no-push --no-commit --no-createTag --versionType major && npm run changelog && npm run release:commit",
-    "release:commit": "bumpery --commitFiles 'CHANGELOG.md package.json' --commitMessage 'chore(release): version %VERSION%' --no-bumpVersion && sh ./tools/notify.sh release $npm_package_version"
+    "release:commit": "bumpery --commitFiles 'CHANGELOG.md package.json' --commitMessage 'chore(release): version %VERSION%' --no-bumpVersion",
+
+    "deploy": "npm run build && npm run cachebuster && goapp deploy"
   },
   "devDependencies": {
     "array-find": "^1.0.0",
@@ -42,15 +52,15 @@
     "bumpery": "^1.1.1",
     "conventional-changelog-generator": "0.0.3",
     "eslint": "^1.6.0",
-    "gcloud-storage-upload": "^0.1.0",
-    "jade": "^1.11.0",
     "lie": "^3.0.1",
     "light-server": "^1.0.6",
     "mocha": "^2.3.2",
     "normalize-styl": "^3.0.3",
-    "pre-commit": "^1.1.1",
+    "parallelshell": "^2.0.0",
     "reqwest": "^2.0.3",
     "stylus": "^0.52.4",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "^2.4.10",
+    "watch-run": "^1.2.2",
+    "watchify": "^3.6.0"
   }
 }
