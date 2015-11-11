@@ -1,0 +1,37 @@
+.filters
+  &--rtl
+    direction: rtl
+    .filters__body__filter__text
+      margin: 0 emCalc(10px) 0 0
+  &--hidden
+    .filters__header__show
+      display: inline
+    .filters__header__hide
+      display: none
+    .filters__body
+      display: none
+  &__header
+    cursor: pointer
+    padding: emCalc(10px)
+    background: #444
+    color: #fff
+    &__show
+      display: none
+  &__body
+    max-height: s('calc(%s - %s)', 90vh, $sidebar-header-height)
+    overflow-y: auto
+    &__filter
+      padding: emCalc(10px)
+      cursor: pointer
+      &--active
+        background: #444
+        color: #fff
+      &:hover
+        background: #444
+        color: #fff
+      &__image
+        vertical-align: middle
+        width: emCalc(30px)
+      &__text
+        margin-left: emCalc(10px)
+        vertical-align: middle

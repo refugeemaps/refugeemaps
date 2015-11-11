@@ -34,6 +34,7 @@
     "release:commit": "bumpery --commitFiles 'CHANGELOG.md package.json' --commitMessage 'chore(release): version %VERSION%' --no-bumpVersion && sh ./tools/notify.sh release $npm_package_version"
   },
   "devDependencies": {
+    "array-find": "^1.0.0",
     "autoprefixer-stylus": "^0.7.1",
     "babel-core": "^5.8.23",
     "babelify": "^6.3.0",
@@ -43,14 +44,13 @@
     "eslint": "^1.6.0",
     "gcloud-storage-upload": "^0.1.0",
     "jade": "^1.11.0",
+    "lie": "^3.0.1",
     "light-server": "^1.0.6",
     "mocha": "^2.3.2",
+    "normalize-styl": "^3.0.3",
     "pre-commit": "^1.1.1",
     "reqwest": "^2.0.3",
     "stylus": "^0.52.4",
     "uglifyjs": "^2.4.10"
-  },
-  "dependencies": {
-    "normalize-styl": "^3.0.3"
   }
 }
