@@ -1,7 +1,7 @@
 /* global google */
 
 const icons = {
-  user: 'mosque',
+  mosque: 'mosque',
   church: 'curch',
   bank: 'bank',
   'call-shop': 'call-shop',
