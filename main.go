@@ -4,6 +4,7 @@ import (
 	"appengine"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 
@@ -17,7 +18,7 @@ var (
 
 // Initialize
 func init() {
-	router.HandleFunc("/", RootHandler).Name("index")
+	router.HandleFunc("/", RootHandler)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 
 	http.Handle("/", router)
@@ -26,6 +27,9 @@ func init() {
 // RootHandler handles the main call.
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+
+	subdomain := getSubdomain(r)
+	c.Infof("A city page?: %v", subdomain)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":    constants.SiteName,
@@ -50,4 +54,22 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		c.Errorf("main.NotFoundHandler template: %v", templateExecuteError)
 		return
 	}
+}
+
+// Get the subdomain
+func getSubdomain(r *http.Request) (subdomain string) {
+	host := r.URL.Host
+	host = strings.TrimSpace(host)
+	hostParts := strings.Split(host, ".")
+
+	if len(hostParts) > 2 {
+		subdomain = hostParts[0]
+		subdomainParts := strings.Split(subdomain, "-dot-")
+
+		if len(subdomainParts) > 1 {
+			subdomain = subdomainParts[len(subdomainParts)-2]
+		}
+	}
+
+	return
 }
