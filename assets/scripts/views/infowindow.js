@@ -8,7 +8,13 @@ export default class {
   constructor() {
     this.$container = document.querySelector('.infowindow');
     this.$close = this.$container.querySelector('.infowindow__close');
-    this.$body = this.$container.querySelector('.infowindow__body');
+    this.$title = this.$container.querySelector('.infowindow__header__title');
+    this.$location = this.$container
+      .querySelector('.infowindow__body__row__content--location');
+    this.$time = this.$container
+      .querySelector('.infowindow__body__row__content--time');
+    this.$info = this.$container
+      .querySelector('.infowindow__body__row__content--info');
 
     this.$close.addEventListener('click', () => this.hide());
   }
@@ -20,38 +26,21 @@ export default class {
   show(hotspot) {
     this.$container.classList.remove('infowindow--hidden');
 
-    let content = '';
+    this.$title.textContent = hotspot.name;
 
-    if (hotspot.name) {
-      content += `<h4 class="infowindow__title">${hotspot.name}</h4><hr>`;
-    }
-
-    if (hotspot.address) {
-      content += `<div class="infowindow__address">
-        <img src="static/images/marker-stroked-24@2x.png"
-          class="infowindow__address__image">
-        <span class="infowindow__address__text">${hotspot.address}</span>
-      </div><hr>`;
-    }
-
-    if (hotspot.descriptionenglish) {
-      content += `<div class="infowindow__description">
-        ${hotspot.descriptionenglish}</div><hr>`;
-    }
-
-    if (hotspot.descriptionforeign) {
-      content += `<div class="infowindow__description">
-        ${hotspot.descriptionforeign}</div><hr>`;
-    }
-
-    if (hotspot.openinghours) {
-      content += `<div class="infowindow__hours">
-        <img src="static/images/clock.png" class="infowindow__hours__image">
-        <span class="infowindow__hours__text">${hotspot.openinghours}</span>
-      </div>`;
-    }
-
-    this.$body.innerHTML = content;
+    [
+      {$el: this.$location, value: hotspot.address},
+      {$el: this.$time, value: hotspot.openinghours},
+      {$el: this.$info, value: hotspot.descriptionenglish}
+    ].forEach(data => {
+      if (data.value !== '') {
+        data.$el.parentNode.classList.remove('infowindow__body__row--hidden');
+        data.$el.textContent = data.value;
+      } else {
+        data.$el.parentNode.classList.add('infowindow__body__row--hidden');
+        data.$el.textContent = '';
+      }
+    });
   }
 
   /**
@@ -59,6 +48,9 @@ export default class {
    */
   hide() {
     this.$container.classList.add('infowindow--hidden');
-    this.$body.innerHTML = '';
+    this.$title.textContent = '';
+    this.$location.textContent = '';
+    this.$time.textContent = '';
+    this.$info.textContent = '';
   }
 }

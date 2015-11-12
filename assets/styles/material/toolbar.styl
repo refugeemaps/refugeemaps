@@ -1,0 +1,25 @@
+.toolbar
+  font-size: 1rem
+  height: $toolbar-height
+  line-height: $toolbar-height
+  color: $color-white
+  background: $color-blue
+  &__title
+    font-size: emCalc(20px)
+    display: inline-block
+    font-weight: 400
+    padding: 0 emCalc(16px, 20)
+  &__action
+    font-size: 1rem
+    position: absolute
+    top: 0
+    left: 0
+    width: $toolbar-height - emCalc(8px)
+    height: $toolbar-height - emCalc(8px)
+    line-height: $toolbar-height - emCalc(8px)
+    margin: emCalc(4px)
+    .icon
+      fill: $color-white
+  &--with-action
+    &__title
+      padding-left: emCalc(72px, 20)

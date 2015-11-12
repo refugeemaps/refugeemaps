@@ -1,8 +1,6 @@
 /**
  * The filters sidebar
  */
-$filters-header-height = emCalc(56px)
-
 .filters
   font-size: 1rem
   position: absolute
@@ -47,34 +45,14 @@ $filters-header-height = emCalc(56px)
     @media (min-width: 456px)
       width: emCalc(400px)
     &__header
-      height: $filters-header-height
-      line-height: $filters-header-height
-      color: $color-white
-      background: $color-blue
       position: absolute
       top: 0
       left: 0
       right: 0
       shadow(1)
-      &__title
-        font-size: emCalc(20px)
-        display: inline-block
-        font-weight: 400
-        padding: 0 emCalc(16px, 20) 0 emCalc(72px, 20)
-      &__back
-        font-size: 1rem
-        position: absolute
-        top: 0
-        left: 0
-        width: $filters-header-height - emCalc(8px)
-        height: $filters-header-height - emCalc(8px)
-        line-height: $filters-header-height - emCalc(8px)
-        margin: emCalc(4px)
-        .icon
-          fill: $color-white
     &__body
       height: 100%
-      padding-top: $filters-header-height + emCalc(8px)
+      padding-top: $toolbar-height + emCalc(8px)
       padding-bottom: emCalc(8px)
       overflow-y: auto
       overflow-x: hidden
@@ -82,7 +60,6 @@ $filters-header-height = emCalc(56px)
 .filter
   padding: 0 emCalc(16px)
   cursor: pointer
-  color: $color-black
   height: emCalc(56px)
   line-height: emCalc(56px)
   transition: background .2s ease-in-out
