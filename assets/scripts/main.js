@@ -10,7 +10,7 @@ import Error from './views/error';
 import Actions from './views/actions';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
-import LanguageSwitch from './views/language-switch';
+import Menu from './views/menu';
 
 class App {
   /**
@@ -28,10 +28,11 @@ class App {
     this.filters = new Filters({
       onFilterChange: currentFilter => this.map.updateHotspots(currentFilter)
     });
-    this.languageSwitch = new LanguageSwitch({
+    this.menu = new Menu({
       onLanguageChange: language => this.filters.changeLanguage(language)
     });
     this.actions = new Actions({
+      onMenuToggle: () => this.menu.toggle(),
       onFiltersToggle: () => this.filters.toggle(),
       onCenter: () => this.map.showUserPosition()
     });

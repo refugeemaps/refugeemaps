@@ -39,15 +39,19 @@
     &:active
       background: rgba(#999, 40%)
       shadow(0)
-  &--fab
+  &--fab, &--icon
     z-index: 1
+    width: emCalc(48px, 14)
+    height: emCalc(48px, 14)
+    line-height: emCalc(48px, 14)
+    padding: 0
+    .icon
+      fill: $color-white
+  &--fab
     border-radius: 50%
     width: emCalc(56px, 14)
     height: emCalc(56px, 14)
     line-height: emCalc(56px, 14)
-    padding: 0
-    .icon
-      fill: $color-white
   &--fab&--white
     .icon
       fill: $color-grey
