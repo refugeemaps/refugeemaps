@@ -21,7 +21,7 @@ export default class {
   }
 
   /**
-   * Add filter items for each category to sidebar
+   * Add filter items for each category to filter list
    * @param {Object} categories The items data object
    */
   renderCategories(categories) {
@@ -69,7 +69,7 @@ export default class {
 
   /**
    * Filter the hotspot data
-   * @param {DOMNode} $categoryFilter The sidebar item
+   * @param {DOMNode} $categoryFilter The filter item
    * @param {String} categoryKey The type of the filter
    */
   toggleCategoryFilter($categoryFilter, categoryKey) {

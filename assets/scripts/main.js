@@ -7,7 +7,6 @@ import findClosestCity from './libs/find-closest-city';
 import Map from './views/map';
 import Loading from './views/loading';
 import Error from './views/error';
-import Sidebar from './views/sidebar';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
 import LanguageSwitch from './views/language-switch';
@@ -27,7 +26,6 @@ class App {
         this.infowindow.show(hotspot);
       }
     });
-    this.sidebar = new Sidebar();
     this.filters = new Filters({
       onFilterChange: currentFilter => {
         this.map.updateHotspots(currentFilter);
@@ -107,7 +105,6 @@ class App {
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
     this.loading.hide();
-    this.sidebar.show();
   }
 
   /**
