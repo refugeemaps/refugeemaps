@@ -32,7 +32,7 @@ class App {
       onLanguageChange: language => this.filters.changeLanguage(language)
     });
     this.actions = new Actions({
-      onFiltersToggle: () => console.log('Toggling filters'),
+      onFiltersToggle: () => this.filters.toggle(),
       onCenter: () => this.map.showUserPosition()
     });
 

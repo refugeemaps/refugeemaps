@@ -11,13 +11,15 @@ export default class {
     onFilterChange = () => {}
   }) {
     this.$container = document.querySelector('.filters');
-    this.$body = this.$container.querySelector('.filters__body');
-    this.$header = this.$container.querySelector('.filters__header');
+    this.$content = this.$container.querySelector('.filters__content');
+    this.$back = this.$container
+      .querySelector('.filters__content__header__back');
+    this.$body = this.$container.querySelector('.filters__content__body');
 
     this.currentFilter = null;
     this.onFilterChange = onFilterChange;
 
-    this.$header.addEventListener('click', () => this.toggle());
+    this.$back.addEventListener('click', () => this.hide());
   }
 
   /**
@@ -30,15 +32,15 @@ export default class {
         $categoryFilterIcon = document.createElement('img'),
         $categoryFilterText = document.createElement('span');
 
-      $categoryFilter.className = 'filters__body__filter';
+      $categoryFilter.className = 'filter';
       $categoryFilter.addEventListener('click',
         () => this.toggleCategoryFilter($categoryFilter, category.key));
 
       $categoryFilterIcon.src = `static/images/${category.key}.png`;
-      $categoryFilterIcon.className = 'filters__body__filter__image';
+      $categoryFilterIcon.className = 'filter__image';
 
       $categoryFilterText.textContent = category.english;
-      $categoryFilterText.className = 'filters__body__filter__text';
+      $categoryFilterText.className = 'filter__text';
 
       $categoryFilter.appendChild($categoryFilterIcon);
       $categoryFilter.appendChild($categoryFilterText);
@@ -47,7 +49,7 @@ export default class {
 
     this.categories = categories;
     this.$categoryFilters =
-      this.$body.querySelectorAll('.filters__body__filter');
+      this.$body.querySelectorAll('.filter');
   }
 
   /**
@@ -77,14 +79,14 @@ export default class {
 
     for (let i = 0; i < this.$categoryFilters.length; i++) {
       this.$categoryFilters[i].classList
-        .remove('filters__body__filter--active');
+        .remove('filter--active');
     }
 
     if (isAlreadyActive) {
       this.currentFilter = null;
     } else {
       this.currentFilter = categoryKey;
-      $categoryFilter.classList.add('filters__body__filter--active');
+      $categoryFilter.classList.add('filter--active');
     }
 
     this.onFilterChange(this.currentFilter);
@@ -96,5 +98,12 @@ export default class {
    */
   toggle() {
     this.$container.classList.toggle('filters--hidden');
+  }
+
+  /**
+   * Hide the filters
+   */
+  hide() {
+    this.$container.classList.add('filters--hidden');
   }
 }
