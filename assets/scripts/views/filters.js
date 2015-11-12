@@ -16,7 +16,7 @@ export default class {
       .querySelector('.filters__content__header__back');
     this.$body = this.$container.querySelector('.filters__content__body');
 
-    this.currentFilter = null;
+    this.currentFilter = 'all';
     this.onFilterChange = onFilterChange;
 
     this.$back.addEventListener('click', () => this.hide());
@@ -27,29 +27,50 @@ export default class {
    * @param {Object} categories The items data object
    */
   renderCategories(categories) {
-    categories.forEach(category => {
-      let $categoryFilter = document.createElement('div'),
-        $categoryFilterIcon = document.createElement('img'),
-        $categoryFilterText = document.createElement('span');
-
-      $categoryFilter.className = 'filter';
-      $categoryFilter.addEventListener('click',
-        () => this.toggleCategoryFilter($categoryFilter, category.key));
-
-      $categoryFilterIcon.src = `static/images/${category.key}.png`;
-      $categoryFilterIcon.className = 'filter__image';
-
-      $categoryFilterText.textContent = category.english;
-      $categoryFilterText.className = 'filter__text';
-
-      $categoryFilter.appendChild($categoryFilterIcon);
-      $categoryFilter.appendChild($categoryFilterText);
-      this.$body.appendChild($categoryFilter);
+    categories.unshift({
+      key: 'all',
+      visible: 'y',
+      english: 'All categories',
+      german: 'Alle Kategorien',
+      arabic: 'جميع الفئات'
     });
+
+    categories.forEach(this.renderCategory.bind(this));
 
     this.categories = categories;
     this.$categoryFilters =
       this.$body.querySelectorAll('.filter');
+  }
+
+  /**
+   * Render one category
+   * @param  {Object} category The category to render
+   */
+  renderCategory(category) {
+    const $categoryFilter = document.createElement('div'),
+      $categoryFilterIcon = document.createElement('img'),
+      $categoryFilterText = document.createElement('span'),
+      isAllFilter = category.key === 'all';
+
+    $categoryFilter.className = isAllFilter ?
+      'filter filter--active' :
+      'filter';
+    $categoryFilter.addEventListener('click',
+      () => this.toggleCategoryFilter($categoryFilter, category.key));
+
+    $categoryFilterIcon.src = `static/images/${category.key}.png`;
+    $categoryFilterIcon.className = 'filter__image';
+
+    $categoryFilterText.textContent = category.english;
+    $categoryFilterText.className = 'filter__text';
+
+    $categoryFilter.appendChild($categoryFilterIcon);
+    $categoryFilter.appendChild($categoryFilterText);
+    this.$body.appendChild($categoryFilter);
+
+    if (isAllFilter) {
+      this.$allFilter = $categoryFilter;
+    }
   }
 
   /**
@@ -83,7 +104,8 @@ export default class {
     }
 
     if (isAlreadyActive) {
-      this.currentFilter = null;
+      this.currentFilter = 'all';
+      this.$allFilter.classList.add('filter--active');
     } else {
       this.currentFilter = categoryKey;
       $categoryFilter.classList.add('filter--active');

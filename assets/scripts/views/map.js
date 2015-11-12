@@ -57,7 +57,7 @@ export default class {
    * @param  {String} currentFilter The current selected filter
    */
   updateHotspots(currentFilter) {
-    if (!currentFilter) {
+    if (currentFilter === 'all') {
       this.markers.forEach(marker => marker.setVisible(true));
       return;
     }
