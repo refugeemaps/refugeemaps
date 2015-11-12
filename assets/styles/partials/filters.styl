@@ -43,8 +43,9 @@ $filters-header-height = emCalc(56px)
     right: 0
     bottom: 0
     width: 100%
-    max-width: emCalc(400px)
     transition: transform .2s ease-in-out
+    @media (min-width: 456px)
+      width: emCalc(400px)
     &__header
       height: $filters-header-height
       line-height: $filters-header-height
