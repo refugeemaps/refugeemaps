@@ -23,27 +23,17 @@ class App {
     this.loading = new Loading();
     this.error = new Error();
     this.map = new Map({
-      onHotspotClick: hotspot => {
-        this.infowindow.show(hotspot);
-      }
+      onHotspotClick: hotspot => this.infowindow.show(hotspot)
     });
     this.filters = new Filters({
-      onFilterChange: currentFilter => {
-        this.map.updateHotspots(currentFilter);
-      }
+      onFilterChange: currentFilter => this.map.updateHotspots(currentFilter)
     });
     this.languageSwitch = new LanguageSwitch({
-      onLanguageChange: language => {
-        this.filters.changeLanguage(language);
-      }
+      onLanguageChange: language => this.filters.changeLanguage(language)
     });
     this.actions = new Actions({
-      onFiltersToggle: () => {
-        console.log('Toggling filters');
-      },
-      onCenter: () => {
-        console.log('Center to the user!');
-      }
+      onFiltersToggle: () => console.log('Toggling filters'),
+      onCenter: () => this.map.showUserPosition()
     });
 
     if (hash) {

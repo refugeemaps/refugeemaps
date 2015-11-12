@@ -31,7 +31,11 @@ export default class {
    * @param {Object} position The position of the user
    */
   showUserPosition(position) {
-    this.mapCanvas.setCenter(position);
+    if (!position && this.userMarker) {
+      position = this.userMarker.getPosition();
+    }
+
+    this.mapCanvas.panTo(position);
 
     if (this.userMarker) {
       this.userMarker.setPosition(position);
