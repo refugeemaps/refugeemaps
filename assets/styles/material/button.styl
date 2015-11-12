@@ -1,0 +1,54 @@
+/**
+ * Material style buttons
+ */
+.button
+  font-size: emCalc(14px)
+  background: $color-blue
+  color: $color-white
+  position: relative
+  border: none
+  border-radius: 2px
+  outline: none
+  display: inline-block
+  height: emCalc(36px, 14)
+  line-height: emCalc(36px, 14)
+  padding: 0 emCalc(16px, 14)
+  text-transform: uppercase
+  transition: background .25s ease-in-out, box-shadow .25s ease-in-out
+  shadow(1)
+  &:hover, &:focus
+    background: darken($color-blue, 15%)
+    shadow(2)
+  &:active
+    background: darken($color-blue, 25%)
+  &--white
+    color: $color-grey
+    background: $color-white
+  &--flat
+    color: $color-blue
+    background: transparent
+    padding: 0 emCalc(8px, 14)
+    shadow(0)
+  &--flat, &--white
+    &:hover, &:focus
+      background: lighten(#999, 80%)
+    &:active
+      background: lighten(#999, 60%)
+  &--fab
+    z-index: 1
+    border-radius: 50%
+    width: emCalc(56px, 14)
+    height: emCalc(56px, 14)
+    line-height: emCalc(56px, 14)
+    padding: 0
+    .icon
+      fill: $color-white
+      width: emCalc(24px)
+      height: emCalc(24px)
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+  &--fab&--white
+    .icon
+      fill: $color-grey

@@ -7,6 +7,7 @@ import findClosestCity from './libs/find-closest-city';
 import Map from './views/map';
 import Loading from './views/loading';
 import Error from './views/error';
+import Actions from './views/actions';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
 import LanguageSwitch from './views/language-switch';
@@ -34,6 +35,14 @@ class App {
     this.languageSwitch = new LanguageSwitch({
       onLanguageChange: language => {
         this.filters.changeLanguage(language);
+      }
+    });
+    this.actions = new Actions({
+      onFiltersToggle: () => {
+        console.log('Toggling filters');
+      },
+      onCenter: () => {
+        console.log('Center to the user!');
       }
     });
 
@@ -105,6 +114,7 @@ class App {
   onHotspotsLoaded(hotspotsData) {
     this.map.addHotspots(hotspotsData);
     this.loading.hide();
+    this.actions.show();
   }
 
   /**

@@ -10,10 +10,12 @@
 
   <div class="map"></div>
 
+  {{template "actions" .}}
+
   {{template "languageSwitch" .}}
   {{template "filters" .}}
-
   {{template "infowindow" .}}
+
   {{template "loading" .}}
   {{template "error" .}}
 
