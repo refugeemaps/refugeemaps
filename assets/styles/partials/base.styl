@@ -6,8 +6,9 @@
   box-sizing: border-box
 
 html, body
-  font-family: sans-serif
+  font-family: 'Roboto', sans-serif
   font-size: 100%
+  font-weight: 400
   line-height: 1.333
   height: 100%
   width: 100%
@@ -31,3 +32,31 @@ h1, h2, h3, h4
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)
+
+.button
+  font-size: emCalc(14px)
+  background: $color-blue
+  color: $color-white
+  border: none
+  border-radius: 2px
+  outline: none
+  display: inline-block
+  height: emCalc(36px, 14)
+  line-height: emCalc(36px, 14)
+  padding: 0 emCalc(16px, 14)
+  text-transform: uppercase
+  transition: background .25s ease
+  shadow(1)
+  &:hover, &:focus
+    background: darken($color-blue, 15%)
+  &:active
+    background: darken($color-blue, 25%)
+  &--flat
+    color: $color-blue
+    background: transparent
+    padding: 0 emCalc(8px, 14)
+    shadow(0)
+    &:hover, &:focus
+      background: rgba(#999, 0.2)
+    &:active
+      background: rgba(#999, 0.4)

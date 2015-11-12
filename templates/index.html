@@ -10,17 +10,14 @@
 
   <div class="map"></div>
 
-  <div class="sidebar sidebar--hidden">
-    {{template "languageSwitch" .}}
-    {{template "filters" .}}
-  </div>
+  {{template "languageSwitch" .}}
+  {{template "filters" .}}
 
   {{template "infowindow" .}}
   {{template "loading" .}}
   {{template "error" .}}
 
   <script src="https://maps.googleapis.com/maps/api/js"></script>
-  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
   <script src="/static/main.js"></script>
 
 </body>

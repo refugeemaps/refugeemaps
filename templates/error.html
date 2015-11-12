@@ -1,17 +1,11 @@
 {{define "error"}}
   <section class="overlay error overlay--hidden">
     <div class="overlay__content">
-      <div class="mdl-card">
-        <div class="mdl-card__title">
-          <h2 class="error__title">Unable to load Map Data</h2>
-        </div>
-        <div class="error__actions mdl-card__actions">
-          <button class="error__actions__cancel mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            Cancel
-          </button>
-          <button class="error__actions__try-again mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            Try again
-          </button>
+      <div class="card">
+        <p class="card__text">Unable to load Map Data</p>
+        <div class="card__action-bar">
+          <button class="error__actions__cancel button button--flat">Cancel</button>
+          <button class="error__actions__try-again button button--flat">Try again</button>
         </div>
       </div>
     </div>
