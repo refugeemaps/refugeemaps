@@ -29,8 +29,8 @@ class App {
     });
     this.sidebar = new Sidebar();
     this.filters = new Filters({
-      onFilterChange: currentFilters => {
-        this.map.updateHotspots(currentFilters);
+      onFilterChange: currentFilter => {
+        this.map.updateHotspots(currentFilter);
       }
     });
     this.languageSwitch = new LanguageSwitch({

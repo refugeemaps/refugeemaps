@@ -50,18 +50,18 @@ export default class {
 
   /**
    * Update the hotspots
-   * @param  {Array} currentFilters The current selected filters
+   * @param  {String} currentFilter The current selected filter
    */
-  updateHotspots(currentFilters) {
-    if (currentFilters.length === 0) {
+  updateHotspots(currentFilter) {
+    if (!currentFilter) {
       this.markers.forEach(marker => marker.setVisible(true));
       return;
     }
 
     this.markers.forEach(marker => {
-      const isInFilters = currentFilters.indexOf(marker.hotspot.type) >= 0;
+      const isActive = currentFilter === marker.hotspot.type;
 
-      marker.setVisible(isInFilters);
+      marker.setVisible(isActive);
     });
   }
 

@@ -14,7 +14,7 @@ export default class {
     this.$body = this.$container.querySelector('.filters__body');
     this.$header = this.$container.querySelector('.filters__header');
 
-    this.currentFilters = [];
+    this.currentFilter = null;
     this.onFilterChange = onFilterChange;
 
     this.$header.addEventListener('click', () => this.toggle());
@@ -73,17 +73,22 @@ export default class {
    * @param {String} categoryKey The type of the filter
    */
   toggleCategoryFilter($categoryFilter, categoryKey) {
-    let index = this.currentFilters.indexOf(categoryKey);
+    let isAlreadyActive = this.currentFilter === categoryKey;
 
-    if (index === -1) {
-      this.currentFilters.push(categoryKey);
-      $categoryFilter.classList.add('filters__body__filter--active');
-    } else {
-      this.currentFilters.splice(index, 1);
-      $categoryFilter.classList.remove('filters__body__filter--active');
+    for (let i = 0; i < this.$categoryFilters.length; i++) {
+      this.$categoryFilters[i].classList
+        .remove('filters__body__filter--active');
     }
 
-    this.onFilterChange(this.currentFilters);
+    if (isAlreadyActive) {
+      this.currentFilter = null;
+    } else {
+      this.currentFilter = categoryKey;
+      $categoryFilter.classList.add('filters__body__filter--active');
+    }
+
+    this.onFilterChange(this.currentFilter);
+    this.toggle();
   }
 
   /**
