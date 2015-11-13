@@ -12,16 +12,16 @@
   &--hidden
     transform: translateX(-100%)
     transition: transform 0s .2s linear
-    .filters__content
+    .sidebar__content
       transform: translateX(-100%)
-    &:before
+  &__hidden &__obfuscator
       display: none
       background: transparent
   &--hidden&--from-right
     transform: translateX(100%)
-    .filters__content
+    .sidebar__content
       transform: translateX(100%)
-  &:before
+  &__obfuscator
     content: ''
     position: fixed
     top: 0
