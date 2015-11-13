@@ -11,7 +11,6 @@ export default class {
     onFilterChange = () => {}
   }) {
     this.$container = document.querySelector('.filters');
-    this.$content = this.$container.querySelector('.filters__content');
     this.$back = this.$container
       .querySelector('.filters__content__header__back');
     this.$body = this.$container.querySelector('.filters__content__body');
@@ -119,13 +118,13 @@ export default class {
    * Toggle the filters visibility
    */
   toggle() {
-    this.$container.classList.toggle('filters--hidden');
+    this.$container.classList.toggle('sidebar--hidden');
   }
 
   /**
    * Hide the filters
    */
   hide() {
-    this.$container.classList.add('filters--hidden');
+    this.$container.classList.add('sidebar--hidden');
   }
 }
