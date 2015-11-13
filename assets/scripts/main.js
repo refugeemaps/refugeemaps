@@ -124,11 +124,11 @@ class App {
           this.map.showUserPosition(pos);
           resolve(pos);
         }, () => {
-          this.handleError();
+          this.handleError('No GPS position found');
           resolve(config.defaultLocation);
         });
       } else {
-        this.handleError();
+        this.handleError('GPS turned off');
         resolve(config.defaultLocation);
       }
     });
@@ -136,9 +136,11 @@ class App {
 
   /**
    * Handle errors when geolocation fails
+   * @param {String} message The error message
    */
-  handleError() {
+  handleError(message) {
     this.error.show();
+    console.error(message);
   }
 }
 

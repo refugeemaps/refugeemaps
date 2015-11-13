@@ -14,26 +14,10 @@
       left: 0
       right: 0
       shadow(1)
-    &__body
-      height: 100%
-      padding-top: $toolbar-height + emCalc(8px)
-      padding-bottom: emCalc(8px)
-      overflow-y: auto
-      overflow-x: hidden
 
-.filter
-  padding: 0 emCalc(16px)
-  cursor: pointer
-  height: emCalc(56px)
-  line-height: emCalc(56px)
-  transition: background .2s ease-in-out
-  &--active, &:hover, &:focus
-    background: rgba(#999, 20%)
-  &:active
-    background: rgba(#999, 40%)
-  &__image
-    vertical-align: middle
-    width: emCalc(30px)
-  &__text
-    margin-left: emCalc(26px)
-    vertical-align: middle
+.filter-select
+  height: 100%
+  padding-top: $toolbar-height + emCalc(8px)
+  padding-bottom: emCalc(8px)
+  overflow-y: auto
+  overflow-x: hidden

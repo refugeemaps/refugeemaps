@@ -13,12 +13,15 @@ export default class {
     this.$container = document.querySelector('.filters');
     this.$back = this.$container
       .querySelector('.filters__content__header__back');
-    this.$body = this.$container.querySelector('.filters__content__body');
-
-    this.currentFilter = 'all';
-    this.onFilterChange = onFilterChange;
+    this.$filterSelect = this.$container.querySelector('.filter-select');
+    this.$filterSelectBody = this.$container
+      .querySelector('.filter-select__body');
 
     this.$back.addEventListener('click', () => this.hide());
+    this.$filterSelect
+      .addEventListener('change', this.switchCategory.bind(this));
+
+    this.onFilterChange = onFilterChange;
   }
 
   /**
@@ -37,8 +40,8 @@ export default class {
     categories.forEach(this.renderCategory.bind(this));
 
     this.categories = categories;
-    this.$categoryFilters =
-      this.$body.querySelectorAll('.filter');
+    this.$categoryFilters = this.$filterSelectBody
+      .querySelectorAll('.select-list__item');
   }
 
   /**
@@ -46,30 +49,36 @@ export default class {
    * @param  {Object} category The category to render
    */
   renderCategory(category) {
-    const $categoryFilter = document.createElement('div'),
-      $categoryFilterIcon = document.createElement('img'),
-      $categoryFilterText = document.createElement('span'),
+    const $categoryFilter = document.createElement('li'),
+      $categoryFilterInput = document.createElement('input'),
+      $categoryFilterLabel = document.createElement('label'),
+      $categoryFilterLabelIcon = document.createElement('img'),
+      $categoryFilterLabelText = document.createElement('span'),
       isAllFilter = category.key === 'all';
 
-    $categoryFilter.className = isAllFilter ?
-      'filter filter--active' :
-      'filter';
-    $categoryFilter.addEventListener('click',
-      () => this.toggleCategoryFilter($categoryFilter, category.key));
-
-    $categoryFilterIcon.src = `static/images/${category.key}.png`;
-    $categoryFilterIcon.className = 'filter__image';
-
-    $categoryFilterText.textContent = category.english;
-    $categoryFilterText.className = 'filter__text';
-
-    $categoryFilter.appendChild($categoryFilterIcon);
-    $categoryFilter.appendChild($categoryFilterText);
-    this.$body.appendChild($categoryFilter);
-
+    $categoryFilterInput.name = 'category';
+    $categoryFilterInput.id = category.key;
+    $categoryFilterInput.setAttribute('value', category.key);
+    $categoryFilterInput.setAttribute('type', 'radio');
     if (isAllFilter) {
-      this.$allFilter = $categoryFilter;
+      $categoryFilterInput.setAttribute('checked', 'checked');
     }
+
+    $categoryFilterLabel.className =
+      'select-list__item select-list__item--with-image';
+    $categoryFilterLabel.setAttribute('for', category.key);
+
+    $categoryFilterLabelIcon.src = `static/images/${category.key}.png`;
+    $categoryFilterLabelIcon.className = 'select-list__item__image';
+
+    $categoryFilterLabelText.textContent = category.english;
+    $categoryFilterLabelText.className = 'select-list__item__text';
+
+    $categoryFilterLabel.appendChild($categoryFilterLabelIcon);
+    $categoryFilterLabel.appendChild($categoryFilterLabelText);
+    $categoryFilter.appendChild($categoryFilterInput);
+    $categoryFilter.appendChild($categoryFilterLabel);
+    this.$filterSelectBody.appendChild($categoryFilter);
   }
 
   /**
@@ -90,28 +99,13 @@ export default class {
   }
 
   /**
-   * Filter the hotspot data
-   * @param {DOMNode} $categoryFilter The filter item
-   * @param {String} categoryKey The type of the filter
+   * Switch the category
+   * @param {ChangeEvent} event The change event of the radio buttons
    */
-  toggleCategoryFilter($categoryFilter, categoryKey) {
-    let isAlreadyActive = this.currentFilter === categoryKey;
-
-    for (let i = 0; i < this.$categoryFilters.length; i++) {
-      this.$categoryFilters[i].classList
-        .remove('filter--active');
-    }
-
-    if (isAlreadyActive) {
-      this.currentFilter = 'all';
-      this.$allFilter.classList.add('filter--active');
-    } else {
-      this.currentFilter = categoryKey;
-      $categoryFilter.classList.add('filter--active');
-    }
-
-    this.onFilterChange(this.currentFilter);
-    this.toggle();
+  switchCategory(event) {
+    let category = event.target.value;
+    this.onFilterChange(category);
+    this.hide();
   }
 
   /**
