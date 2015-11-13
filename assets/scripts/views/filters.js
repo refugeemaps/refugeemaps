@@ -89,9 +89,9 @@ export default class extends Sidebar {
    */
   changeLanguage(language) {
     if (isRightToLeft(language)) {
-      this.$container.classList.add('filters--rtl');
+      this.$filterSelect.classList.add('select-list--rtl');
     } else {
-      this.$container.classList.remove('filters--rtl');
+      this.$filterSelect.classList.remove('select-list--rtl');
     }
 
     for (let i = 0; i < this.$categoryFilters.length; i++) {
