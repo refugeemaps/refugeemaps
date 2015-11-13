@@ -1,14 +1,16 @@
+import Sidebar from './sidebar';
+
 /**
- * The language switch
+ * The main menu
  */
-export default class {
+export default class extends Sidebar {
   /**
    * Initialize
    */
   constructor({
     onLanguageChange = () => {}
   }) {
-    this.$container = document.querySelector('.menu');
+    super('.menu');
     this.$languageSelect = this.$container.querySelector('.language-select');
 
     this.$languageSelect
@@ -25,19 +27,5 @@ export default class {
     let language = event.target.value;
     this.onLanguageChange(language);
     this.hide();
-  }
-
-  /**
-   * Toggle the filters visibility
-   */
-  toggle() {
-    this.$container.classList.toggle('sidebar--hidden');
-  }
-
-  /**
-   * Hide the filters
-   */
-  hide() {
-    this.$container.classList.add('sidebar--hidden');
   }
 }

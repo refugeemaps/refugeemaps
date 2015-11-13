@@ -1,16 +1,18 @@
+import Sidebar from './sidebar';
 import isRightToLeft from '../libs/is-right-to-left';
 
 /**
  * The category filters
  */
-export default class {
+export default class extends Sidebar {
   /**
    * Initialize
    */
   constructor({
     onFilterChange = () => {}
   }) {
-    this.$container = document.querySelector('.filters');
+    super('.filters');
+
     this.$back = this.$container
       .querySelector('.filters__content__header__back');
     this.$filterSelect = this.$container.querySelector('.filter-select');
@@ -106,19 +108,5 @@ export default class {
     let category = event.target.value;
     this.onFilterChange(category);
     this.hide();
-  }
-
-  /**
-   * Toggle the filters visibility
-   */
-  toggle() {
-    this.$container.classList.toggle('sidebar--hidden');
-  }
-
-  /**
-   * Hide the filters
-   */
-  hide() {
-    this.$container.classList.add('sidebar--hidden');
   }
 }
