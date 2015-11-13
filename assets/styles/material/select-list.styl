@@ -1,0 +1,18 @@
+.select-list
+  font-size: 1rem
+  padding: emCalc(8px) 0
+  input
+    display: none
+  &__item
+    display: block
+    padding: 0 emCalc(16px)
+    cursor: pointer
+    height: emCalc(48px)
+    line-height: emCalc(48px)
+    transition: background .2s ease-in-out
+    input:checked + &, &:hover, &:focus
+      background: rgba(#999, 20%)
+    &:active
+      background: rgba(#999, 40%)
+    &--rtl
+      direction: rtl

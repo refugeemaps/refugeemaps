@@ -3,3 +3,27 @@
  */
 .menu
   font-size: 1rem
+  &__content
+    &__intro
+      font-size: emCalc(14px)
+      position: absolute
+      left: 0
+      right: 0
+      bottom: emCalc(50px, 14)
+      padding: emCalc(16px, 14)
+    &__footer
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      height: emCalc(50px)
+      line-height: emCalc(50px)
+      background: $color-black
+      padding: 0 emCalc(16px)
+      &__link
+        text-decoration: none
+        display: inline-block
+        margin-right: emCalc(14px)
+        .icon
+          vertical-align: middle
+          fill: $color-white
