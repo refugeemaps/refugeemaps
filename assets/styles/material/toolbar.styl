@@ -7,8 +7,17 @@
   &__title
     font-size: emCalc(20px)
     display: inline-block
-    font-weight: 400
+    font-weight: 500
     padding: 0 emCalc(16px, 20)
+  &__subtitle
+    color: $color-black
+    font-weight: 500
+  &--two-lines
+    line-height: emCalc(17px, 14)
+    padding: emCalc(7px) 0
+  &--two-lines &__title, &__subtitle
+    font-size: emCalc(14px)
+    padding: 0 emCalc(16px, 14)
   &__action
     font-size: 1rem
     position: absolute
