@@ -1,15 +1,21 @@
+import Sidebar from './sidebar';
+
 /**
- * The language switch
+ * The main menu
  */
-export default class {
+export default class extends Sidebar {
   /**
    * Initialize
    */
   constructor({
     onLanguageChange = () => {}
   }) {
-    this.$container = document.querySelector('.language-switch');
-    this.$container.addEventListener('change', this.switchLanguage.bind(this));
+    super('.menu');
+    this.$languageSelect = this.$container.querySelector('.language-select');
+
+    this.$languageSelect
+      .addEventListener('change', this.switchLanguage.bind(this));
+
     this.onLanguageChange = onLanguageChange;
   }
 
@@ -20,5 +26,6 @@ export default class {
   switchLanguage(event) {
     let language = event.target.value;
     this.onLanguageChange(language);
+    this.hide();
   }
 }

@@ -1,53 +1,86 @@
+import Sidebar from './sidebar';
 import isRightToLeft from '../libs/is-right-to-left';
 
 /**
  * The category filters
  */
-export default class {
+export default class extends Sidebar {
   /**
    * Initialize
    */
   constructor({
     onFilterChange = () => {}
   }) {
-    this.$container = document.querySelector('.filters');
-    this.$body = this.$container.querySelector('.filters__body');
-    this.$header = this.$container.querySelector('.filters__header');
+    super('.filters');
 
-    this.currentFilters = [];
+    this.$back = this.$container
+      .querySelector('.filters__content__header__back');
+    this.$filterSelect = this.$container.querySelector('.filter-select');
+    this.$filterSelectBody = this.$container
+      .querySelector('.filter-select__body');
+
+    this.$back.addEventListener('click', () => this.hide());
+    this.$filterSelect
+      .addEventListener('change', this.switchCategory.bind(this));
+
     this.onFilterChange = onFilterChange;
-
-    this.$header.addEventListener('click', () => this.toggle());
   }
 
   /**
-   * Add filter items for each category to sidebar
+   * Add filter items for each category to filter list
    * @param {Object} categories The items data object
    */
   renderCategories(categories) {
-    categories.forEach(category => {
-      let $categoryFilter = document.createElement('div'),
-        $categoryFilterIcon = document.createElement('img'),
-        $categoryFilterText = document.createElement('span');
-
-      $categoryFilter.className = 'filters__body__filter';
-      $categoryFilter.addEventListener('click',
-        () => this.toggleCategoryFilter($categoryFilter, category.key));
-
-      $categoryFilterIcon.src = `static/images/${category.key}.png`;
-      $categoryFilterIcon.className = 'filters__body__filter__image';
-
-      $categoryFilterText.textContent = category.english;
-      $categoryFilterText.className = 'filters__body__filter__text';
-
-      $categoryFilter.appendChild($categoryFilterIcon);
-      $categoryFilter.appendChild($categoryFilterText);
-      this.$body.appendChild($categoryFilter);
+    categories.unshift({
+      key: 'all',
+      visible: 'y',
+      english: 'All categories',
+      german: 'Alle Kategorien',
+      arabic: 'جميع الفئات'
     });
 
+    categories.forEach(this.renderCategory.bind(this));
+
     this.categories = categories;
-    this.$categoryFilters =
-      this.$body.querySelectorAll('.filters__body__filter');
+    this.$categoryFilters = this.$filterSelectBody
+      .querySelectorAll('.select-list__item');
+  }
+
+  /**
+   * Render one category
+   * @param  {Object} category The category to render
+   */
+  renderCategory(category) {
+    const $categoryFilter = document.createElement('li'),
+      $categoryFilterInput = document.createElement('input'),
+      $categoryFilterLabel = document.createElement('label'),
+      $categoryFilterLabelIcon = document.createElement('img'),
+      $categoryFilterLabelText = document.createElement('span'),
+      isAllFilter = category.key === 'all';
+
+    $categoryFilterInput.name = 'category';
+    $categoryFilterInput.id = category.key;
+    $categoryFilterInput.setAttribute('value', category.key);
+    $categoryFilterInput.setAttribute('type', 'radio');
+    if (isAllFilter) {
+      $categoryFilterInput.setAttribute('checked', 'checked');
+    }
+
+    $categoryFilterLabel.className =
+      'select-list__item select-list__item--with-image';
+    $categoryFilterLabel.setAttribute('for', category.key);
+
+    $categoryFilterLabelIcon.src = `static/images/${category.key}.png`;
+    $categoryFilterLabelIcon.className = 'select-list__item__image';
+
+    $categoryFilterLabelText.textContent = category.english;
+    $categoryFilterLabelText.className = 'select-list__item__text';
+
+    $categoryFilterLabel.appendChild($categoryFilterLabelIcon);
+    $categoryFilterLabel.appendChild($categoryFilterLabelText);
+    $categoryFilter.appendChild($categoryFilterInput);
+    $categoryFilter.appendChild($categoryFilterLabel);
+    this.$filterSelectBody.appendChild($categoryFilter);
   }
 
   /**
@@ -56,9 +89,9 @@ export default class {
    */
   changeLanguage(language) {
     if (isRightToLeft(language)) {
-      this.$container.classList.add('filters--rtl');
+      this.$filterSelect.classList.add('select-list--rtl');
     } else {
-      this.$container.classList.remove('filters--rtl');
+      this.$filterSelect.classList.remove('select-list--rtl');
     }
 
     for (let i = 0; i < this.$categoryFilters.length; i++) {
@@ -68,28 +101,12 @@ export default class {
   }
 
   /**
-   * Filter the hotspot data
-   * @param {DOMNode} $categoryFilter The sidebar item
-   * @param {String} categoryKey The type of the filter
+   * Switch the category
+   * @param {ChangeEvent} event The change event of the radio buttons
    */
-  toggleCategoryFilter($categoryFilter, categoryKey) {
-    let index = this.currentFilters.indexOf(categoryKey);
-
-    if (index === -1) {
-      this.currentFilters.push(categoryKey);
-      $categoryFilter.classList.add('filters__body__filter--active');
-    } else {
-      this.currentFilters.splice(index, 1);
-      $categoryFilter.classList.remove('filters__body__filter--active');
-    }
-
-    this.onFilterChange(this.currentFilters);
-  }
-
-  /**
-   * Toggle the filters visibility
-   */
-  toggle() {
-    this.$container.classList.toggle('filters--hidden');
+  switchCategory(event) {
+    let category = event.target.value;
+    this.onFilterChange(category);
+    this.hide();
   }
 }

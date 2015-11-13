@@ -10,14 +10,16 @@
 
   <div class="map"></div>
 
-  <div class="sidebar sidebar--hidden">
-    {{template "languageSwitch" .}}
-    {{template "filters" .}}
-  </div>
+  {{template "actions" .}}
 
+  {{template "menu" .}}
+  {{template "filters" .}}
   {{template "infowindow" .}}
 
-  <script src="https://maps.googleapis.com/maps/api/js?signed_in=true"></script>
+  {{template "loading" .}}
+  {{template "error" .}}
+
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
   <script src="/static/main.js"></script>
 
 </body>

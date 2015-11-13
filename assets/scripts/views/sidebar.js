@@ -1,18 +1,29 @@
 /**
- * The sidebar
+ * The sidebar. Can be extended
  */
 export default class {
   /**
    * Initialize
+   * @param {String} selector The sidebar container selector
    */
-  constructor() {
-    this.$container = document.querySelector('.sidebar');
+  constructor(selector) {
+    this.$container = document.querySelector(selector);
+    this.$obfuscator = this.$container.querySelector('.sidebar__obfuscator');
+
+    this.$obfuscator.addEventListener('click', this.hide.bind(this));
   }
 
   /**
-   * Show the sidebar
+   * Toggle the sidebar visibility
    */
-  show() {
-    this.$container.classList.remove('sidebar--hidden');
+  toggle() {
+    this.$container.classList.toggle('sidebar--hidden');
+  }
+
+  /**
+   * Hide the sidebar
+   */
+  hide() {
+    this.$container.classList.add('sidebar--hidden');
   }
 }

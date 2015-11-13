@@ -1,0 +1,54 @@
+{{define "menu"}}
+  <section class="menu sidebar sidebar--hidden">
+    <div class="sidebar__obfuscator"></div>
+    <main class="menu__content sidebar__content sidebar__content--slim">
+      <header class="menu__content__header toolbar toolbar--two-lines">
+        <h1 class="menu__content__header__title toolbar__title">{{.title}}</h1>
+        <h2 class="menu__content__header__subtitle toolbar__subtitle">Helping refugees to find safety</h2>
+      </header>
+      <div class="menu__content__body">
+
+        <form class="language-select select-list">
+          <ul>
+            <li>
+              <input type="radio" name="language" id="english" value="english" checked="checked" />
+              <label class="select-list__item" for="english">
+                English
+              </label>
+            </li>
+            <li>
+              <input type="radio" name="language" id="german" value="german" />
+              <label class="select-list__item" for="german">
+                Deutsch
+              </label>
+            </li>
+            <li>
+              <input type="radio" name="language" id="arabic" value="arabic" />
+              <label class="select-list__item select-list__item--rtl" for="arabic">
+                العربية
+              </label>
+            </li>
+          </ul>
+        </form>
+
+      </div>
+
+      <div class="menu__content__intro">
+        Refugees who arrive in Hamburg need a support and help system in order to get back to a normal and healthy life.
+      </div>
+
+      <footer class="menu__content__footer">
+        <a class="menu__content__footer__link" href="#" title="Google+">
+          <svg class="icon">
+            <use xlink:href="/static/images/icons.svg#google-plus" />
+          </svg>
+        </a>
+        <a class="menu__content__footer__link" href="#" title="Twitter">
+          <svg class="icon">
+            <use xlink:href="/static/images/icons.svg#twitter" />
+          </svg>
+        </a>
+      </footer>
+    </main>
+  </section>
+{{end}}

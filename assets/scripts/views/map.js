@@ -1,5 +1,4 @@
 import config from '../config/config';
-import mapStyle from '../config/map-style';
 import getIcon from '../libs/get-icon';
 
 /* global google */
@@ -14,13 +13,11 @@ export default class {
     const $container = document.querySelector('.map'),
       options = {
         center: config.defaultLocation,
+        disableDefaultUI: true,
+        zoomControl: true,
         zoomControlOptions: {
           position: google.maps.ControlPosition.LEFT_BOTTOM
         },
-        streetViewControlOptions: {
-          position: google.maps.ControlPosition.LEFT_BOTTOM
-        },
-        styles: mapStyle,
         zoom: 15
       };
 
@@ -34,7 +31,11 @@ export default class {
    * @param {Object} position The position of the user
    */
   showUserPosition(position) {
-    this.mapCanvas.setCenter(position);
+    if (!position && this.userMarker) {
+      position = this.userMarker.getPosition();
+    }
+
+    this.mapCanvas.panTo(position);
 
     if (this.userMarker) {
       this.userMarker.setPosition(position);
@@ -53,18 +54,18 @@ export default class {
 
   /**
    * Update the hotspots
-   * @param  {Array} currentFilters The current selected filters
+   * @param  {String} currentFilter The current selected filter
    */
-  updateHotspots(currentFilters) {
-    if (currentFilters.length === 0) {
+  updateHotspots(currentFilter) {
+    if (currentFilter === 'all') {
       this.markers.forEach(marker => marker.setVisible(true));
       return;
     }
 
     this.markers.forEach(marker => {
-      const isInFilters = currentFilters.indexOf(marker.hotspot.type) >= 0;
+      const isActive = currentFilter === marker.hotspot.type;
 
-      marker.setVisible(isInFilters);
+      marker.setVisible(isActive);
     });
   }
 

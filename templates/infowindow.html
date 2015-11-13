@@ -1,6 +1,42 @@
 {{define "infowindow"}}
-  <div class="infowindow infowindow--hidden">
-    <button class="infowindow__close">Close</button>
-    <div class="infowindow__body"></div>
-  </div>
+  <section class="infowindow infowindow--hidden">
+    <button class="infowindow__close button button--fab button--white">
+      <svg class="icon">
+        <use xlink:href="/static/images/icons.svg#close" />
+      </svg>
+    </button>
+    <header class="infowindow__header toolbar">
+      <h2 class="infowindow__header__title toolbar__title"></h2>
+    </header>
+    <div class="infowindow__body">
+
+      <div class="infowindow__body__row">
+        <svg class="icon infowindow__body__row__icon">
+          <use xlink:href="/static/images/icons.svg#location" />
+        </svg>
+        <div class="infowindow__body__row__content infowindow__body__row__content--location">
+
+        </div>
+      </div>
+
+      <div class="infowindow__body__row">
+        <svg class="icon infowindow__body__row__icon">
+          <use xlink:href="/static/images/icons.svg#time" />
+        </svg>
+        <div class="infowindow__body__row__content infowindow__body__row__content--time">
+
+        </div>
+      </div>
+
+      <div class="infowindow__body__row">
+        <svg class="icon infowindow__body__row__icon">
+          <use xlink:href="/static/images/icons.svg#info" />
+        </svg>
+        <div class="infowindow__body__row__content infowindow__body__row__content--info">
+
+        </div>
+      </div>
+
+    </div>
+  </section>
 {{end}}
