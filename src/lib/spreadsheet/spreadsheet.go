@@ -3,17 +3,23 @@ package spreadsheet
 import (
 	"appengine"
 	"appengine/urlfetch"
-	"encoding/json"
+	"encoding/csv"
 	"fmt"
-	"io/ioutil"
 
 	"lib/constants"
 )
 
 // Get one Spreadheet’s sheet data
-func Get(c appengine.Context, spreadsheetId string, sheetId string) (data interface{}) {
+func Get(c appengine.Context, spreadsheetId string) (data []map[string]string) {
+	url := fmt.Sprintf(constants.SheetUrl, spreadsheetId)
+	rows := fetch(c, url)
+	data = parse(c, rows)
+	return
+}
+
+// Fetch the Spreadsheet
+func fetch(c appengine.Context, url string) (rows [][]string) {
 	client := urlfetch.Client(c)
-	url := fmt.Sprintf(constants.SheetUrl, spreadsheetId, sheetId)
 
 	response, getErr := client.Get(url)
 	defer response.Body.Close()
@@ -22,15 +28,33 @@ func Get(c appengine.Context, spreadsheetId string, sheetId string) (data interf
 		return
 	}
 
-	jsonData, readErr := ioutil.ReadAll(response.Body)
+	reader := csv.NewReader(response.Body)
+	reader.Comma = '\t'
+
+	rows, readErr := reader.ReadAll()
 	if readErr != nil {
-		c.Errorf("spreadsheet.ReadAll: %v", readErr.Error())
+		c.Errorf("spreadsheet.ReadCsv: %v", readErr.Error())
+		return
 	}
 
-	unmarshalError := json.Unmarshal(jsonData, &data)
-	if unmarshalError != nil {
-		c.Errorf("spreadsheet.Unmarshal: %v", unmarshalError.Error())
+	return
+}
+
+// Parse the spreadsheet and assume first row as header
+func parse(c appengine.Context, rows [][]string) (data []map[string]string) {
+	for rowKey, row := range rows {
+		if rowKey == 0 {
+			continue
+		}
+
+		rowData := make(map[string]string)
+
+		for key, value := range row {
+			rowData[rows[0][key]] = value
+		}
+
+		data = append(data, rowData)
 	}
 
-	return data
+	return
 }
