@@ -28,11 +28,12 @@ func init() {
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	city.Get(r)
+	selectedCity := city.Get(r)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":    constants.SiteName,
 		"siteName": constants.SiteName,
+		"city":     selectedCity,
 	})
 	if templateExecuteError != nil {
 		c.Errorf("main.RootHandler template: %v", templateExecuteError)
