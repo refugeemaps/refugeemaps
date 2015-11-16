@@ -7,9 +7,8 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"lib/city"
 	"lib/constants"
-	"lib/position"
-	"lib/subdomain"
 )
 
 var (
@@ -29,12 +28,12 @@ func init() {
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	c.Infof("This city: %v", subdomain.Get(r))
-	c.Infof("The position: %v", position.Get(r))
+	selectedCity := city.Get(r)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":    constants.SiteName,
 		"siteName": constants.SiteName,
+		"city":     selectedCity,
 	})
 	if templateExecuteError != nil {
 		c.Errorf("main.RootHandler template: %v", templateExecuteError)

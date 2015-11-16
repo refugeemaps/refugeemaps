@@ -8,16 +8,44 @@ export default class {
   constructor({
     onMenuToggle = () => {},
     onFiltersToggle = () => {},
-    onCenter = () => {}
+    onUserLocationSuccess = () => {},
+    onUserLocationError = () => {}
   }) {
     this.$container = document.querySelector('.actions');
     this.$menuToggle = document.querySelector('.menu-toggle');
     this.$center = this.$container.querySelector('.center');
     this.$filtersToggle = this.$container.querySelector('.filters-toggle');
 
-    this.$center.addEventListener('click', () => onCenter());
+    if (!navigator.geolocation) {
+      this.$center.remove();
+    }
+
+    this.onUserLocationSuccess = onUserLocationSuccess
+    this.onUserLocationError = onUserLocationError
+
+    if (this.$center) {
+      this.$center.addEventListener('click', () => this.getUserLocation());
+    }
     this.$filtersToggle.addEventListener('click', () => onFiltersToggle());
     this.$menuToggle.addEventListener('click', () => onMenuToggle());
+  }
+
+  /**
+   * Get the user location
+   * @return {Promise} Promise with the user location
+   */
+  getUserLocation() {
+    navigator.geolocation.getCurrentPosition(position => {
+      const userPosition = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      this.onUserLocationSuccess(userPosition);
+    }, () => {
+      console.error('There was an error retrieving the geolocation…');
+      this.onUserLocationError();
+    });
   }
 
   /**
