@@ -17,8 +17,6 @@ class App {
    * Constructs the app.
    */
   constructor() {
-    const hash = window.location.hash.toLowerCase().substr(1);
-
     this.infowindow = new Infowindow();
     this.loading = new Loading();
     this.error = new Error();
@@ -37,23 +35,9 @@ class App {
       onCenter: () => this.map.showUserPosition()
     });
 
-    if (hash) {
-      getData({spreadsheetId: config.citySpreadsheetId})
-        .then(cities => this.selectCity(cities, hash))
-        .then(city => this.centerOnCity(city))
-        .then(city => getData({spreadsheetId: city.spreadsheetid}))
-        .then(hotspots => this.onHotspotsLoaded(hotspots))
-        .catch(error => this.handleError(error));
-    } else {
-      Promise.all([
-        getData({spreadsheetId: config.citySpreadsheetId}),
-        this.getUserLocation()
-      ])
-        .then(([cities, position]) => findClosestCity(cities, position))
-        .then(city => getData({spreadsheetId: city.spreadsheetid}))
-        .then(hotspots => this.onHotspotsLoaded(hotspots))
-        .catch(error => this.handleError(error));
-    }
+    getData({spreadsheetId: window.citySpreadsheetId})
+      .then(hotspots => this.onHotspotsLoaded(hotspots))
+      .catch(error => this.handleError(error));
 
     getData({spreadsheetId: config.categoriesSpreadsheetId})
       .then(categories => this.filters.renderCategories(categories))

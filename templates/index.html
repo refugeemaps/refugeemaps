@@ -19,6 +19,9 @@
   {{template "loading" .}}
   {{template "error" .}}
 
+  <script>
+    window.citySpreadsheetId = {{.city.SpreadsheetId}};
+  </script>
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <script src="/static/main.js"></script>
 
