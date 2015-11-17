@@ -1,5 +1,6 @@
 /* global google */
 
+import config from '../config/config';
 
 /**
  * Get the marker icon
@@ -10,29 +11,13 @@
 export default function(category) {
 
   if (category === 'user') {
-    return getUserIcon();
+    return config.userIcon;
   }
 
   return create(category);
-
 }
 /* eslint-enable complexity */
 
-/**
- * Get the user icon
- * @return {GoogleIconObject} icon The marker icon
- */
-function getUserIcon() {
-  return {
-    path: google.maps.SymbolPath.CIRCLE,
-    fillColor: '#2196f3',
-    fillOpacity: 1,
-    scale: 8,
-    strokeColor: 'white',
-    strokeOpacity: 0.5,
-    strokeWeight: 6
-  }
-}
 
 /**
  * Create the google icon object

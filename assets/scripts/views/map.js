@@ -75,15 +75,6 @@ export default class {
    */
   addHotspots(hotspots) {
 
-    const circle = {
-      path: "M0.5,0m-15,0a15,15 0 1,0 30,0a15,15 0 1,0-30,0",
-      fillColor: '#F44336',
-      fillOpacity: 1,
-      scale: 1,
-      strokeColor: "#FFF",
-      strokeWeight: 2
-    };
-
     hotspots.forEach(hotspot => {
       const position = {
           lat: parseFloat(hotspot.lat),
@@ -92,7 +83,7 @@ export default class {
         icon = getIcon(hotspot.type),
         background = new google.maps.Marker({
           map: this.mapCanvas,
-          icon: circle,
+          icon: config.markerBackground,
           position
         }),
         marker = new google.maps.Marker({
