@@ -12,7 +12,15 @@
       </header>
       <form class="filter-select select-list">
         <ul class="filter-select__body">
-
+          {{range .categories}}
+            <li>
+              <input checked="{{.Checked}}" value="{{.Key}}" id="{{.Key}}" name="category" type="radio">
+              <label for="{{.Key}}" class="select-list__item select-list__item--with-image" data-key="{{.Key}}" {{range .Languages}}data-{{.Name}}="{{.Text}}" {{end}}>
+                <img class="select-list__item__image" src="static/images/{{.Key}}.png">
+                <span class="select-list__item__text"></span>
+              </label>
+            </li>
+          {{end}}
         </ul>
       </form>
     </main>

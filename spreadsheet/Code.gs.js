@@ -291,10 +291,9 @@ function updateMapColumn(latitudeIndex, longitudeIndex, mapIndex) {
     var longitude = latLongRange[i][1];
     if (latitude && longitude) {
       var mapUrl = createStaticMap(latitude, longitude);
-      sheet.insertImage(mapUrl, mapIndex, i + 2);
-      sheet.getRange(i + 2, mapIndex).setValue(mapUrl);
       sheet.setRowHeight(i + 2, MAP_DIMENSIONS.height);
       sheet.setColumnWidth(mapIndex, MAP_DIMENSIONS.width);
+      sheet.getRange(i + 2, mapIndex).setFormula('=IMAGE("' + mapUrl + '")');
     }
   }
 }

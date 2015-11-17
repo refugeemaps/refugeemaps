@@ -17,6 +17,24 @@ export default class extends Sidebar {
       .addEventListener('change', this.switchLanguage.bind(this));
 
     this.onLanguageChange = onLanguageChange;
+    this.initLanguage();
+  }
+
+  /**
+   * Initialize the language
+   */
+  initLanguage() {
+    const $languageOptions = this.$languageSelect
+      .querySelectorAll('.language-select__option');
+    let i = 0;
+
+    for (i; i < $languageOptions.length; i++) {
+
+      if ($languageOptions[i].checked) {
+        this.onLanguageChange($languageOptions[i].value);
+        break;
+      }
+    }
   }
 
   /**
