@@ -16,7 +16,6 @@ export default function(category) {
 
   return create(category);
 }
-/* eslint-enable complexity */
 
 
 /**
