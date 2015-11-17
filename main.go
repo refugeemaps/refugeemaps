@@ -10,6 +10,7 @@ import (
 	"lib/categories"
 	"lib/city"
 	"lib/constants"
+	"lib/hotspots"
 )
 
 var (
@@ -56,6 +57,10 @@ func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	selectedCity.SpreadsheetId = "15Na8ihDIljcRatsPkNQFA1rQLM6C08AC0VJVyGFKioI"
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(hotspots.GetAsJSON(c, selectedCity))
 }
 
 // NotFoundHandler handles 404
