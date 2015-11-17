@@ -1,3 +1,5 @@
+import find from 'array-find';
+
 /**
  * The infowindow
  */
@@ -24,14 +26,18 @@ export default class {
    * @param {Object} hotspot The hotspot to show
    */
   show(hotspot) {
-    this.$container.classList.remove('infowindow--hidden');
+    const english = find(hotspot.translations, translation => {
+        return translation.language === 'english';
+      }),
+      description = english.text;
 
+    this.$container.classList.remove('infowindow--hidden');
     this.$title.textContent = hotspot.name;
 
     [
       {$el: this.$location, value: hotspot.address},
       {$el: this.$time, value: hotspot.openingHours},
-      {$el: this.$info, value: hotspot.description}
+      {$el: this.$info, value: description}
     ].forEach(data => {
       if (data.value && data.value !== '') {
         data.$el.parentNode.classList.remove('infowindow__body__row--hidden');

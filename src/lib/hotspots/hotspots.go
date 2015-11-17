@@ -18,7 +18,6 @@ type Hotspot struct {
 	Position     position.Position         `json:"position"`
 	Contact      string                    `json:"contact,omitempty"`
 	OpeningHours string                    `json:"openingHours,omitempty"`
-	Description  string                    `json:"description,omitempty"`
 	Translations []translation.Translation `json:"translations"`
 }
 
@@ -58,6 +57,7 @@ func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
 		}
 
 		var translations []translation.Translation
+		translations = append(translations, translation.Translation{"english", hotspotData["Description"]})
 
 		for key, value := range hotspotData {
 			_, exists := nonTranslationKeys[key]
@@ -75,7 +75,6 @@ func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
 			Position:     position.Create(c, hotspotData["Latitude"], hotspotData["Longitude"]),
 			Contact:      hotspotData["Contact"],
 			OpeningHours: hotspotData["OpeningHours"],
-			Description:  hotspotData["Description"],
 			Translations: translations,
 		})
 	}
