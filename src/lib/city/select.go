@@ -26,8 +26,8 @@ func selectClosest(ccc appengine.Context, cities []City, userPosition position.P
 	var closestDistance float64
 
 	for _, city := range cities {
-		diffLat := rad(city.Lat - userPosition.Lat)
-		diffLong := rad(city.Lng - userPosition.Lng)
+		diffLat := rad(city.Position.Lat - userPosition.Lat)
+		diffLong := rad(city.Position.Lng - userPosition.Lng)
 		a := math.Sin(diffLat/2)*math.Sin(diffLat/2) + math.Cos(rad(userPosition.Lat))*math.Cos(rad(userPosition.Lat))*math.Sin(diffLong/2)*math.Sin(diffLong/2)
 		c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 		distance := earthRadius * c

@@ -18,7 +18,7 @@ type Request struct {
 var cache = make(map[string]Request)
 
 // Get one Spreadheet’s sheet data
-func Get(c appengine.Context, spreadsheetId string) (data []map[string]string) {
+func Get(c appengine.Context, spreadsheetId string, sheetId string, headerRow int) (data []map[string]string) {
 	cachedRequest, exists := cache[spreadsheetId]
 
 	if exists {
@@ -31,9 +31,9 @@ func Get(c appengine.Context, spreadsheetId string) (data []map[string]string) {
 		}
 	}
 
-	url := fmt.Sprintf(constants.SheetUrl, spreadsheetId)
+	url := fmt.Sprintf(constants.SheetUrl, spreadsheetId, sheetId)
 	rows := fetch(c, url)
-	data = parse(c, rows)
+	data = parse(c, rows, headerRow)
 	cache[spreadsheetId] = Request{time.Now(), data}
 
 	return
@@ -63,16 +63,16 @@ func fetch(c appengine.Context, url string) (rows [][]string) {
 }
 
 // Parse the spreadsheet and assume first row as header
-func parse(c appengine.Context, rows [][]string) (data []map[string]string) {
+func parse(c appengine.Context, rows [][]string, headerRow int) (data []map[string]string) {
 	for rowKey, row := range rows {
-		if rowKey == 0 {
+		if rowKey <= headerRow {
 			continue
 		}
 
 		rowData := make(map[string]string)
 
 		for key, value := range row {
-			rowData[rows[0][key]] = value
+			rowData[rows[headerRow][key]] = value
 		}
 
 		data = append(data, rowData)

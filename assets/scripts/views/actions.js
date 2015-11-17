@@ -20,8 +20,8 @@ export default class {
       this.$center.remove();
     }
 
-    this.onUserLocationSuccess = onUserLocationSuccess
-    this.onUserLocationError = onUserLocationError
+    this.onUserLocationSuccess = onUserLocationSuccess;
+    this.onUserLocationError = onUserLocationError;
 
     if (this.$center) {
       this.$center.addEventListener('click', () => this.getUserLocation());
@@ -32,7 +32,6 @@ export default class {
 
   /**
    * Get the user location
-   * @return {Promise} Promise with the user location
    */
   getUserLocation() {
     navigator.geolocation.getCurrentPosition(position => {

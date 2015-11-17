@@ -10,6 +10,7 @@ import (
 	"lib/categories"
 	"lib/city"
 	"lib/constants"
+	"lib/hotspots"
 )
 
 var (
@@ -20,6 +21,7 @@ var (
 // Initialize
 func init() {
 	router.HandleFunc("/", RootHandler)
+	router.HandleFunc("/_api/hotspots/{cityId}.json", HotspotsJSONHandler)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 
 	http.Handle("/", router)
@@ -42,6 +44,23 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 		c.Errorf("main.RootHandler template: %v", templateExecuteError)
 		return
 	}
+}
+
+// HotspotsJSONHandler returns hotspots
+func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	vars := mux.Vars(r)
+	selectedCity, exists := city.GetById(r, vars["cityId"])
+	if !exists {
+		NotFoundHandler(w, r)
+		return
+	}
+
+	selectedCity.SpreadsheetId = "15Na8ihDIljcRatsPkNQFA1rQLM6C08AC0VJVyGFKioI"
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(hotspots.GetAsJSON(c, selectedCity))
 }
 
 // NotFoundHandler handles 404

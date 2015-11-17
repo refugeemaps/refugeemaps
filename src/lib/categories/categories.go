@@ -6,32 +6,30 @@ import (
 
 	"lib/constants"
 	"lib/spreadsheet"
+	"lib/translation"
 )
 
 type Category struct {
-	Key       string
-	Checked   bool
-	Languages []Language
-}
-
-type Language struct {
-	Name string
-	Text string
+	Key          string
+	Checked      bool
+	Translations []translation.Translation
 }
 
 var allCategories = Category{
 	Key:     "all",
 	Checked: false,
-	Languages: []Language{
-		0: Language{"english", "All categories"},
-		1: Language{"german", "Alle Kategorien"},
-		2: Language{"arabic", "جميع الفئات"},
+	Translations: []translation.Translation{
+		0: translation.Translation{"english", "All categories"},
+		1: translation.Translation{"german", "Alle Kategorien"},
+		2: translation.Translation{"arabic", "جميع الفئات"},
 	},
 }
 
 // Load and parse the categories
 func Load(c appengine.Context) (categories []Category) {
-	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId)
+	sheetId := "0"
+	headerRow := 0
+	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId, sheetId, headerRow)
 
 	categories = append(categories, allCategories)
 
@@ -44,20 +42,20 @@ func Load(c appengine.Context) (categories []Category) {
 			continue
 		}
 
-		var languages []Language
+		var translations []translation.Translation
 
 		for key, value := range categoryData {
 			if key == "visible" || key == "key" {
 				continue
 			}
 
-			languages = append(languages, Language{strings.ToLower(key), value})
+			translations = append(translations, translation.Translation{strings.ToLower(key), value})
 		}
 
 		categories = append(categories, Category{
-			Key:       categoryData["key"],
-			Checked:   false,
-			Languages: languages,
+			Key:          categoryData["key"],
+			Checked:      false,
+			Translations: translations,
 		})
 	}
 

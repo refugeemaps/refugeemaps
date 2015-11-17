@@ -1,7 +1,4 @@
-import Promise from 'lie';
-import find from 'array-find';
-import config from './config/config';
-import getData from './libs/get-data';
+import getHotspots from './libs/get-hotspots';
 
 import Map from './views/map';
 import Loading from './views/loading';
@@ -34,7 +31,7 @@ class App {
       onUserLocationSuccess: position => this.map.showUserPosition(position)
     });
 
-    getData({spreadsheetId: window.citySpreadsheetId})
+    getHotspots()
       .then(hotspots => this.onHotspotsLoaded(hotspots))
       .catch(error => this.handleError(error));
 
@@ -44,11 +41,11 @@ class App {
   }
 
   /**
-   * Kick off for adding the hotspots to the map
-   * @param {Object} hotspotsData hotspots data
+   * Finally initialize the map
+   * @param {Object} hotspots The hotspots data
    */
-  onHotspotsLoaded(hotspotsData) {
-    this.map.addHotspots(hotspotsData);
+  onHotspotsLoaded(hotspots) {
+    this.map.addHotspots(hotspots);
     this.loading.hide();
     this.actions.show();
   }
