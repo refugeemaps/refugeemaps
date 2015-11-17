@@ -30,10 +30,10 @@ export default class {
 
     [
       {$el: this.$location, value: hotspot.address},
-      {$el: this.$time, value: hotspot.openinghours},
-      {$el: this.$info, value: hotspot.descriptionenglish}
+      {$el: this.$time, value: hotspot.openingHours},
+      {$el: this.$info, value: hotspot.description}
     ].forEach(data => {
-      if (data.value !== '') {
+      if (data.value && data.value !== '') {
         data.$el.parentNode.classList.remove('infowindow__body__row--hidden');
         data.$el.textContent = data.value;
       } else {

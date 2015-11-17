@@ -63,7 +63,7 @@ export default class {
     }
 
     this.markers.forEach(marker => {
-      const isActive = currentFilter === marker.hotspot.type;
+      const isActive = currentFilter === marker.hotspot.category;
 
       marker.setVisible(isActive);
     });
@@ -76,10 +76,10 @@ export default class {
   addHotspots(hotspots) {
     hotspots.forEach(hotspot => {
       const position = {
-          lat: parseFloat(hotspot.lat),
-          lng: parseFloat(hotspot.lng)
+          lat: parseFloat(hotspot.position.lat),
+          lng: parseFloat(hotspot.position.lng)
         },
-        icon = getIcon(hotspot.type),
+        icon = getIcon(hotspot.category),
         background = new google.maps.Marker({
           map: this.mapCanvas,
           icon: config.markerBackground,
