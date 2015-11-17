@@ -5,15 +5,37 @@ import (
 	"appengine/urlfetch"
 	"encoding/csv"
 	"fmt"
+	"time"
 
 	"lib/constants"
 )
 
+type Request struct {
+	Time time.Time
+	Data []map[string]string
+}
+
+var cache = make(map[string]Request)
+
 // Get one Spreadheet’s sheet data
 func Get(c appengine.Context, spreadsheetId string) (data []map[string]string) {
+	cachedRequest, exists := cache[spreadsheetId]
+
+	if exists {
+		cacheExpire := cachedRequest.Time.Add(time.Second * constants.CachingTime)
+		useCache := time.Now().Before(cacheExpire)
+
+		if useCache {
+			data = cachedRequest.Data
+			return
+		}
+	}
+
 	url := fmt.Sprintf(constants.SheetUrl, spreadsheetId)
 	rows := fetch(c, url)
 	data = parse(c, rows)
+	cache[spreadsheetId] = Request{time.Now(), data}
+
 	return
 }
 
