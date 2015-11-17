@@ -27,7 +27,7 @@ function create(category) {
   let icon = document.querySelector(`#icon-${category}`);
   icon = icon || document.querySelector('#icon-all');
 
-  const path = icon.querySelector('path').getAttribute("d");
+  const path = icon.querySelector('path').getAttribute('d');
 
   return {
     path: path,

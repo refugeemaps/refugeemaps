@@ -29,7 +29,6 @@ export default class extends Sidebar {
     let i = 0;
 
     for (i; i < $languageOptions.length; i++) {
-
       if ($languageOptions[i].checked) {
         this.onLanguageChange($languageOptions[i].value);
         break;

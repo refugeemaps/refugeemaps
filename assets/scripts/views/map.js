@@ -74,7 +74,6 @@ export default class {
    * @param {Object} hotspots Array with the hotspots infos
    */
   addHotspots(hotspots) {
-
     hotspots.forEach(hotspot => {
       const position = {
           lat: parseFloat(hotspot.lat),
