@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"lib/categories"
 	"lib/city"
 	"lib/constants"
 )
@@ -29,11 +30,13 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	selectedCity := city.Get(r)
+	allCategories := categories.Load(c)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
-		"title":    constants.SiteName,
-		"siteName": constants.SiteName,
-		"city":     selectedCity,
+		"title":      constants.SiteName,
+		"siteName":   constants.SiteName,
+		"categories": allCategories,
+		"city":       selectedCity,
 	})
 	if templateExecuteError != nil {
 		c.Errorf("main.RootHandler template: %v", templateExecuteError)
