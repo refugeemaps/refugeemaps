@@ -69,7 +69,7 @@ func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
 		}
 
 		hotspots = append(hotspots, Hotspot{
-			Category:     hotspotData["Category"],
+			Category:     mapEmoji(hotspotData["Category"]),
 			Name:         hotspotData["Name"],
 			Address:      hotspotData["Address"],
 			Position:     position.Create(c, hotspotData["Latitude"], hotspotData["Longitude"]),
