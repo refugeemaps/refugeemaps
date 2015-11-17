@@ -12,14 +12,14 @@ import (
 )
 
 type Hotspot struct {
-	Category     string
-	Name         string
-	Address      string
-	Position     position.Position
-	Contact      string
-	OpeningHours string
-	Description  string
-	Translations []translation.Translation
+	Category     string                    `json:"category,omitempty"`
+	Name         string                    `json:"name,omitempty"`
+	Address      string                    `json:"address,omitempty"`
+	Position     position.Position         `json:"position"`
+	Contact      string                    `json:"contact,omitempty"`
+	OpeningHours string                    `json:"openingHours,omitempty"`
+	Description  string                    `json:"description,omitempty"`
+	Translations []translation.Translation `json:"translations"`
 }
 
 var nonTranslationKeys = map[string]struct{}{

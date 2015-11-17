@@ -1,6 +1,6 @@
 package translation
 
 type Translation struct {
-	Language string
-	Text     string
+	Language string `json:"language"`
+	Text     string `json:"text"`
 }

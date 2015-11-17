@@ -8,8 +8,8 @@ import (
 )
 
 type Position struct {
-	Lat float64
-	Lng float64
+	Lat float64 `json:"lat,omitempty"`
+	Lng float64 `json:"lng,omitempty"`
 }
 
 // Create a new position from strings
