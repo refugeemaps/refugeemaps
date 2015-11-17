@@ -26,7 +26,7 @@ export default class extends Sidebar {
   initLanguage() {
     const $languageOptions = this.$languageSelect
       .querySelectorAll('.language-select__option');
-    let i = 0
+    let i = 0;
 
     for (i; i < $languageOptions.length; i++) {
 
