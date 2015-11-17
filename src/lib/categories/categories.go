@@ -27,7 +27,9 @@ var allCategories = Category{
 
 // Load and parse the categories
 func Load(c appengine.Context) (categories []Category) {
-	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId)
+	sheetId := "0"
+	headerRow := 0
+	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId, sheetId, headerRow)
 
 	categories = append(categories, allCategories)
 

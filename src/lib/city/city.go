@@ -14,6 +14,7 @@ type City struct {
 	Lat           float64
 	Lng           float64
 	SpreadsheetId string
+	SheetId       string
 }
 
 // Get the city according to subdomain or position from the request

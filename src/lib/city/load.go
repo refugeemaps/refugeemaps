@@ -10,7 +10,9 @@ import (
 
 // Parse the city data
 func load(c appengine.Context) (cities []City) {
-	citiesData := spreadsheet.Get(c, constants.CitySpreadsheetId)
+	sheetId := "0"
+	headerRow := 0
+	citiesData := spreadsheet.Get(c, constants.CitySpreadsheetId, sheetId, headerRow)
 
 	for _, cityData := range citiesData {
 		if cityData["visible"] != "y" {
@@ -34,6 +36,7 @@ func load(c appengine.Context) (cities []City) {
 			Lat:           lat,
 			Lng:           lng,
 			SpreadsheetId: cityData["Spreadsheet ID"],
+			SheetId:       cityData["Sheet ID"],
 		}
 
 		cities = append(cities, city)
