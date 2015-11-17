@@ -9,7 +9,7 @@ import (
 )
 
 // Parse the city data
-func loadCities(c appengine.Context) (cities []City) {
+func load(c appengine.Context) (cities []City) {
 	citiesData := spreadsheet.Get(c, constants.CitySpreadsheetId)
 
 	for _, cityData := range citiesData {

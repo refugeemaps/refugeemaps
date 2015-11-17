@@ -20,7 +20,7 @@ type City struct {
 func Get(r *http.Request) (city City) {
 	c := appengine.NewContext(r)
 
-	cities := loadCities(c)
+	cities := load(c)
 	calledSubdomain := subdomain.Get(r)
 	userPosition := position.Get(r)
 
