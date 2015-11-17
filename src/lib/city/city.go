@@ -11,8 +11,7 @@ import (
 type City struct {
 	ID            string
 	Name          string
-	Lat           float64
-	Lng           float64
+	Position      position.Position
 	SpreadsheetId string
 	SheetId       string
 }
@@ -22,8 +21,8 @@ func Get(r *http.Request) (city City) {
 	c := appengine.NewContext(r)
 
 	cities := load(c)
-	calledSubdomain := subdomain.Get(r)
-	userPosition := position.Get(r)
+	calledSubdomain := subdomain.GetFromRequest(r)
+	userPosition := position.GetFromRequest(r)
 
 	if calledSubdomain != "" {
 		city = selectByID(cities, calledSubdomain)

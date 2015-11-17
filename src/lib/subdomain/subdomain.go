@@ -6,7 +6,7 @@ import (
 )
 
 // Get the subdomain
-func Get(r *http.Request) (subdomain string) {
+func GetFromRequest(r *http.Request) (subdomain string) {
 	host := r.URL.Host
 	host = strings.TrimSpace(host)
 	hostParts := strings.Split(host, ".")

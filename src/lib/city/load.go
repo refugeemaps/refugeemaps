@@ -2,9 +2,9 @@ package city
 
 import (
 	"appengine"
-	"strconv"
 
 	"lib/constants"
+	"lib/position"
 	"lib/spreadsheet"
 )
 
@@ -19,22 +19,10 @@ func load(c appengine.Context) (cities []City) {
 			continue
 		}
 
-		lat, latErr := strconv.ParseFloat(cityData["Lat"], 64)
-		if latErr != nil {
-			c.Errorf("getPosition.latErr: %v", latErr)
-			continue
-		}
-		lng, lngErr := strconv.ParseFloat(cityData["Lng"], 64)
-		if lngErr != nil {
-			c.Errorf("getPosition.lngErr: %v", lngErr)
-			continue
-		}
-
 		city := City{
 			ID:            cityData["ID"],
 			Name:          cityData["City"],
-			Lat:           lat,
-			Lng:           lng,
+			Position:      position.Create(c, cityData["lat"], cityData["lng"]),
 			SpreadsheetId: cityData["Spreadsheet ID"],
 			SheetId:       cityData["Sheet ID"],
 		}
