@@ -38,10 +38,6 @@ class App {
       .then(hotspots => this.onHotspotsLoaded(hotspots))
       .catch(error => this.handleError(error));
 
-    getData({spreadsheetId: config.categoriesSpreadsheetId})
-      .then(categories => this.filters.renderCategories(categories))
-      .catch(error => this.handleError(error));
-
     window.onhashchange = function() {
       window.location.reload();
     };
