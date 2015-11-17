@@ -16,7 +16,7 @@
             <li>
               <input checked="{{.Checked}}" value="{{.Key}}" id="{{.Key}}" name="category" type="radio">
               <label for="{{.Key}}" class="select-list__item select-list__item--with-image" data-key="{{.Key}}" {{range .Languages}}data-{{.Name}}="{{.Text}}" {{end}}>
-                <img class="select-list__item__image" src="static/images/{{.Key}}.png">
+                <svg class="icon"><use xlink:href="#icon-{{.Key}}" /></svg>
                 <span class="select-list__item__text"></span>
               </label>
             </li>

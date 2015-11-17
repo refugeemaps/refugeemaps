@@ -46,7 +46,7 @@ export default class {
     this.userMarker = new google.maps.Marker({
       map: this.mapCanvas,
       clickable: false,
-      label: 'You are here',
+      zIndex: -1,
       icon: getIcon('user'),
       position
     });
@@ -74,24 +74,33 @@ export default class {
    * @param {Object} hotspots Array with the hotspots infos
    */
   addHotspots(hotspots) {
+
     hotspots.forEach(hotspot => {
       const position = {
           lat: parseFloat(hotspot.lat),
           lng: parseFloat(hotspot.lng)
         },
         icon = getIcon(hotspot.type),
+        background = new google.maps.Marker({
+          map: this.mapCanvas,
+          icon: config.markerBackground,
+          position
+        }),
         marker = new google.maps.Marker({
           map: this.mapCanvas,
+          clickable: false,
           icon,
           position
         });
 
+      background.hotspot = hotspot;
       marker.hotspot = hotspot;
 
-      marker.addListener('click', () => {
+      background.addListener('click', () => {
         this.onHotspotClick(hotspot);
       });
 
+      this.markers.push(background);
       this.markers.push(marker);
     });
   }
