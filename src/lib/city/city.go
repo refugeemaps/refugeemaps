@@ -38,3 +38,14 @@ func Get(r *http.Request) (city City) {
 
 	return
 }
+
+// Get a city by it’s id
+func GetById(r *http.Request, cityId string) (city City, exists bool) {
+	c := appengine.NewContext(r)
+
+	cities := load(c)
+	city = selectByID(cities, cityId)
+	exists = city.ID != ""
+
+	return
+}
