@@ -74,11 +74,13 @@ export default class {
    * @param {Object} hotspots Array with the hotspots infos
    */
   addHotspots(hotspots) {
+    const bounds = new google.maps.LatLngBounds();
+
     hotspots.forEach(hotspot => {
-      const position = {
-          lat: parseFloat(hotspot.position.lat),
-          lng: parseFloat(hotspot.position.lng)
-        },
+      const position = new google.maps.LatLng(
+          parseFloat(hotspot.position.lat),
+          parseFloat(hotspot.position.lng)
+        ),
         icon = getIcon(hotspot.category),
         background = new google.maps.Marker({
           map: this.mapCanvas,
@@ -95,6 +97,8 @@ export default class {
       background.hotspot = hotspot;
       marker.hotspot = hotspot;
 
+      bounds.extend(position);
+
       background.addListener('click', () => {
         this.onHotspotClick(hotspot);
       });
@@ -102,6 +106,8 @@ export default class {
       this.markers.push(background);
       this.markers.push(marker);
     });
+
+    this.mapCanvas.panToBounds(bounds);
   }
 
   /**
