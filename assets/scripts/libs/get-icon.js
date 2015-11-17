@@ -1,22 +1,6 @@
 /* global google */
 
-const icons = {
-  mosque: 'mosque',
-  church: 'church',
-  bank: 'bank',
-  'call-shop': 'call-shop',
-  supermarket: 'supermarket',
-  culture: 'culture',
-  pharmacy: 'pharmacy',
-  laundry: 'laundry',
-  playground: 'playground',
-  football: 'football',
-  basketball: 'basketball',
-  'table-tennis': 'table-tennis',
-  skateboard: 'skateboard',
-  library: 'library',
-  'public-restroom': 'public-restroom'
-};
+import config from '../config/config';
 
 /**
  * Get the marker icon
@@ -25,49 +9,31 @@ const icons = {
  */
 /* eslint-disable complexity */
 export default function(category) {
-  const iconName = icons[category];
-
-  if (iconName) {
-    return create({url: `static/images/${iconName}.png`});
-  }
 
   if (category === 'user') {
-    return getUserIcon();
+    return config.userIcon;
   }
 
-  return create({url: 'static/images/marker-24@2x.png'});
+  return create(category);
 }
-/* eslint-enable complexity */
 
-/**
- * Get the user icon
- * @return {GoogleIconObject} icon The marker icon
- */
-function getUserIcon() {
-  return create({
-    url: 'static/images/red-marker.png',
-    width: 25,
-    height: 40,
-    anchorX: 12,
-    anchorY: 40
-  });
-}
 
 /**
  * Create the google icon object
- * @param {String} url The icon URL
- * @param {Integer} width The icon width
- * @param {Integer} height The icon height
- * @param {Integer} anchorX The x anchor value
- * @param {Integer} anchorY The y anchor value
+ * @param {String} category The icon category
  * @return {GoogleIconObject} icon The marker icon
  */
-function create({url, width = 30, height = 30, anchorX = 15, anchorY = 15}) {
+function create(category) {
+  let icon = document.querySelector(`#icon-${category}`);
+  icon = icon || document.querySelector('#icon-all');
+
+  const path = icon.querySelector('path').getAttribute("d");
+
   return {
-    url: url,
-    size: new google.maps.Size(width, height),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(anchorX, anchorY),
-    scaledSize: new google.maps.Size(width, height)
+    path: path,
+    fillColor: 'white',
+    fillOpacity: 1,
+    scale: 1,
+    strokeWeight: 0
   };
 }
