@@ -107,7 +107,7 @@ export default class {
       this.markers.push(marker);
     });
 
-    this.mapCanvas.panToBounds(bounds);
+    this.mapCanvas.fitBounds(bounds);
   }
 
   /**
