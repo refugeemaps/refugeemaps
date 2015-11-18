@@ -5,8 +5,9 @@ export default class {
   /**
    * Initialize
    * @param {String} selector The sidebar container selector
+   * @param {Array} hotspots The Hotspots
    */
-  constructor(selector) {
+  constructor(selector, hotspots) {
     this.$printContainer = document.createElement('div');
     this.$printContainer.classList.add(selector);
 
