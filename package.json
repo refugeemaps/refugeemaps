@@ -21,7 +21,7 @@
 
     "watch": "npm run clean && parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run watch:images'",
     "watch:js": "watchify --debug -v -t babelify assets/scripts/main.js -o static/main.js",
-    "watch:css": "stylus --inline --watch --sourcemap-inline -u autoprefixer-stylus assets/styles/main.styl -o static",
+    "watch:css": "stylus --inline --watch --sourcemap-inline -u autoprefixer-stylus assets/styles/{main,print}.styl -o static",
     "watch:images": "npm run build:images && watch-run -p 'assets/images/*' npm run build:images",
 
     "test": "npm run lint && npm run build",
@@ -29,7 +29,7 @@
 
     "build": "npm run clean && npm run build:css && npm run build:js && npm run build:images",
     "build:js": "browserify assets/scripts/main.js -t babelify | uglifyjs > static/main.js",
-    "build:css": "stylus --inline --compress -u autoprefixer-stylus assets/styles/main.styl -o static",
+    "build:css": "stylus --inline --compress -u autoprefixer-stylus assets/styles/{main,print}.styl -o static",
     "build:images": "npm run clean:images && cp -r assets/images/* static/images/",
 
     "changelog": "conventional-changelog-generator && vim -w CHANGELOG.md",

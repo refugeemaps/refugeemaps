@@ -36,9 +36,20 @@ class App {
       .then(hotspots => this.onHotspotsLoaded(hotspots))
       .catch(error => this.handleError(error));
 
-    window.onhashchange = function() {
-      window.location.reload();
-    };
+    window.onhashchange = this.onHashHandle;
+    this.onHashHandle();
+  }
+
+  /**
+   * Handle hash change events.
+   */
+  onHashHandle() {
+    const {hash} = location;
+    let el = document.createElement('link');
+    el.rel = 'stylesheet';
+    el.href = '/static/print.css';
+    document.head.appendChild(el);
+    document.body.classList.toggle('print', hash === '#print');
   }
 
   /**
