@@ -18,8 +18,7 @@ export default class {
         );
       }),
       staticMapUrl = this.getStaticMapUrl(reducedHotspots),
-      baseurl = window.location.href
-        .substr(0, window.location.href.lastIndexOf('#'));
+      baseurl = window.location.href.substr(0, window.location.href.lastIndexOf('#'));
 
     this.$printContainer = document.createElement('div');
     this.$printContainer.classList.add(selector);
@@ -42,6 +41,16 @@ export default class {
     this.$textLink = document.createElement('span');
     this.$textLink.innerHTML = 'Latest version: ' + baseurl;
     this.$printContainer.appendChild(this.$textLink);
+
+    let legendList = document.createElement('ul');
+    // add a legend from the filtered list
+    reducedHotspots.forEach(function(element, index) {
+      let legendItem = document.createElement('li');
+      legendItem.classList.add(element.category);
+      legendItem.innerHTML = index + ' ' + element.name + ',' + element.category + ',' + element.address;
+      legendList.appendChild(legendItem);
+    });
+    this.$printContainer.appendChild(legendList);
 
     document.body.appendChild(this.$printContainer);
   }
