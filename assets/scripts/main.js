@@ -23,7 +23,7 @@ class App {
       onFilterChange: currentFilter => this.map.updateHotspots(currentFilter)
     });
     this.menu = new Menu({
-      onLanguageChange: language => this.filters.changeLanguage(language)
+      onLanguageChange: language => this.onLanguageChange(language)
     });
     this.actions = new Actions({
       onMenuToggle: () => this.menu.toggle(),
@@ -38,6 +38,15 @@ class App {
     window.onhashchange = function() {
       window.location.reload();
     };
+  }
+
+  /**
+   * When the language got changed
+   * @param  {String} language The new language
+   */
+  onLanguageChange(language) {
+    this.filters.changeLanguage(language);
+    this.infowindow.changeLanguage(language);
   }
 
   /**

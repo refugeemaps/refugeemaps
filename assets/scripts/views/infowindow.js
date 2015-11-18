@@ -18,7 +18,19 @@ export default class {
     this.$info = this.$container
       .querySelector('.infowindow__body__row__content--info');
 
+    this.hotspot = null;
+    this.language = null;
+
     this.$close.addEventListener('click', () => this.hide());
+  }
+
+  /**
+   * Change to the new language
+   * @param  {String} language The new language
+   */
+  changeLanguage(language) {
+    this.language = language;
+    this.render();
   }
 
   /**
@@ -26,17 +38,33 @@ export default class {
    * @param {Object} hotspot The hotspot to show
    */
   show(hotspot) {
-    const english = find(hotspot.translations, translation => {
+    this.hotspot = hotspot;
+    this.render();
+  }
+
+  /**
+   * Render the infowindow according to the state
+   */
+  render() {
+    if (!this.hotspot) {
+      return;
+    }
+
+    const english = find(this.hotspot.translations, translation => {
         return translation.language === 'english';
       }),
-      description = english.text;
+      currentTranslation = find(this.hotspot.translations, translation => {
+        return translation.language === this.language;
+      }),
+      description = (currentTranslation && currentTranslation.text) ||
+        english.text;
 
     this.$container.classList.remove('infowindow--hidden');
-    this.$title.textContent = hotspot.name;
+    this.$title.textContent = this.hotspot.name;
 
     [
-      {$el: this.$location, value: hotspot.address},
-      {$el: this.$time, value: hotspot.openingHours},
+      {$el: this.$location, value: this.hotspot.address},
+      {$el: this.$time, value: this.hotspot.openingHours},
       {$el: this.$info, value: description}
     ].forEach(data => {
       if (data.value && data.value !== '') {
