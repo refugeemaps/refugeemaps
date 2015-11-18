@@ -6,6 +6,7 @@ import Error from './views/error';
 import Actions from './views/actions';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
+import Print from './views/print';
 import Menu from './views/menu';
 
 class App {
@@ -49,6 +50,7 @@ class App {
     el.href = '/static/print.css';
     document.head.appendChild(el);
     document.body.classList.toggle('print', hash === '#print');
+    let printView = new Print('print-view');
   }
 
   /**
