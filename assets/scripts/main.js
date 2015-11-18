@@ -46,11 +46,13 @@ class App {
   onHashHandle() {
     const {hash} = location;
     let el = document.createElement('link');
-    el.rel = 'stylesheet';
-    el.href = '/static/print.css';
-    document.head.appendChild(el);
-    document.body.classList.toggle('print', hash === '#print');
-    let printView = new Print('print-view');
+    if (hash === '#print') {
+      el.rel = 'stylesheet';
+      el.href = '/static/print.css';
+      document.head.appendChild(el);
+      document.body.classList.toggle('print', hash === '#print');
+      this.printView = new Print('print-view');
+    }
   }
 
   /**
