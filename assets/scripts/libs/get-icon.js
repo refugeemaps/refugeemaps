@@ -1,5 +1,3 @@
-/* global google */
-
 import config from '../config/config';
 
 /**
@@ -7,16 +5,14 @@ import config from '../config/config';
  * @param {String} category The category of the location
  * @return {GoogleIconObject} icon The marker icon
  */
-/* eslint-disable complexity */
-export default function(category) {
 
+export default function(category) {
   if (category === 'user') {
     return config.userIcon;
   }
 
   return create(category);
 }
-
 
 /**
  * Create the google icon object
