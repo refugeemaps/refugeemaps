@@ -52,7 +52,7 @@ func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
 	hotspotsData := spreadsheet.Get(c, selectedCity.SpreadsheetId, selectedCity.SheetId, headerRow)
 
 	for _, hotspotData := range hotspotsData {
-		if hotspotData["Visible"] != "y" {
+		if hotspotData["Visible"] != "y" || hotspotData["Name"] == "" {
 			continue
 		}
 
