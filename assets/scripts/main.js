@@ -39,7 +39,7 @@ class App {
       })
       .catch(error => this.handleError(error));
 
-    window.onhashchange = this.onHashHandle;
+    window.onhashchange = this.onHashHandle.bind(this);
   }
 
   /**
@@ -53,7 +53,8 @@ class App {
       el.href = '/static/print.css';
       document.head.appendChild(el);
       document.body.classList.toggle('print', hash === '#print');
-      this.printView = new Print('print-view', this.hotspots);
+      this.printView = new Print('print-view', this.hotspots,
+        this.map.getBounds());
     }
   }
 

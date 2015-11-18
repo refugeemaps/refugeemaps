@@ -114,6 +114,14 @@ export default class {
   }
 
   /**
+   * Get the current map bounds
+   * @return {GoogleMapsBounds} The current bounds
+   */
+  getBounds() {
+    return this.mapCanvas.getBounds();
+  }
+
+  /**
    * Set the center of the map
    * @param {Object} position The position which should be centered
    */
