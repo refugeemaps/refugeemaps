@@ -1,4 +1,4 @@
-# Ubilabs Refugee Map
+# Refugee Map
 
 ## Description
 
@@ -6,13 +6,14 @@ Map that shows locations which are potentially useful and interesting for refuge
 
 ### Links
 
-* Staging: …
+* [http://refugeemaps.eu](http://refugeemaps.eu)
 
 ### Team
 
-* PM Ubilabs: Martin Kleppe <kleppe@ubilabs.net>
-* Dev Ubilabs: Malte Modrow <modrow@ubilabs.net>
-* Dev Ubilabs: Robert Katzki <katzki@ubilabs.net>
+* Ubilabs: Martin Kleppe
+* Ubilabs: Malte Modrow
+* Ubilabs: Robert Katzki
+* Google: Thomas Steiner
 
 ## Development
 
@@ -51,7 +52,3 @@ To deploy the application, run the following commands:
 ```sh
 npm run deploy
 ```
-
-## Hosting
-
-The project is hosted at [Google App Engine](https://console.developers.google.com/project/earthview-gallery/appengine).
