@@ -36,6 +36,7 @@ export default class {
     }
 
     this.mapCanvas.panTo(position);
+    this.mapCanvas.setZoom(15);
 
     if (this.userMarker) {
       this.userMarker.setPosition(position);
@@ -46,7 +47,7 @@ export default class {
     this.userMarker = new google.maps.Marker({
       map: this.mapCanvas,
       clickable: false,
-      zIndex: -1,
+      zIndex: 5,
       icon: getIcon('user'),
       position
     });
@@ -85,12 +86,14 @@ export default class {
         background = new google.maps.Marker({
           map: this.mapCanvas,
           icon: config.markerBackground,
+          zIndex: 1,
           position
         }),
         marker = new google.maps.Marker({
           map: this.mapCanvas,
           clickable: false,
           icon,
+          zIndex: 1,
           position
         });
 
