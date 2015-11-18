@@ -2,6 +2,7 @@ package refugeemaps
 
 import (
 	"appengine"
+	"encoding/json"
 	"html/template"
 	"net/http"
 
@@ -53,7 +54,7 @@ func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	selectedCity, exists := city.GetById(r, vars["cityId"])
 	if !exists {
-		NotFoundHandler(w, r)
+		NotFoundJSONHandler(w, r)
 		return
 	}
 
@@ -74,4 +75,20 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		c.Errorf("main.NotFoundHandler template: %v", templateExecuteError)
 		return
 	}
+}
+
+// NotFoundHandler handles 404 in JSON
+func NotFoundJSONHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	errorResponse, jsonError := json.Marshal(map[string]string{
+		"message": "Error 404 – Not found",
+	})
+	if jsonError != nil {
+		c.Errorf("main.NotFoundJSONHandler marshal: %v", jsonError)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	w.Write(errorResponse)
 }
