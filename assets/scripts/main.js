@@ -33,11 +33,13 @@ class App {
     });
 
     getHotspots()
-      .then(hotspots => this.onHotspotsLoaded(hotspots))
+      .then(hotspots => {
+        this.onHotspotsLoaded(hotspots);
+        this.onHashHandle();
+      })
       .catch(error => this.handleError(error));
 
     window.onhashchange = this.onHashHandle;
-    this.onHashHandle();
   }
 
   /**
@@ -51,7 +53,7 @@ class App {
       el.href = '/static/print.css';
       document.head.appendChild(el);
       document.body.classList.toggle('print', hash === '#print');
-      this.printView = new Print('print-view');
+      this.printView = new Print('print-view', this.hotspots);
     }
   }
 
@@ -69,6 +71,7 @@ class App {
    * @param {Object} hotspots The hotspots data
    */
   onHotspotsLoaded(hotspots) {
+    this.hotspots = hotspots;
     this.map.addHotspots(hotspots);
     this.loading.hide();
     this.actions.show();
