@@ -5,6 +5,7 @@ import (
 	"appengine/urlfetch"
 	"encoding/csv"
 	"fmt"
+	"strings"
 	"time"
 
 	"lib/constants"
@@ -72,7 +73,7 @@ func parse(c appengine.Context, rows [][]string, headerRow int) (data []map[stri
 		rowData := make(map[string]string)
 
 		for key, value := range row {
-			rowData[rows[headerRow][key]] = value
+			rowData[strings.TrimSpace(rows[headerRow][key])] = strings.TrimSpace(value)
 		}
 
 		data = append(data, rowData)
