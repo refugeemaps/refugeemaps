@@ -11,6 +11,7 @@ export default class {
     this.$container = document.querySelector('.infowindow');
     this.$close = this.$container.querySelector('.infowindow__close');
     this.$title = this.$container.querySelector('.infowindow__header__title');
+    this.$link = this.$container.querySelector('.infowindow__maplink');
     this.$location = this.$container
       .querySelector('.infowindow__body__row__content--location');
     this.$time = this.$container
@@ -21,6 +22,7 @@ export default class {
     this.hotspot = null;
     this.language = null;
 
+    this.$link.addEventListener('click', () => this.openMaps());
     this.$close.addEventListener('click', () => this.hide());
   }
 
@@ -40,6 +42,17 @@ export default class {
   show(hotspot) {
     this.hotspot = hotspot;
     this.render();
+  }
+
+  /**
+   * Open the default maps application.
+   */
+  openMaps() {
+    const position = this.hotspot.position,
+      query = this.hotspot.address + '/@' + `${position.lat},${position.lng}`,
+      url = 'https://www.google.com/maps/place/' + query;
+
+    window.open(url, '_blank');
   }
 
   /**
