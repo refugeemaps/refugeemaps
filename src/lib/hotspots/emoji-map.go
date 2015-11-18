@@ -4,17 +4,15 @@ var emojiMap = map[string]string{
 	"🙏": "religion",
 	"💵": "finance",
 	"🌍": "communication",
-	"🛍": "shopping",
+	"🛍": "store",
 	"💊": "health",
-	"⚽": "sports",
+	"⚽": "sport",
 	"🏃": "kids",
-	"🌳": "parks",
+	"🌳": "park",
 	"☕": "cafe",
 	"🏢": "authorities",
 	"🎭": "culture",
 	"🚽": "restrooms",
-	"h": "house",          // TODO house
-	"t": "transportation", // TODO transportation
 }
 
 // Map the emojis to pure categories
