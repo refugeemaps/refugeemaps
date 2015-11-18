@@ -13,8 +13,6 @@ var emojiMap = map[string]string{
 	"🏢": "authorities",
 	"🎭": "culture",
 	"🚽": "restrooms",
-	"h": "house",          // TODO house
-	"t": "transportation", // TODO transportation
 }
 
 // Map the emojis to pure categories
