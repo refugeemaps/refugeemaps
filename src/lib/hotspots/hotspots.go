@@ -21,6 +21,13 @@ type Hotspot struct {
 	Translations []translation.Translation `json:"translations"`
 }
 
+var requiredKeys = map[string]struct{}{
+	"Name":        {},
+	"Latitude":    {},
+	"Longitude":   {},
+	"Description": {},
+}
+
 var nonTranslationKeys = map[string]struct{}{
 	"Visible":       {},
 	"Category":      {},
@@ -52,8 +59,14 @@ func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
 	hotspotsData := spreadsheet.Get(c, selectedCity.SpreadsheetId, selectedCity.SheetId, headerRow)
 
 	for _, hotspotData := range hotspotsData {
-		if hotspotData["Visible"] != "y" || hotspotData["Name"] == "" {
+		if hotspotData["Visible"] != "y" {
 			continue
+		}
+
+		for requiredKey := range requiredKeys {
+			if hotspotData[requiredKey] == "" {
+				continue
+			}
 		}
 
 		var translations []translation.Translation
