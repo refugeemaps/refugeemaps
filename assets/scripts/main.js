@@ -6,6 +6,7 @@ import Error from './views/error';
 import Actions from './views/actions';
 import Filters from './views/filters';
 import Infowindow from './views/infowindow';
+import Print from './views/print';
 import Menu from './views/menu';
 
 class App {
