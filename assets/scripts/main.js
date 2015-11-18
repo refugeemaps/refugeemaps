@@ -50,6 +50,7 @@ class App {
     el.href = '/static/print.css';
     document.head.appendChild(el);
     document.body.classList.toggle('print', hash === '#print');
+    let printView = new Print('print-view');
   }
 
   /**

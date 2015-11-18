@@ -1,5 +1,5 @@
 /**
- * The print view. Can be extended
+ * The print view.
  */
 export default class {
   /**
