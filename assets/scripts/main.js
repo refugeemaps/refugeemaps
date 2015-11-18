@@ -44,7 +44,6 @@ class App {
    */
   onHashHandle() {
     const {hash} = location;
-    // <link rel="stylesheet" href="/static/main.css">
     let el = document.createElement('link');
     el.rel = 'stylesheet';
     el.href = '/static/print.css';
