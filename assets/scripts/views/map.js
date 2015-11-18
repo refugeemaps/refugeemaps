@@ -36,6 +36,7 @@ export default class {
     }
 
     this.mapCanvas.panTo(position);
+    this.mapCanvas.setZoom(15);
 
     if (this.userMarker) {
       this.userMarker.setPosition(position);
