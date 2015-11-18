@@ -8,7 +8,7 @@ export default class {
    */
   constructor(selector) {
     this.$printContainer = document.createElement('div');
-    this.$printContainer.classList.add(`${selector}`);
+    this.$printContainer.classList.add(selector);
 
     this.$staticImage = document.createElement('img');
     this.$staticImage.classList.add(`${selector}__image`);
