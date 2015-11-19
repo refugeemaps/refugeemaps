@@ -10,14 +10,8 @@ export default class {
    * @param {Array} hotspots The hotspots
    * @param {GoogleMapsBounds} mapBounds The bounds if the current viewport
    */
-  constructor(selector, hotspots, mapBounds) {
-    this.mapBounds = mapBounds;
-    let reducedHotspots = hotspots.filter(hotspot => {
-        return mapBounds.contains(
-          new google.maps.LatLng(hotspot.position.lat, hotspot.position.lng)
-        );
-      }),
-      staticMapUrl = this.getStaticMapUrl(reducedHotspots),
+  constructor(selector, hotspots) {
+    let staticMapUrl = this.getStaticMapUrl(hotspots),
       baseurl = window.location.href.substr(0, window.location.href.lastIndexOf('#'));
 
     this.$printContainer = document.createElement('div');
@@ -44,7 +38,7 @@ export default class {
 
     let legendList = document.createElement('ul');
     // add a legend from the filtered list
-    reducedHotspots.forEach(function(element, index) {
+    hotspots.forEach(function(element, index) {
       let legendItem = document.createElement('li');
       legendItem.classList.add(element.category);
       legendItem.innerHTML = index + ' ' + element.name + ',' + element.category + ',' + element.address;
