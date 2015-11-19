@@ -34,7 +34,7 @@ export default class {
 
     // add a text version of the link
     this.$textLink = document.createElement('span');
-    this.$textLink.innerHTML = 'Latest version: ' + baseurl;
+    this.$textLink.innerHTML = location.hostname;
     this.$textLink.classList.add('qr-link');
     this.$printContainer.appendChild(this.$textLink);
 
