@@ -5,7 +5,12 @@
   .map,
   .menu__content,
   .sidebar__obfuscator,
+  .infowindow,
+  .filters
+    display: none
   .infowindow
+    display: none
+  .filters
     display: none
 
 .print-view
@@ -15,8 +20,11 @@
   right: 0
   bottom: 0
   background: white
+  display: none
   overflow-y: scroll
   z-index: 100
+  .print &
+    display: block
   &__image
     width: 100%
   &__list
@@ -33,7 +41,6 @@
         font-weight: 700
       &__address
         font-size: 15px
-
 
 .print-view li.religion:before {
   content: "\1F64F"

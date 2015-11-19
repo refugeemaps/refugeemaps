@@ -1,5 +1,4 @@
 /* global google */
-
 /**
  * The print view.
  */
@@ -12,7 +11,8 @@ export default class {
    */
   constructor(selector, hotspots) {
     let staticMapUrl = this.getStaticMapUrl(hotspots),
-      baseurl = window.location.href.substr(0, window.location.href.lastIndexOf('#'));
+      baseurl = window.location.href.substr(0,
+        window.location.href.lastIndexOf('#'));
 
     this.$printContainer = document.createElement('div');
     this.$printContainer.classList.add(selector);
@@ -40,14 +40,14 @@ export default class {
     legendList.classList.add('print-view__list');
 
     // add a legend from the filtered list
-    hotspots.forEach(function(element, index) {
+    hotspots.forEach((element, index) => {
       let legendItem = document.createElement('li');
       legendItem.classList.add(element.category);
       legendItem.classList.add('print-view__list__item');
 
       let legendItemIndex = document.createElement('span');
       legendItemIndex.classList.add('print-view__list__item__index');
-      legendItemIndex.textContent = index;
+      legendItemIndex.textContent = this.getLetterFromNumber(index);
 
       let legendItemName = document.createElement('span');
       legendItemName.classList.add('print-view__list__item__name');
@@ -93,7 +93,7 @@ export default class {
 
     let markers = '';
     hotspots.forEach((hotspot, index) => {
-      if (index >= 25) {
+      if (index >= 26) {
         return;
       }
       markers += `&markers=color:red` +
@@ -115,5 +115,12 @@ export default class {
    */
   getLetterFromNumber(number) {
     return String.fromCharCode(97 + number).toUpperCase();
+  }
+
+  /**
+   * Remove continer from the DOM
+   */
+  remove() {
+    this.$printContainer.remove();
   }
 }
