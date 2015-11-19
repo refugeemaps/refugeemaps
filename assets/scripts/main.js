@@ -54,7 +54,7 @@ class App {
                     new google.maps.LatLng(hotspot.position.lat, hotspot.position.lng)
                 );
       });
-      this.menu.toggle();
+      this.menu.hide();
       if (reducedHotspots.length>26) {
         // add a message and forward to '/'
         this.error.show("too many markers in selection", false);
