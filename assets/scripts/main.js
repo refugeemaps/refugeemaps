@@ -50,7 +50,7 @@ class App {
    */
   onHashHandle() {
     const {hash} = location;
-    document.body.classList.toggle('print', hash === '#print');
+    document.querySelector('html').classList.toggle('print', hash === '#print');
     if (hash !== '#print') {
       return;
     }
