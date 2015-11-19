@@ -1,3 +1,4 @@
+/* globals google */
 import getHotspots from './libs/get-hotspots';
 
 import Map from './views/map';
@@ -35,11 +36,13 @@ class App {
     getHotspots()
       .then(hotspots => {
         this.onHotspotsLoaded(hotspots);
-        this.onHashHandle();
       })
       .catch(error => this.handleError(error));
 
-    window.onhashchange = this.onHashHandle.bind(this);
+    if (location.hash === '#print') {
+      location.hash = '';
+    }
+    window.onhashchange = () => this.onHashHandle();
   }
 
   /**
@@ -49,25 +52,31 @@ class App {
     const {hash} = location;
     if (hash === '#print') {
       let mapBounds = this.map.getBounds(),
-          reducedHotspots = this.hotspots.filter(hotspot => {
-                return mapBounds.contains(
-                    new google.maps.LatLng(hotspot.position.lat, hotspot.position.lng)
-                );
-      });
+        reducedHotspots = this.hotspots.filter(hotspot => {
+          return mapBounds.contains(
+            new google.maps.LatLng(hotspot.position.lat,
+              hotspot.position.lng)
+          );
+        }),
+        el = document.createElement('link');
       this.menu.hide();
-      if (reducedHotspots.length>26) {
-        // add a message and forward to '/'
-        this.error.show("too many markers in selection", false);
-        // location.href = '/';
-      } else {
-        let el = document.createElement('link');
-        el.rel = 'stylesheet';
-        el.href = '/static/print.css';
-        document.head.appendChild(el);
-        document.body.classList.toggle('print', hash === '#print');
-
-        this.printView = new Print('print-view', reducedHotspots);
+      if (reducedHotspots.length >= 26) {
+        reducedHotspots = reducedHotspots.sort((a, b) => {
+          let defaultLocation = mapBounds.getCenter();
+          return distance(
+            a.position.lng, a.position.lat,
+            defaultLocation.lng(), defaultLocation.lat()
+          ) - distance(b.position.lng, b.position.lat,
+            defaultLocation.lng(), defaultLocation.lat()
+          );
+        }).splice(0, 26);
       }
+      el.rel = 'stylesheet';
+      el.href = '/static/print.css';
+      document.head.appendChild(el);
+      document.body.classList.toggle('print', hash === '#print');
+
+      this.printView = new Print('print-view', reducedHotspots);
     }
   }
 
@@ -96,9 +105,25 @@ class App {
    * @param {String} message The error message
    */
   handleError(message) {
-    this.error.show("Unable to load Map Data", true);
+    this.error.show('Unable to load Map Data', true);
     console.error(message);
   }
 }
 
 window.app = new App();
+
+function distance(lon1, lat1, lon2, lat2) {
+  var R = 6371, // Radius of the earth in km
+    dLat = toRad(lat2 - lat1),  // Javascript functions in radians
+    dLon = toRad(lon2 - lon1),
+    a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2),
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)),
+    d = R * c; // Distance in km
+  return d;
+}
+
+function toRad(n) {
+  return n * Math.PI / 180;
+}
