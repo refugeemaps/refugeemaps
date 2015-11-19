@@ -50,34 +50,38 @@ class App {
    */
   onHashHandle() {
     const {hash} = location;
-    if (hash === '#print') {
-      let mapBounds = this.map.getBounds(),
-        reducedHotspots = this.hotspots.filter(hotspot => {
-          return mapBounds.contains(
-            new google.maps.LatLng(hotspot.position.lat,
-              hotspot.position.lng)
-          );
-        }),
-        el = document.createElement('link');
-      this.menu.hide();
-      if (reducedHotspots.length >= 26) {
-        reducedHotspots = reducedHotspots.sort((a, b) => {
-          let defaultLocation = mapBounds.getCenter();
-          return distance(
-            a.position.lng, a.position.lat,
-            defaultLocation.lng(), defaultLocation.lat()
-          ) - distance(b.position.lng, b.position.lat,
-            defaultLocation.lng(), defaultLocation.lat()
-          );
-        }).splice(0, 26);
-      }
-      el.rel = 'stylesheet';
-      el.href = '/static/print.css';
-      document.head.appendChild(el);
-      document.body.classList.toggle('print', hash === '#print');
-
-      this.printView = new Print('print-view', reducedHotspots);
+    document.body.classList.toggle('print', hash === '#print');
+    if (hash !== '#print') {
+      return;
     }
+    let mapBounds = this.map.getBounds(),
+      reducedHotspots = this.hotspots.filter(hotspot => {
+        return mapBounds.contains(
+          new google.maps.LatLng(hotspot.position.lat,
+            hotspot.position.lng)
+        );
+      }),
+      el = document.createElement('link');
+    this.menu.hide();
+    if (reducedHotspots.length >= 26) {
+      reducedHotspots = reducedHotspots.sort((a, b) => {
+        let defaultLocation = mapBounds.getCenter();
+        return distance(
+          a.position.lng, a.position.lat,
+          defaultLocation.lng(), defaultLocation.lat()
+        ) - distance(b.position.lng, b.position.lat,
+          defaultLocation.lng(), defaultLocation.lat()
+        );
+      }).splice(0, 26);
+    }
+    el.rel = 'stylesheet';
+    el.href = '/static/print.css';
+    if (!this.printView) {
+      document.head.appendChild(el);
+    } else if (this.printView) {
+      this.printView.remove();
+    }
+    this.printView = new Print('print-view', reducedHotspots);
   }
 
   /**
