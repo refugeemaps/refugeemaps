@@ -25,6 +25,7 @@ export default class {
 
     // add a QR code for the current url (without hash)
     this.$qrCode = document.createElement('img');
+    this.$qrCode.classList.add('qr-code');
     this.$qrCode.src = 'https://chart.googleapis.com/chart?' +
       'chs=150x150&cht=qr&chl=' +
       encodeURIComponent(baseurl) +
@@ -34,6 +35,7 @@ export default class {
     // add a text version of the link
     this.$textLink = document.createElement('span');
     this.$textLink.innerHTML = 'Latest version: ' + baseurl;
+    this.$textLink.classList.add('qr-link');
     this.$printContainer.appendChild(this.$textLink);
 
     let legendList = document.createElement('ul');
@@ -87,7 +89,7 @@ export default class {
    */
   getStaticMapUrl(hotspots) {
     const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap?',
-      mapSize = '1000x500',
+      mapSize = '1000x300',
       mapType = 'roadmap',
       key = 'AIzaSyAYrOxhjr-dH6ODKT5zkLScVL-4dP56I2U';
 

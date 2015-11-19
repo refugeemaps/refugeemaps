@@ -1,5 +1,6 @@
 .print
   overflow-y: scroll
+  position: static
   .actions,
   .menu,
   .map,
@@ -25,14 +26,19 @@
   z-index: 100
   .print &
     display: block
+  .qr-code, .qr-link
+    vertical-align: middle
   &__image
     width: 100%
   &__list
-    font-size: 17px
+    font-size: 13px
     padding: 10px
+    display: flex
+    flex-wrap: wrap
     &__item
       padding: 5px
       margin-top: 5px
+      width: 160px
       &__index
         margin-left: 10px
         font-weight: 700
@@ -40,41 +46,4 @@
         margin-left: 10px
         font-weight: 700
       &__address
-        font-size: 15px
-
-.print-view li.religion:before {
-  content: "\1F64F"
-}
-.print-view li.finance:before {
-  content: "\1F4B5"
-}
-.print-view li.communication:before {
-  content: "\1F30D"
-}
-.print-view li.store:before {
-  content: "\1F6CD"
-}
-.print-view li.health:before {
-  content: "\1F48A"
-}
-.print-view li.sport:before {
-  content: "\26BD"
-}
-.print-view li.kids:before {
-  content: "\1F3C3"
-}
-.print-view li.park:before {
-  content: "\1F333"
-}
-.print-view li.cafe:before {
-  content: "\2615"
-}
-.print-view li.authorities:before {
-  content: "\1F3E2"
-}
-.print-view li.culture:before {
-  content: "\1F3AD"
-}
-.print-view li.restrooms:before {
-  content: "\1F6BD"
-}
+        font-size: 11px
