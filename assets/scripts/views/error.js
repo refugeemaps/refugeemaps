@@ -8,6 +8,7 @@ export default class {
   constructor() {
     this.$container = document.querySelector('.error');
     this.$cancel = this.$container.querySelector('.error__actions__cancel');
+    this.$text = this.$container.querySelector('.card__text');
     this.$tryAgain = this.$container
       .querySelector('.error__actions__try-again');
 
@@ -25,7 +26,11 @@ export default class {
   /**
    * Show the error
    */
-  show() {
+  show(message, showTryAgain) {
+    if (!showTryAgain) {
+      this.$tryAgain.classList.add('error__actions__invisible');
+    }
+    this.$text.innerHTML = message;
     this.$container.classList.remove('overlay--hidden');
   }
 
@@ -34,5 +39,6 @@ export default class {
    */
   hide() {
     this.$container.classList.add('overlay--hidden');
+    location.href = '/';
   }
 }

@@ -47,14 +47,27 @@ class App {
    */
   onHashHandle() {
     const {hash} = location;
-    let el = document.createElement('link');
     if (hash === '#print') {
-      el.rel = 'stylesheet';
-      el.href = '/static/print.css';
-      document.head.appendChild(el);
-      document.body.classList.toggle('print', hash === '#print');
-      this.printView = new Print('print-view', this.hotspots,
-        this.map.getBounds());
+      let mapBounds = this.map.getBounds(),
+          reducedHotspots = this.hotspots.filter(hotspot => {
+                return mapBounds.contains(
+                    new google.maps.LatLng(hotspot.position.lat, hotspot.position.lng)
+                );
+      });
+      this.menu.hide();
+      if (reducedHotspots.length>26) {
+        // add a message and forward to '/'
+        this.error.show("too many markers in selection", false);
+        // location.href = '/';
+      } else {
+        let el = document.createElement('link');
+        el.rel = 'stylesheet';
+        el.href = '/static/print.css';
+        document.head.appendChild(el);
+        document.body.classList.toggle('print', hash === '#print');
+
+        this.printView = new Print('print-view', reducedHotspots);
+      }
     }
   }
 
@@ -83,7 +96,7 @@ class App {
    * @param {String} message The error message
    */
   handleError(message) {
-    this.error.show();
+    this.error.show("Unable to load Map Data", true);
     console.error(message);
   }
 }
