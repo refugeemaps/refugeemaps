@@ -49,7 +49,7 @@ export default class {
    */
   openMaps() {
     const position = this.hotspot.position,
-      query = this.hotspot.address + '/@' + `${position.lat},${position.lng}`,
+      query = `${this.hotspot.address}/@${position.lat},${position.lng}`,
       url = 'https://www.google.com/maps/place/' + query;
 
     window.open(url, '_blank');
