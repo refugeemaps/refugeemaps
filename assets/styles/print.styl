@@ -1,0 +1,80 @@
+.print
+  overflow-y: scroll
+  .actions,
+  .menu,
+  .map,
+  .menu__content,
+  .sidebar__obfuscator,
+  .infowindow,
+  .filters
+    display: none
+  .infowindow
+    display: none
+  .filters
+    display: none
+
+.print-view
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: white
+  display: none
+  overflow-y: scroll
+  z-index: 100
+  .print &
+    display: block
+  &__image
+    width: 100%
+  &__list
+    font-size: 17px
+    padding: 10px
+    &__item
+      padding: 5px
+      margin-top: 5px
+      &__index
+        margin-left: 10px
+        font-weight: 700
+      &__name
+        margin-left: 10px
+        font-weight: 700
+      &__address
+        font-size: 15px
+
+.print-view li.religion:before {
+  content: "\1F64F"
+}
+.print-view li.finance:before {
+  content: "\1F4B5"
+}
+.print-view li.communication:before {
+  content: "\1F30D"
+}
+.print-view li.store:before {
+  content: "\1F6CD"
+}
+.print-view li.health:before {
+  content: "\1F48A"
+}
+.print-view li.sports:before {
+  content: "\26BD"
+}
+.print-view li.kids:before {
+  content: "\1F3C3"
+}
+.print-view li.parks:before {
+  content: "\1F333"
+}
+.print-view li.cafe:before {
+  content: "\2615"
+}
+.print-view li.authorities:before {
+  content: "\1F3E2"
+}
+.print-view li.culture:before {
+  content: "\1F3AD"
+}
+.print-view li.restrooms:before {
+  content: "\1F6BD"
+}
