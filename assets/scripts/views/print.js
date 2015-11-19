@@ -43,11 +43,30 @@ export default class {
     this.$printContainer.appendChild(this.$textLink);
 
     let legendList = document.createElement('ul');
+    legendList.classList.add('print-view__list');
+
     // add a legend from the filtered list
     reducedHotspots.forEach(function(element, index) {
       let legendItem = document.createElement('li');
       legendItem.classList.add(element.category);
-      legendItem.innerHTML = index + ' ' + element.name + ',' + element.category + ',' + element.address;
+      legendItem.classList.add('print-view__list__item');
+
+      let legendItemIndex = document.createElement('span');
+      legendItemIndex.classList.add('print-view__list__item__index');
+      legendItemIndex.textContent = index;
+
+      let legendItemName = document.createElement('span');
+      legendItemName.classList.add('print-view__list__item__name');
+      legendItemName.textContent = element.name;
+
+      let legendItemAddress = document.createElement('div');
+      legendItemAddress.classList.add('print-view__list__item__address');
+      legendItemAddress.textContent = element.address;
+
+      legendItem.appendChild(legendItemIndex);
+      legendItem.appendChild(legendItemName);
+      legendItem.appendChild(legendItemAddress);
+
       legendList.appendChild(legendItem);
     });
     this.$printContainer.appendChild(legendList);
@@ -74,7 +93,7 @@ export default class {
    */
   getStaticMapUrl(hotspots) {
     const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap?',
-      mapSize = '1000x1000',
+      mapSize = '1000x500',
       mapType = 'roadmap',
       key = 'AIzaSyAYrOxhjr-dH6ODKT5zkLScVL-4dP56I2U';
 
