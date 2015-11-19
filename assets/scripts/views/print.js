@@ -99,7 +99,7 @@ export default class {
         return;
       }
       markers += `&markers=color:red` +
-      `%7Clabel:${this.getLetterFromNumber(index)}%7C` +
+      `%7Clabel:${this.getLetterFromNumber(index)}%7Csize:mid%7C` +
       `${hotspot.position.lat},${hotspot.position.lng}`;
     });
 
