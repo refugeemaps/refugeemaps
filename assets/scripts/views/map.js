@@ -12,13 +12,11 @@ export default class {
   }) {
     const $container = document.querySelector('.map'),
       options = {
-        center: config.defaultLocation,
         disableDefaultUI: true,
         zoomControl: true,
         zoomControlOptions: {
           position: google.maps.ControlPosition.LEFT_BOTTOM
-        },
-        zoom: 15
+        }
       };
 
     this.mapCanvas = new google.maps.Map($container, options);
