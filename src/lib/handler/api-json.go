@@ -24,7 +24,23 @@ func LocationsJSON(w http.ResponseWriter, r *http.Request) {
 	writeJSON(c, w, allLocations)
 }
 
-// LocationLanguagesJSON returns pois
+// LocationCategoriesJSON returns categories used at the location
+func LocationCategoriesJSON(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	vars := mux.Vars(r)
+	selectedLocation, exists := locations.GetById(r, vars["locationId"])
+	if !exists {
+		NotFoundJSON(w, r)
+		return
+	}
+
+	locationCategories := selectedLocation.GetUsedCategories(c)
+
+	writeJSON(c, w, locationCategories)
+}
+
+// LocationLanguagesJSON returns languages used at that location
 func LocationLanguagesJSON(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
