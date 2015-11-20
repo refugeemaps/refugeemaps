@@ -4,7 +4,7 @@
  * General configuration
  */
 export default {
-  poisApiUrl: '/_api/hotspots/{{location}}.json',
+  poisApiUrl: '/_api/locations/{{location}}/pois/',
   defaultLocation: {
     lat: 53.560022,
     lng: 9.977840
