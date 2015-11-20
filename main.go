@@ -17,6 +17,7 @@ func init() {
 
 	api := router.PathPrefix("/_api/").Methods("GET").Subrouter()
 	api.HandleFunc("/locations/", handler.LocationsJSON)
+	api.HandleFunc("/locations/{locationId}/", handler.LocationJSON)
 	api.HandleFunc("/locations/{locationId}/categories/", handler.LocationCategoriesJSON)
 	api.HandleFunc("/locations/{locationId}/languages/", handler.LocationLanguagesJSON)
 	api.HandleFunc("/locations/{locationId}/pois/", handler.LocationPoisJSON)
