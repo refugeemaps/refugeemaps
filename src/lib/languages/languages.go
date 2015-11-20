@@ -7,7 +7,7 @@ type Language struct {
 }
 
 // Get all the languages
-func Load() []Language {
+func All() []Language {
 	return []Language{
 		Language{"english", "English", false},
 		Language{"german", "Deutsch", false},

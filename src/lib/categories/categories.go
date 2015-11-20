@@ -24,7 +24,7 @@ var allCategories = Category{
 }
 
 // Load and parse the categories
-func Load(c appengine.Context) (categories []Category) {
+func All(c appengine.Context) (categories []Category) {
 	sheetId := "0"
 	headerRow := 0
 	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId, sheetId, headerRow)

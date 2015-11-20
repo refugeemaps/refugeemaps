@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"lib/locations"
-	"lib/pois"
 )
 
 // LocationsJSON returns all locations
@@ -25,8 +24,8 @@ func LocationsJSON(w http.ResponseWriter, r *http.Request) {
 	writeJSON(c, w, allLocations)
 }
 
-// PoisJSON returns pois
-func PoisJSON(w http.ResponseWriter, r *http.Request) {
+// LocationLanguagesJSON returns pois
+func LocationLanguagesJSON(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	vars := mux.Vars(r)
@@ -36,7 +35,23 @@ func PoisJSON(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	locationPois := pois.Get(c, selectedLocation)
+	locationLanguages := selectedLocation.GetUsedLanguages(c)
+
+	writeJSON(c, w, locationLanguages)
+}
+
+// LocationPoisJSON returns pois
+func LocationPoisJSON(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	vars := mux.Vars(r)
+	selectedLocation, exists := locations.GetById(r, vars["locationId"])
+	if !exists {
+		NotFoundJSON(w, r)
+		return
+	}
+
+	locationPois := selectedLocation.GetPois(c)
 
 	writeJSON(c, w, locationPois)
 }

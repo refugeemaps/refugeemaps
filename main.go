@@ -17,7 +17,10 @@ func init() {
 
 	api := router.PathPrefix("/_api/").Methods("GET").Subrouter()
 	api.HandleFunc("/locations/", handler.LocationsJSON)
-	api.HandleFunc("/locations/{locationId}/pois/", handler.PoisJSON)
+	api.HandleFunc("/locations/{locationId}/languages/", handler.LocationLanguagesJSON)
+	api.HandleFunc("/locations/{locationId}/pois/", handler.LocationPoisJSON)
+
+	// Legacy URL redirect
 	api.HandleFunc("/hotspots/{locationId}.json", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		url := fmt.Sprintf("/_api/locations/%v/pois/", vars["locationId"])

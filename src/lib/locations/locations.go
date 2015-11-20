@@ -4,16 +4,35 @@ import (
 	"appengine"
 	"net/http"
 
+	"lib/constants"
 	"lib/position"
+	"lib/spreadsheet"
 	"lib/subdomain"
 )
 
-type Location struct {
-	ID            string            `json:"id"`
-	Name          string            `json:"name"`
-	Position      position.Position `json:"position"`
-	SpreadsheetId string            `json:"spreadsheetId,omitempty"`
-	SheetId       string            `json:"sheetId,omitempty"`
+// Parse the location data
+func All(c appengine.Context) (cities []Location) {
+	sheetId := "0"
+	headerRow := 0
+	citiesData := spreadsheet.Get(c, constants.LocationSpreadsheetId, sheetId, headerRow)
+
+	for _, locationData := range citiesData {
+		if locationData["visible"] != "y" {
+			continue
+		}
+
+		location := Location{
+			ID:            locationData["ID"],
+			Name:          locationData["City"],
+			Position:      position.Create(c, locationData["Lat"], locationData["Lng"]),
+			SpreadsheetId: locationData["Spreadsheet ID"],
+			SheetId:       locationData["Sheet ID"],
+		}
+
+		cities = append(cities, location)
+	}
+
+	return
 }
 
 // Get the location according to subdomain or position from the request

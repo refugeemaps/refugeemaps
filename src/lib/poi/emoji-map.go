@@ -1,4 +1,4 @@
-package pois
+package poi
 
 var emojiMap = map[string]string{
 	"🙏": "religion",
