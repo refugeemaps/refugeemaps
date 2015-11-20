@@ -1,4 +1,4 @@
-package location
+package locations
 
 import (
 	"appengine"

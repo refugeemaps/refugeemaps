@@ -7,7 +7,7 @@ import (
 
 	"lib/categories"
 	"lib/constants"
-	"lib/location"
+	"lib/locations"
 )
 
 var templates = template.Must(template.ParseGlob("templates/*"))
@@ -16,7 +16,7 @@ var templates = template.Must(template.ParseGlob("templates/*"))
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	selectedLocation := location.Get(r)
+	selectedLocation := locations.Get(r)
 	allCategories := categories.Load(c)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{

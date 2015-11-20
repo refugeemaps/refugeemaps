@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"lib/location"
+	"lib/locations"
 	"lib/position"
 	"lib/spreadsheet"
 	"lib/translation"
@@ -41,7 +41,7 @@ var nonTranslationKeys = map[string]struct{}{
 }
 
 // Get the pois as JSON
-func GetAsJSON(c appengine.Context, selectedLocation location.Location) (poisJSON []byte) {
+func GetAsJSON(c appengine.Context, selectedLocation locations.Location) (poisJSON []byte) {
 	pois := Get(c, selectedLocation)
 
 	poisJSON, jsonError := json.Marshal(pois)
@@ -54,7 +54,7 @@ func GetAsJSON(c appengine.Context, selectedLocation location.Location) (poisJSO
 }
 
 // Load and parse the pois
-func Get(c appengine.Context, selectedLocation location.Location) (pois []Poi) {
+func Get(c appengine.Context, selectedLocation locations.Location) (pois []Poi) {
 	headerRow := 1
 	poisData := spreadsheet.Get(c, selectedLocation.SpreadsheetId, selectedLocation.SheetId, headerRow)
 

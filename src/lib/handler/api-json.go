@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"lib/location"
+	"lib/locations"
 	"lib/pois"
 )
 
@@ -16,7 +16,7 @@ func PoisJSONHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	vars := mux.Vars(r)
-	selectedLocation, exists := location.GetById(r, vars["locationId"])
+	selectedLocation, exists := locations.GetById(r, vars["locationId"])
 	if !exists {
 		NotFoundJSONHandler(w, r)
 		return
