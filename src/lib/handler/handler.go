@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"lib/categories"
 	"lib/constants"
 	"lib/locations"
 )
@@ -18,13 +17,12 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	selectedLocation := locations.Get(r)
-	allCategories := categories.All(c)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":      constants.SiteName,
 		"siteName":   constants.SiteName,
-		"categories": allCategories,
 		"location":   selectedLocation,
+		"categories": selectedLocation.GetUsedCategories(c),
 		"languages":  selectedLocation.GetUsedLanguages(c),
 	})
 	if templateExecuteError != nil {
