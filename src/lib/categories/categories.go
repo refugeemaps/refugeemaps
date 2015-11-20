@@ -11,13 +11,11 @@ import (
 
 type Category struct {
 	Key          string
-	Checked      bool
 	Translations []translation.Translation
 }
 
 var allCategories = Category{
-	Key:     "all",
-	Checked: false,
+	Key: "all",
 	Translations: []translation.Translation{
 		0: translation.Translation{"english", "All categories"},
 		1: translation.Translation{"german", "Alle Kategorien"},
@@ -54,7 +52,6 @@ func Load(c appengine.Context) (categories []Category) {
 
 		categories = append(categories, Category{
 			Key:          categoryData["key"],
-			Checked:      false,
 			Translations: translations,
 		})
 	}

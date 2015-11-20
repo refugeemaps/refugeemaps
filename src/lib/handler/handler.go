@@ -8,6 +8,7 @@ import (
 
 	"lib/categories"
 	"lib/constants"
+	"lib/languages"
 	"lib/locations"
 )
 
@@ -19,12 +20,14 @@ func Root(w http.ResponseWriter, r *http.Request) {
 
 	selectedLocation := locations.Get(r)
 	allCategories := categories.Load(c)
+	allLanguages := languages.Load()
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":      constants.SiteName,
 		"siteName":   constants.SiteName,
 		"categories": allCategories,
 		"location":   selectedLocation,
+		"languages":  allLanguages,
 	})
 	if templateExecuteError != nil {
 		c.Errorf("main.Root template: %v", templateExecuteError)

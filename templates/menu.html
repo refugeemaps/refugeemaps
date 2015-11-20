@@ -10,24 +10,14 @@
 
         <form class="language-select select-list">
           <ul>
-            <li>
-              <input type="radio" name="language" class="language-select__option" id="english" value="english" checked="checked" />
-              <label class="select-list__item" for="english">
-                English
-              </label>
-            </li>
-            <li>
-              <input type="radio" name="language" class="language-select__option" id="german" value="german" />
-              <label class="select-list__item" for="german">
-                Deutsch
-              </label>
-            </li>
-            <li>
-              <input type="radio" name="language" class="language-select__option" id="arabic" value="arabic" />
-              <label class="select-list__item select-list__item--rtl" for="arabic">
-                العربية
-              </label>
-            </li>
+            {{range .languages}}
+              <li>
+                <input type="radio" name="language" class="language-select__option" id="{{.ID}}" value="{{.ID}}" />
+                <label class="select-list__item {{if .IsRtl}}select-list__item--rtl{{end}}" for="{{.ID}}">
+                  {{.Name}}
+                </label>
+              </li>
+            {{end}}
           </ul>
         </form>
 
