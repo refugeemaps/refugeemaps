@@ -12,8 +12,8 @@ import (
 
 var templates = template.Must(template.ParseGlob("templates/*"))
 
-// RootHandler handles the main call.
-func RootHandler(w http.ResponseWriter, r *http.Request) {
+// Root handles the main call.
+func Root(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	selectedLocation := locations.Get(r)
@@ -26,13 +26,13 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 		"location":   selectedLocation,
 	})
 	if templateExecuteError != nil {
-		c.Errorf("main.RootHandler template: %v", templateExecuteError)
+		c.Errorf("main.Root template: %v", templateExecuteError)
 		return
 	}
 }
 
-// NotFoundHandler handles 404
-func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+// NotFound handles 404
+func NotFound(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	w.WriteHeader(404)
@@ -41,7 +41,7 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		"siteName": constants.SiteName,
 	})
 	if templateExecuteError != nil {
-		c.Errorf("main.NotFoundHandler template: %v", templateExecuteError)
+		c.Errorf("main.NotFound template: %v", templateExecuteError)
 		return
 	}
 }
