@@ -1,4 +1,4 @@
-package hotspots
+package pois
 
 var emojiMap = map[string]string{
 	"🙏": "religion",

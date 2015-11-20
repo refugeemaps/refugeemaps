@@ -8,7 +8,7 @@ export default class {
    * Constructs the map
    */
   constructor({
-    onHotspotClick = () => {}
+    onPoiClick = () => {}
   }) {
     const $container = document.querySelector('.map'),
       options = {
@@ -21,7 +21,7 @@ export default class {
 
     this.mapCanvas = new google.maps.Map($container, options);
     this.markers = [];
-    this.onHotspotClick = onHotspotClick;
+    this.onPoiClick = onPoiClick;
   }
 
   /**
@@ -52,35 +52,35 @@ export default class {
   }
 
   /**
-   * Update the hotspots
+   * Update the pois
    * @param  {String} currentFilter The current selected filter
    */
-  updateHotspots(currentFilter) {
+  updatePois(currentFilter) {
     if (currentFilter === 'all') {
       this.markers.forEach(marker => marker.setVisible(true));
       return;
     }
 
     this.markers.forEach(marker => {
-      const isActive = currentFilter === marker.hotspot.category;
+      const isActive = currentFilter === marker.poi.category;
 
       marker.setVisible(isActive);
     });
   }
 
   /**
-   * Add a marker for every hotspot
-   * @param {Object} hotspots Array with the hotspots infos
+   * Add a marker for every poi
+   * @param {Object} pois Array with the pois infos
    */
-  addHotspots(hotspots) {
+  addPois(pois) {
     const bounds = new google.maps.LatLngBounds();
 
-    hotspots.forEach(hotspot => {
+    pois.forEach(poi => {
       const position = new google.maps.LatLng(
-          parseFloat(hotspot.position.lat),
-          parseFloat(hotspot.position.lng)
+          parseFloat(poi.position.lat),
+          parseFloat(poi.position.lng)
         ),
-        icon = getIcon(hotspot.category),
+        icon = getIcon(poi.category),
         background = new google.maps.Marker({
           map: this.mapCanvas,
           icon: config.markerBackground,
@@ -95,13 +95,13 @@ export default class {
           position
         });
 
-      background.hotspot = hotspot;
-      marker.hotspot = hotspot;
+      background.poi = poi;
+      marker.poi = poi;
 
       bounds.extend(position);
 
       background.addListener('click', () => {
-        this.onHotspotClick(hotspot);
+        this.onPoiClick(poi);
       });
 
       this.markers.push(background);

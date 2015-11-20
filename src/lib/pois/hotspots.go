@@ -1,4 +1,4 @@
-package hotspots
+package pois
 
 import (
 	"appengine"
@@ -11,7 +11,7 @@ import (
 	"lib/translation"
 )
 
-type Hotspot struct {
+type Poi struct {
 	Category     string                    `json:"category,omitempty"`
 	Name         string                    `json:"name,omitempty"`
 	Address      string                    `json:"address,omitempty"`
@@ -40,39 +40,39 @@ var nonTranslationKeys = map[string]struct{}{
 	"Description":   {},
 }
 
-// Get the hotspots as JSON
-func GetAsJSON(c appengine.Context, selectedLocation location.Location) (hotspotsJSON []byte) {
-	hotspots := Get(c, selectedLocation)
+// Get the pois as JSON
+func GetAsJSON(c appengine.Context, selectedLocation location.Location) (poisJSON []byte) {
+	pois := Get(c, selectedLocation)
 
-	hotspotsJSON, jsonError := json.Marshal(hotspots)
+	poisJSON, jsonError := json.Marshal(pois)
 	if jsonError != nil {
-		c.Errorf("hotspots.GetAsJSON marshal: %v", jsonError)
+		c.Errorf("pois.GetAsJSON marshal: %v", jsonError)
 		return
 	}
 
 	return
 }
 
-// Load and parse the hotspots
-func Get(c appengine.Context, selectedLocation location.Location) (hotspots []Hotspot) {
+// Load and parse the pois
+func Get(c appengine.Context, selectedLocation location.Location) (pois []Poi) {
 	headerRow := 1
-	hotspotsData := spreadsheet.Get(c, selectedLocation.SpreadsheetId, selectedLocation.SheetId, headerRow)
+	poisData := spreadsheet.Get(c, selectedLocation.SpreadsheetId, selectedLocation.SheetId, headerRow)
 
-	for _, hotspotData := range hotspotsData {
-		if hotspotData["Visible"] != "y" {
+	for _, poiData := range poisData {
+		if poiData["Visible"] != "y" {
 			continue
 		}
 
 		for requiredKey := range requiredKeys {
-			if hotspotData[requiredKey] == "" {
+			if poiData[requiredKey] == "" {
 				continue
 			}
 		}
 
 		var translations []translation.Translation
-		translations = append(translations, translation.Translation{"english", hotspotData["Description"]})
+		translations = append(translations, translation.Translation{"english", poiData["Description"]})
 
-		for key, value := range hotspotData {
+		for key, value := range poiData {
 			_, exists := nonTranslationKeys[key]
 			if exists || key == "" {
 				continue
@@ -81,13 +81,13 @@ func Get(c appengine.Context, selectedLocation location.Location) (hotspots []Ho
 			translations = append(translations, translation.Translation{strings.ToLower(key), value})
 		}
 
-		hotspots = append(hotspots, Hotspot{
-			Category:     mapEmoji(hotspotData["Category"]),
-			Name:         hotspotData["Name"],
-			Address:      hotspotData["Address"],
-			Position:     position.Create(c, hotspotData["Latitude"], hotspotData["Longitude"]),
-			Contact:      hotspotData["Contact"],
-			OpeningHours: hotspotData["OpeningHours"],
+		pois = append(pois, Poi{
+			Category:     mapEmoji(poiData["Category"]),
+			Name:         poiData["Name"],
+			Address:      poiData["Address"],
+			Position:     position.Create(c, poiData["Latitude"], poiData["Longitude"]),
+			Contact:      poiData["Contact"],
+			OpeningHours: poiData["OpeningHours"],
 			Translations: translations,
 		})
 	}

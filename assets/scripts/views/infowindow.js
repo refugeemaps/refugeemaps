@@ -19,7 +19,7 @@ export default class {
     this.$info = this.$container
       .querySelector('.infowindow__body__row__content--info');
 
-    this.hotspot = null;
+    this.poi = null;
     this.language = null;
 
     this.$link.addEventListener('click', () => this.openMaps());
@@ -37,10 +37,10 @@ export default class {
 
   /**
    * Show the infowindow
-   * @param {Object} hotspot The hotspot to show
+   * @param {Object} poi The poi to show
    */
-  show(hotspot) {
-    this.hotspot = hotspot;
+  show(poi) {
+    this.poi = poi;
     this.render();
   }
 
@@ -48,8 +48,8 @@ export default class {
    * Open the default maps application.
    */
   openMaps() {
-    const position = this.hotspot.position,
-      query = `${this.hotspot.address}/@${position.lat},${position.lng}`,
+    const position = this.poi.position,
+      query = `${this.poi.address}/@${position.lat},${position.lng}`,
       url = 'https://www.google.com/maps/place/' + query;
 
     window.open(url, '_blank');
@@ -59,25 +59,25 @@ export default class {
    * Render the infowindow according to the state
    */
   render() {
-    if (!this.hotspot) {
+    if (!this.poi) {
       return;
     }
 
-    const english = find(this.hotspot.translations, translation => {
+    const english = find(this.poi.translations, translation => {
         return translation.language === 'english';
       }),
-      currentTranslation = find(this.hotspot.translations, translation => {
+      currentTranslation = find(this.poi.translations, translation => {
         return translation.language === this.language;
       }),
       description = (currentTranslation && currentTranslation.text) ||
         english.text;
 
     this.$container.classList.remove('infowindow--hidden');
-    this.$title.textContent = this.hotspot.name;
+    this.$title.textContent = this.poi.name;
 
     [
-      {$el: this.$location, value: this.hotspot.address},
-      {$el: this.$time, value: this.hotspot.openingHours},
+      {$el: this.$location, value: this.poi.address},
+      {$el: this.$time, value: this.poi.openingHours},
       {$el: this.$info, value: description}
     ].forEach(data => {
       if (data.value && data.value !== '') {

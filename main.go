@@ -10,8 +10,8 @@ import (
 
 	"lib/categories"
 	"lib/constants"
-	"lib/hotspots"
 	"lib/location"
+	"lib/pois"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 // Initialize
 func init() {
 	router.HandleFunc("/", RootHandler)
-	router.HandleFunc("/_api/hotspots/{locationId}.json", HotspotsJSONHandler)
+	router.HandleFunc("/_api/hotspots/{locationId}.json", PoisJSONHandler)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 
 	http.Handle("/", router)
@@ -47,8 +47,8 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// HotspotsJSONHandler returns hotspots
-func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
+// PoisJSONHandler returns pois
+func PoisJSONHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	vars := mux.Vars(r)
@@ -59,7 +59,7 @@ func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(hotspots.GetAsJSON(c, selectedLocation))
+	w.Write(pois.GetAsJSON(c, selectedLocation))
 }
 
 // NotFoundHandler handles 404
