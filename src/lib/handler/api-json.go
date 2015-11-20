@@ -16,6 +16,12 @@ func LocationsJSON(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	allLocations := locations.All(c)
 
+	for i, location := range allLocations {
+		location.SpreadsheetId = ""
+		location.SheetId = ""
+		allLocations[i] = location
+	}
+
 	writeJSON(c, w, allLocations)
 }
 

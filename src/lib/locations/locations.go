@@ -9,11 +9,11 @@ import (
 )
 
 type Location struct {
-	ID            string
-	Name          string
-	Position      position.Position
-	SpreadsheetId string
-	SheetId       string
+	ID            string            `json:"id"`
+	Name          string            `json:"name"`
+	Position      position.Position `json:"position"`
+	SpreadsheetId string            `json:"spreadsheetId,omitempty"`
+	SheetId       string            `json:"sheetId,omitempty"`
 }
 
 // Get the location according to subdomain or position from the request

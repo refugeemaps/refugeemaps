@@ -21,8 +21,8 @@ func All(c appengine.Context) (cities []Location) {
 
 		location := Location{
 			ID:            locationData["ID"],
-			Name:          locationData["Location"],
-			Position:      position.Create(c, locationData["lat"], locationData["lng"]),
+			Name:          locationData["City"],
+			Position:      position.Create(c, locationData["Lat"], locationData["Lng"]),
 			SpreadsheetId: locationData["Spreadsheet ID"],
 			SheetId:       locationData["Sheet ID"],
 		}
