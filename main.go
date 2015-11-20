@@ -15,7 +15,7 @@ var router = mux.NewRouter()
 func init() {
 	router.StrictSlash(true)
 
-	api := router.PathPrefix("/_api/").Subrouter()
+	api := router.PathPrefix("/_api/").Methods("GET").Subrouter()
 	api.HandleFunc("/locations/{locationId}/pois/", handler.PoisJSON)
 	api.HandleFunc("/hotspots/{locationId}.json", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -23,7 +23,7 @@ func init() {
 		http.Redirect(w, r, url, http.StatusMovedPermanently)
 	})
 
-	router.HandleFunc("/", handler.Root)
+	router.HandleFunc("/", handler.Root).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 
 	http.Handle("/", router)
