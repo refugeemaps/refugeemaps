@@ -4,7 +4,7 @@
  * General configuration
  */
 export default {
-  hotspotsApiUrl: '/_api/hotspots/{{city}}.json',
+  hotspotsApiUrl: '/_api/hotspots/{{location}}.json',
   defaultLocation: {
     lat: 53.560022,
     lng: 9.977840

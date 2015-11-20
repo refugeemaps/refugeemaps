@@ -9,9 +9,9 @@ import (
 	"github.com/gorilla/mux"
 
 	"lib/categories"
-	"lib/city"
 	"lib/constants"
 	"lib/hotspots"
+	"lib/location"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 // Initialize
 func init() {
 	router.HandleFunc("/", RootHandler)
-	router.HandleFunc("/_api/hotspots/{cityId}.json", HotspotsJSONHandler)
+	router.HandleFunc("/_api/hotspots/{locationId}.json", HotspotsJSONHandler)
 	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 
 	http.Handle("/", router)
@@ -32,14 +32,14 @@ func init() {
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	selectedCity := city.Get(r)
+	selectedLocation := location.Get(r)
 	allCategories := categories.Load(c)
 
 	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
 		"title":      constants.SiteName,
 		"siteName":   constants.SiteName,
 		"categories": allCategories,
-		"city":       selectedCity,
+		"location":   selectedLocation,
 	})
 	if templateExecuteError != nil {
 		c.Errorf("main.RootHandler template: %v", templateExecuteError)
@@ -52,14 +52,14 @@ func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	vars := mux.Vars(r)
-	selectedCity, exists := city.GetById(r, vars["cityId"])
+	selectedLocation, exists := location.GetById(r, vars["locationId"])
 	if !exists {
 		NotFoundJSONHandler(w, r)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(hotspots.GetAsJSON(c, selectedCity))
+	w.Write(hotspots.GetAsJSON(c, selectedLocation))
 }
 
 // NotFoundHandler handles 404

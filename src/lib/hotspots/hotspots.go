@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"lib/city"
+	"lib/location"
 	"lib/position"
 	"lib/spreadsheet"
 	"lib/translation"
@@ -41,8 +41,8 @@ var nonTranslationKeys = map[string]struct{}{
 }
 
 // Get the hotspots as JSON
-func GetAsJSON(c appengine.Context, selectedCity city.City) (hotspotsJSON []byte) {
-	hotspots := Get(c, selectedCity)
+func GetAsJSON(c appengine.Context, selectedLocation location.Location) (hotspotsJSON []byte) {
+	hotspots := Get(c, selectedLocation)
 
 	hotspotsJSON, jsonError := json.Marshal(hotspots)
 	if jsonError != nil {
@@ -54,9 +54,9 @@ func GetAsJSON(c appengine.Context, selectedCity city.City) (hotspotsJSON []byte
 }
 
 // Load and parse the hotspots
-func Get(c appengine.Context, selectedCity city.City) (hotspots []Hotspot) {
+func Get(c appengine.Context, selectedLocation location.Location) (hotspots []Hotspot) {
 	headerRow := 1
-	hotspotsData := spreadsheet.Get(c, selectedCity.SpreadsheetId, selectedCity.SheetId, headerRow)
+	hotspotsData := spreadsheet.Get(c, selectedLocation.SpreadsheetId, selectedLocation.SheetId, headerRow)
 
 	for _, hotspotData := range hotspotsData {
 		if hotspotData["Visible"] != "y" {
