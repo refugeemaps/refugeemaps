@@ -20,7 +20,7 @@ type Location struct {
 func Get(r *http.Request) (location Location) {
 	c := appengine.NewContext(r)
 
-	cities := load(c)
+	cities := All(c)
 	calledSubdomain := subdomain.GetFromRequest(r)
 	userPosition := position.GetFromRequest(r)
 
@@ -43,7 +43,7 @@ func Get(r *http.Request) (location Location) {
 func GetById(r *http.Request, locationId string) (location Location, exists bool) {
 	c := appengine.NewContext(r)
 
-	cities := load(c)
+	cities := All(c)
 	location = selectByID(cities, locationId)
 	exists = location.ID != ""
 

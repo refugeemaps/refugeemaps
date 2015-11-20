@@ -9,7 +9,7 @@ import (
 )
 
 // Parse the location data
-func load(c appengine.Context) (cities []Location) {
+func All(c appengine.Context) (cities []Location) {
 	sheetId := "0"
 	headerRow := 0
 	citiesData := spreadsheet.Get(c, constants.LocationSpreadsheetId, sheetId, headerRow)

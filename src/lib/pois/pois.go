@@ -2,7 +2,6 @@ package pois
 
 import (
 	"appengine"
-	"encoding/json"
 	"strings"
 
 	"lib/locations"
@@ -38,19 +37,6 @@ var nonTranslationKeys = map[string]struct{}{
 	"Contact":       {},
 	"Opening Hours": {},
 	"Description":   {},
-}
-
-// Get the pois as JSON
-func GetAsJSON(c appengine.Context, selectedLocation locations.Location) (poisJSON []byte) {
-	pois := Get(c, selectedLocation)
-
-	poisJSON, jsonError := json.Marshal(pois)
-	if jsonError != nil {
-		c.Errorf("pois.GetAsJSON marshal: %v", jsonError)
-		return
-	}
-
-	return
 }
 
 // Load and parse the pois

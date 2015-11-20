@@ -16,6 +16,7 @@ func init() {
 	router.StrictSlash(true)
 
 	api := router.PathPrefix("/_api/").Methods("GET").Subrouter()
+	api.HandleFunc("/locations/", handler.LocationsJSON)
 	api.HandleFunc("/locations/{locationId}/pois/", handler.PoisJSON)
 	api.HandleFunc("/hotspots/{locationId}.json", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
