@@ -4,6 +4,7 @@ import (
 	"appengine"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"lib/categories"
 	"lib/constants"
@@ -33,9 +34,16 @@ func Root(w http.ResponseWriter, r *http.Request) {
 
 // NotFound handles 404
 func NotFound(w http.ResponseWriter, r *http.Request) {
+	isApi := strings.HasPrefix(r.URL.Path, "/_api/")
+
+	if isApi {
+		NotFoundJSON(w, r)
+		return
+	}
+
 	c := appengine.NewContext(r)
 
-	w.WriteHeader(404)
+	w.WriteHeader(http.StatusNotFound)
 	templateExecuteError := templates.ExecuteTemplate(w, "404Page", map[string]interface{}{
 		"title":    "Error 404 – Not found",
 		"siteName": constants.SiteName,
