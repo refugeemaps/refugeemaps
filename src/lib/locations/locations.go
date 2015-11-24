@@ -11,12 +11,12 @@ import (
 )
 
 // Parse the location data
-func All(c appengine.Context) (cities []Location) {
+func All(c appengine.Context) (locations []Location) {
 	sheetId := "0"
 	headerRow := 0
-	citiesData := spreadsheet.Get(c, constants.LocationSpreadsheetId, sheetId, headerRow)
+	locationsData := spreadsheet.Get(c, constants.LocationSpreadsheetId, sheetId, headerRow)
 
-	for _, locationData := range citiesData {
+	for _, locationData := range locationsData {
 		if locationData["visible"] != "y" {
 			continue
 		}
@@ -29,7 +29,7 @@ func All(c appengine.Context) (cities []Location) {
 			SheetId:       locationData["Sheet ID"],
 		}
 
-		cities = append(cities, location)
+		locations = append(locations, location)
 	}
 
 	return
@@ -39,20 +39,20 @@ func All(c appengine.Context) (cities []Location) {
 func Get(r *http.Request) (location Location) {
 	c := appengine.NewContext(r)
 
-	cities := All(c)
+	locations := All(c)
 	calledSubdomain := subdomain.GetFromRequest(r)
 	userPosition := position.GetFromRequest(r)
 
 	if calledSubdomain != "" {
-		location = selectByID(cities, calledSubdomain)
+		location = selectByID(locations, calledSubdomain)
 	}
 
 	if location.ID == "" && userPosition.Lat != 0 && userPosition.Lng != 0 {
-		location = selectClosest(c, cities, userPosition)
+		location = selectClosest(c, locations, userPosition)
 	}
 
 	if location.ID == "" {
-		location = cities[0]
+		location = locations[0]
 	}
 
 	return
@@ -62,8 +62,8 @@ func Get(r *http.Request) (location Location) {
 func GetById(r *http.Request, locationId string) (location Location, exists bool) {
 	c := appengine.NewContext(r)
 
-	cities := All(c)
-	location = selectByID(cities, locationId)
+	locations := All(c)
+	location = selectByID(locations, locationId)
 	exists = location.ID != ""
 
 	return
