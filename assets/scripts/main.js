@@ -1,4 +1,4 @@
-import getHotspots from './libs/get-hotspots';
+import getPois from './libs/get-pois';
 
 import Map from './views/map';
 import Loading from './views/loading';
@@ -17,10 +17,10 @@ class App {
     this.loading = new Loading();
     this.error = new Error();
     this.map = new Map({
-      onHotspotClick: hotspot => this.infowindow.show(hotspot)
+      onPoiClick: poi => this.infowindow.show(poi)
     });
     this.filters = new Filters({
-      onFilterChange: currentFilter => this.map.updateHotspots(currentFilter)
+      onFilterChange: currentFilter => this.map.updatePois(currentFilter)
     });
     this.menu = new Menu({
       onLanguageChange: language => this.onLanguageChange(language)
@@ -31,8 +31,8 @@ class App {
       onUserLocationSuccess: position => this.map.showUserPosition(position)
     });
 
-    getHotspots()
-      .then(hotspots => this.onHotspotsLoaded(hotspots))
+    getPois()
+      .then(pois => this.onPoisLoaded(pois))
       .catch(error => this.handleError(error));
 
     window.onhashchange = function() {
@@ -51,10 +51,10 @@ class App {
 
   /**
    * Finally initialize the map
-   * @param {Object} hotspots The hotspots data
+   * @param {Object} pois The pois data
    */
-  onHotspotsLoaded(hotspots) {
-    this.map.addHotspots(hotspots);
+  onPoisLoaded(pois) {
+    this.map.addPois(pois);
     this.loading.hide();
     this.actions.show();
   }

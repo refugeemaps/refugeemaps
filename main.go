@@ -1,77 +1,36 @@
 package refugeemaps
 
 import (
-	"appengine"
-	"html/template"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 
-	"lib/categories"
-	"lib/city"
-	"lib/constants"
-	"lib/hotspots"
+	"lib/handler"
 )
 
-var (
-	router    = mux.NewRouter()
-	templates = template.Must(template.ParseGlob("templates/*"))
-)
+var router = mux.NewRouter()
 
 // Initialize
 func init() {
-	router.HandleFunc("/", RootHandler)
-	router.HandleFunc("/_api/hotspots/{cityId}.json", HotspotsJSONHandler)
-	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
+	router.StrictSlash(true)
+
+	api := router.PathPrefix("/_api/").Methods("GET").Subrouter()
+	api.HandleFunc("/locations/", handler.LocationsJSON)
+	api.HandleFunc("/locations/{locationId}/", handler.LocationJSON)
+	api.HandleFunc("/locations/{locationId}/categories/", handler.LocationCategoriesJSON)
+	api.HandleFunc("/locations/{locationId}/languages/", handler.LocationLanguagesJSON)
+	api.HandleFunc("/locations/{locationId}/pois/", handler.LocationPoisJSON)
+
+	// Legacy URL redirect
+	api.HandleFunc("/hotspots/{locationId}.json", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		url := fmt.Sprintf("/_api/locations/%v/pois/", vars["locationId"])
+		http.Redirect(w, r, url, http.StatusMovedPermanently)
+	})
+
+	router.HandleFunc("/", handler.Root).Methods("GET")
+	router.NotFoundHandler = http.HandlerFunc(handler.NotFound)
 
 	http.Handle("/", router)
-}
-
-// RootHandler handles the main call.
-func RootHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	selectedCity := city.Get(r)
-	allCategories := categories.Load(c)
-
-	templateExecuteError := templates.ExecuteTemplate(w, "indexPage", map[string]interface{}{
-		"title":      constants.SiteName,
-		"siteName":   constants.SiteName,
-		"categories": allCategories,
-		"city":       selectedCity,
-	})
-	if templateExecuteError != nil {
-		c.Errorf("main.RootHandler template: %v", templateExecuteError)
-		return
-	}
-}
-
-// HotspotsJSONHandler returns hotspots
-func HotspotsJSONHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	vars := mux.Vars(r)
-	selectedCity, exists := city.GetById(r, vars["cityId"])
-	if !exists {
-		NotFoundHandler(w, r)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(hotspots.GetAsJSON(c, selectedCity))
-}
-
-// NotFoundHandler handles 404
-func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	w.WriteHeader(404)
-	templateExecuteError := templates.ExecuteTemplate(w, "404Page", map[string]interface{}{
-		"title":    "Error 404 – Not found",
-		"siteName": constants.SiteName,
-	})
-	if templateExecuteError != nil {
-		c.Errorf("main.NotFoundHandler template: %v", templateExecuteError)
-		return
-	}
 }

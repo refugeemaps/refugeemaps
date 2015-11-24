@@ -3,11 +3,11 @@ import reqwest from 'reqwest';
 import config from '../config/config';
 
 /**
- * Returns a promise which resolves the hotspots data
+ * Returns a promise which resolves the pois data
  * @return {Promise} The promise.
  */
 export default function() {
-  const url = config.hotspotsApiUrl.replace('{{city}}', window.cityId);
+  const url = config.poisApiUrl.replace('{{location}}', window.locationId);
 
   return new Promise((resolve, reject) => {
     reqwest({

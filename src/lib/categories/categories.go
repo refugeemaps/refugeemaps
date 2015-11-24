@@ -11,13 +11,11 @@ import (
 
 type Category struct {
 	Key          string
-	Checked      bool
 	Translations []translation.Translation
 }
 
 var allCategories = Category{
-	Key:     "all",
-	Checked: false,
+	Key: "all",
 	Translations: []translation.Translation{
 		0: translation.Translation{"english", "All categories"},
 		1: translation.Translation{"german", "Alle Kategorien"},
@@ -26,7 +24,7 @@ var allCategories = Category{
 }
 
 // Load and parse the categories
-func Load(c appengine.Context) (categories []Category) {
+func All(c appengine.Context) (categories []Category) {
 	sheetId := "0"
 	headerRow := 0
 	categoriesData := spreadsheet.Get(c, constants.CategoriesSpreadsheetId, sheetId, headerRow)
@@ -54,7 +52,6 @@ func Load(c appengine.Context) (categories []Category) {
 
 		categories = append(categories, Category{
 			Key:          categoryData["key"],
-			Checked:      false,
 			Translations: translations,
 		})
 	}
