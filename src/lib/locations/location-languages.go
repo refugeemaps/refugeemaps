@@ -10,23 +10,12 @@ func (location Location) GetUsedLanguages(c appengine.Context) (usedLanguages []
 	allPois := location.GetPois(c)
 	allLanguages := languages.All()
 
-	var languageMap = make(map[string]bool)
-
 	for _, language := range allLanguages {
-		languageMap[language.ID] = false
-	}
-
-	for _, poi := range allPois {
-		for _, language := range allLanguages {
+		for _, poi := range allPois {
 			if poi.HasTranslationFor(language.ID) {
-				languageMap[language.ID] = true
+				usedLanguages = append(usedLanguages, language)
+				break
 			}
-		}
-	}
-
-	for _, language := range allLanguages {
-		if languageMap[language.ID] {
-			usedLanguages = append(usedLanguages, language)
 		}
 	}
 
