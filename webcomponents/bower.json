@@ -1,0 +1,25 @@
+{
+  "name": "refugeemaps",
+  "version": "0.0.0",
+  "homepage": "https://github.com/refugeemaps/refugeemaps",
+  "authors": [
+    "tomayac <steiner.thomas@gmail.com>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.4",
+    "google-map": "GoogleWebComponents/google-map#~1.1.9",
+    "material-design-lite": "~1.0.6"
+  }
+}
